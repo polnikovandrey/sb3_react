@@ -10,7 +10,7 @@ import com.mcfly.poll.payload.user_role.LoginRequest;
 import com.mcfly.poll.payload.user_role.SignUpRequest;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
-import com.mcfly.poll.security.JwtTokenProvider;
+import com.mcfly.poll.security.JwtUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,7 +46,7 @@ public class AuthController {   // TODO https://www.bezkoder.com/spring-security
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    JwtTokenProvider tokenProvider;
+    JwtUtils jwtUtils;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -54,7 +54,7 @@ public class AuthController {   // TODO https://www.bezkoder.com/spring-security
                 = new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
         final Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String jwt = tokenProvider.generateToken(authentication);
+        final String jwt = jwtUtils.generateToken(authentication);
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
