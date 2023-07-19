@@ -9,10 +9,12 @@ app:
 logging:
   level:
     ROOT: INFO
-    org.springframework.orm.jpa: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
     org.hibernate.engine.transaction.internal.TransactionImpl: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.security: TRACE
     org.springframework.transaction: DEBUG
+
 
 server:
   port: 8080

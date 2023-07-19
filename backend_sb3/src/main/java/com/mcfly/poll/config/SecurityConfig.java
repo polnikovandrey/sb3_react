@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers("/", "favicon.ico", "/static/**").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**").permitAll()
                                 .anyRequest().authenticated())
