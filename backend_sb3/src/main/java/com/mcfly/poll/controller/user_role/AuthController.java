@@ -66,9 +66,10 @@ public class AuthController {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(false, "Email Address is already in use"), HttpStatus.BAD_REQUEST);
         }
-        final User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPassword());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        final Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
+        // TODO - SignUpRequest.name + SignupRequest.firstName + SignupRequest.lastName + SignupRequest.middleName
+        final User user = User.builder().firstName(signUpRequest.getName()).lastName(signUpRequest.getName()).middleName(signUpRequest.getName())
+                .username(signUpRequest.getUsername()).email(signUpRequest.getEmail()).password(passwordEncoder.encode(signUpRequest.getPassword())).build();
+        final Role userRole = roleRepository.findByName(RoleName.USER).orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
         final User result = userRepository.save(user);
         final URI location

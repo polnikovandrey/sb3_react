@@ -42,7 +42,7 @@ public class UserServiceTest {
     @Test
     void userSummary() {
         final UserService userServiceMock = Mockito.mock();
-        final UserSummary userSummaryToReturn = new UserSummary(1L, "username", "name");
+        final UserSummary userSummaryToReturn = new UserSummary(1L, "username", "firstName", "lastName", "middleName");
         Mockito.when(userServiceMock.getUserSummary(Mockito.any(UserPrincipal.class)))
                 .thenReturn(userSummaryToReturn);
         final UserSummary userSummary = userServiceMock.getUserSummary(new UserPrincipal());
@@ -80,10 +80,18 @@ public class UserServiceTest {
     @Test
     void getExistingUserProfile() {
         final String existingUsername = "Existing user";
-        final User expectedUser = new User("name", existingUsername, "user@email.com", "password");
-        expectedUser.setId(1L);
+        final User expectedUser =
+                User.builder()
+                        .id(1L)
+                        .username(existingUsername)
+                        .email("user@email.com")
+                        .password("password")
+                        .firstName("firstName")
+                        .lastName("lastName")
+                        .middleName("middleName")
+                        .build();
         final PollingUserProfile expectedProfile
-                = new PollingUserProfile(expectedUser.getId(), expectedUser.getUsername(), expectedUser.getName(),
+                = new PollingUserProfile(expectedUser.getId(), expectedUser.getUsername(), expectedUser.getLastName(),
                 expectedUser.getCreatedAt(), 42L, 43L);
         Mockito.when(userRepository.findByUsername(existingUsername))
                 .thenReturn(Optional.of(expectedUser));

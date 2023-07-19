@@ -97,7 +97,7 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "fakeUsername")
     public void checkMe() throws Exception {
-        final UserSummary userSummary = new UserSummary(1L, "username", "name");
+        final UserSummary userSummary = new UserSummary(1L, "username", "firstName", "lastName", "middleName");
         //noinspection DataFlowIssue
         Mockito.when(userService.getUserSummary(null)).thenReturn(userSummary);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/me"))
@@ -105,6 +105,8 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("username"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("name"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("firstName"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("lastName"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.middleName").value("middleName"));
     }
 }

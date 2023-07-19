@@ -31,9 +31,9 @@ public class UserRoleRepositoryTest {
 
     @Test
     void testFindRoleByName() {
-        final Optional<Role> roleUserOptional = roleRepository.findByName(RoleName.ROLE_USER);
+        final Optional<Role> roleUserOptional = roleRepository.findByName(RoleName.USER);
         assertTrue(roleUserOptional.isPresent());
-        final Optional<Role> roleAdminOptional = roleRepository.findByName(RoleName.ROLE_ADMIN);
+        final Optional<Role> roleAdminOptional = roleRepository.findByName(RoleName.ADMIN);
         assertTrue(roleAdminOptional.isPresent());
     }
 
@@ -88,14 +88,24 @@ public class UserRoleRepositoryTest {
     }
 
     private User createRandomUser() {
-        final String name = RandomStringUtils.randomAlphabetic(5);
+        final String firstName = RandomStringUtils.randomAlphabetic(5);
+        final String lastName = RandomStringUtils.randomAlphabetic(5);
+        final String middleName = RandomStringUtils.randomAlphabetic(5);
         final String username = RandomStringUtils.randomAlphabetic(5);
         final String email = RandomStringUtils.randomAlphabetic(5) + "@gmail.com";
         final String password = RandomStringUtils.randomAlphabetic(5);
-        final User user = new User(name, username, email, password);
-        user.setCreatedAt(Instant.now());
-        user.setUpdatedAt(Instant.now());
-        final Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
+        final User user =
+                User.builder()
+                        .firstName(firstName)
+                        .lastName(lastName)
+                        .middleName(middleName)
+                        .username(username)
+                        .email(email)
+                        .password(password)
+                        .createdAt(Instant.now())
+                        .updatedAt(Instant.now())
+                        .build();
+        final Role userRole = roleRepository.findByName(RoleName.USER).orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
         return user;
     }

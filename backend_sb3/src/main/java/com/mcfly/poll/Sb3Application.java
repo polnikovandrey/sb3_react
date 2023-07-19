@@ -10,11 +10,11 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 // Register JPA 2.1 converters: convert Java 8 Date/Time fields to SQL upon persisting.
-@EntityScan(basePackageClasses = {PollApplication.class, Jsr310Converters.class})
-public class PollApplication {
+@EntityScan(basePackageClasses = {Sb3Application.class, Jsr310Converters.class})
+public class Sb3Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(PollApplication.class, args);
+        SpringApplication.run(Sb3Application.class, args);
     }
 
     @PostConstruct

@@ -1,21 +1,25 @@
 drop table if exists roles;
 create table roles
 (
-    id   bigint not null auto_increment primary key,
-    name enum ('ROLE_ADMIN','ROLE_USER') unique
+    id   bigint      not null auto_increment primary key,
+    name varchar(20) not null unique
 );
-insert into roles(name) values ('ROLE_USER');
-insert into roles(name) values ('ROLE_ADMIN');
+insert into roles(name)
+values ('ROLE_ADMIN'),
+       ('ROLE_USER');
 drop table if exists users;
 create table users
 (
-    id         bigint       not null auto_increment primary key,
-    username   varchar(15)  not null unique,
-    password   varchar(100) not null,
-    name       varchar(40)  not null,
-    email      varchar(40)  not null unique,
-    created_at datetime(6)  not null,
-    updated_at datetime(6)  not null
+    id          bigint       not null auto_increment primary key,
+    username    varchar(20)  not null unique,
+    email       varchar(40)  not null unique,
+    password    varchar(100) not null,
+    first_name  varchar(20)  not null,
+    last_name   varchar(20)  not null,
+    middle_name varchar(20)  not null default '',
+    created_at  timestamp    not null,
+    updated_at  timestamp    not null,
+    version     bigint       not null
 );
 drop table if exists user_roles;
 create table user_roles

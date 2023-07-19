@@ -25,7 +25,7 @@ public class UserService {
     VoteRepository voteRepository;
 
     public UserSummary getUserSummary(UserPrincipal currentUser) {
-        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getMiddleName());
     }
 
     public UserIdentityAvailability checkUsernameAvailability(String username) {
@@ -42,6 +42,6 @@ public class UserService {
         final User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found", "User", "username", username));
         final long pollCount = pollRepository.countByCreatedBy(user.getId());
         final long voteCount = voteRepository.countByUserId(user.getId());
-        return new PollingUserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt(), pollCount, voteCount);
+        return new PollingUserProfile(user.getId(), user.getUsername(), user.getLastName(), user.getCreatedAt(), pollCount, voteCount);
     }
 }

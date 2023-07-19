@@ -4,12 +4,16 @@ public class UserSummary {
 
     private Long id;
     private String username;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String middleName;
 
-    public UserSummary(Long id, String username, String name) {
+    public UserSummary(Long id, String username, String firstName, String lastName, String middleName) {
         this.id = id;
         this.username = username;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
     }
 
     public Long getId() {
@@ -28,11 +32,27 @@ public class UserSummary {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 }

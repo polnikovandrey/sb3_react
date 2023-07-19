@@ -32,7 +32,7 @@ public class ModelMapper {
             return choiceResponse;
         }).toList();
         pollResponse.setChoices(choiceResponses);
-        final UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(), creator.getName());
+        final UserSummary creatorSummary = new UserSummary(creator.getId(), creator.getUsername(), creator.getFirstName(), creator.getLastName(), creator.getMiddleName());
         pollResponse.setCreatedBy(creatorSummary);
         if (userVote != null) {
             pollResponse.setSelectedChoice(userVote);
