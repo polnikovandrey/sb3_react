@@ -31,7 +31,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class AuthController {   // TODO https://www.bezkoder.com/spring-security-refresh-token/
 
     @Autowired
     AuthenticationManager authenticationManager;
