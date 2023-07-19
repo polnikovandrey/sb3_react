@@ -82,10 +82,12 @@ public class AuthController {   // TODO https://www.bezkoder.com/spring-security
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(false, "Email Address is already in use"), HttpStatus.BAD_REQUEST);
         }
+
+        final RoleName roleName = signUpRequest.isAdmin() ? RoleName.ADMIN : RoleName.USER;
+        final Role userRole = roleRepository.findByName(roleName).orElseThrow(() -> new AppException("User Role not set."));
         final User user = User.builder().firstName(signUpRequest.getFirstName()).lastName(signUpRequest.getLastName()).middleName(signUpRequest.getMiddleName())
-                .username(signUpRequest.getUsername()).email(signUpRequest.getEmail()).password(passwordEncoder.encode(signUpRequest.getPassword())).build();
-        final Role userRole = roleRepository.findByName(RoleName.USER).orElseThrow(() -> new AppException("User Role not set."));
-        user.setRoles(Collections.singleton(userRole));
+                .username(signUpRequest.getUsername()).email(signUpRequest.getEmail()).password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .roles(Collections.singleton(userRole)).build();
         final User result = userRepository.save(user);
         final URI location
                 = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{username}").buildAndExpand(result.getUsername()).toUri();

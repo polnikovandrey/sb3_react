@@ -31,6 +31,8 @@ public class SignUpRequest {
     @Size(min = 6, max = 20)
     private String password;
 
+    private boolean admin;
+
     public String getFirstName() {
         return firstName;
     }
@@ -77,5 +79,13 @@ public class SignUpRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
