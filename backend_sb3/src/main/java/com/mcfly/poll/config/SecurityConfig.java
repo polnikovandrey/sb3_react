@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-//@EnableWebSecurity        TODO check wo
+//@EnableWebSecurity        TODO check wo, include WebMvcConfig active
 @EnableMethodSecurity
 public class SecurityConfig {
 
