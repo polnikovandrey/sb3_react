@@ -12,7 +12,7 @@ logging:
     org.hibernate.engine.transaction.internal.TransactionImpl: DEBUG
     org.hibernate.type.descriptor.sql: TRACE
     org.springframework.orm.jpa: DEBUG
-    org.springframework.security: TRACE
+    org.springframework.security: DEBUG
     org.springframework.transaction: DEBUG
 
 
