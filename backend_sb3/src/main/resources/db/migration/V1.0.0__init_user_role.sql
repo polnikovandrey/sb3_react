@@ -17,8 +17,8 @@ create table users
     first_name  varchar(20)  not null,
     last_name   varchar(20)  not null,
     middle_name varchar(20)  not null default '',
-    created_at  timestamp    not null,
-    updated_at  timestamp    not null,
+    created_at  datetime(6)  not null,
+    updated_at  datetime(6)  not null,
     version     bigint       not null
 );
 drop table if exists user_roles;

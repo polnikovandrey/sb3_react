@@ -3,16 +3,19 @@ package com.mcfly.poll.domain.user_role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(
         name = "users",
         uniqueConstraints = {
@@ -53,6 +56,7 @@ public class User {
         @Size(max = 20)
         private String lastName;
 
+        @NotNull
         @Size(max = 20)
         private String middleName;
 
@@ -60,16 +64,20 @@ public class User {
         @JoinTable(
                 name = "user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
-                inverseJoinColumns = @JoinColumn(name = "role_id")
+                inverseJoinColumns = @JoinColumn(name = "role_id",
+                nullable = false)
         )
         private Set<Role> roles = new HashSet<>();
 
         @CreatedDate
+        @Column(nullable = false, updatable = false)
         private Instant createdAt;
 
         @LastModifiedDate
+        @Column(nullable = false)
         private Instant updatedAt;
 
         @Version
+        @Column(nullable = false)
         private Long version;
 }
