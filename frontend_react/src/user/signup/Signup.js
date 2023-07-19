@@ -4,8 +4,11 @@ import './Signup.css';
 import {Link} from 'react-router-dom';
 import {
     EMAIL_MAX_LENGTH,
-    NAME_MAX_LENGTH,
-    NAME_MIN_LENGTH,
+    FIRST_NAME_MAX_LENGTH,
+    FIRST_NAME_MIN_LENGTH,
+    LAST_NAME_MAX_LENGTH,
+    LAST_NAME_MIN_LENGTH,
+    MIDDLE_NAME_MAX_LENGTH,
     PASSWORD_MAX_LENGTH,
     PASSWORD_MIN_LENGTH,
     USERNAME_MAX_LENGTH,
@@ -20,7 +23,13 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: {
+            firstName: {
+                value: ''
+            },
+            lastName: {
+                value: ''
+            },
+            middleName: {
                 value: ''
             },
             username: {
@@ -57,7 +66,9 @@ class Signup extends Component {
         event.preventDefault();
     
         const signupRequest = {
-            name: this.state.name.value,
+            firstName: this.state.firstName.value,
+            lastName: this.state.lastName.value,
+            middleName: this.state.middleName.value,
             email: this.state.email.value,
             username: this.state.username.value,
             password: this.state.password.value
@@ -78,7 +89,9 @@ class Signup extends Component {
     }
 
     isFormInvalid() {
-        return !(this.state.name.validateStatus === 'success' &&
+        return !(this.state.firstName.validateStatus === 'success' &&
+            this.state.lastName.validateStatus === 'success' &&
+            this.state.middleName.validateStatus === 'success' &&
             this.state.username.validateStatus === 'success' &&
             this.state.email.validateStatus === 'success' &&
             this.state.password.validateStatus === 'success'
@@ -92,16 +105,40 @@ class Signup extends Component {
                 <div className="signup-content">
                     <Form onSubmit={this.handleSubmit} className="signup-form">
                         <FormItem 
-                            label="Full Name"
-                            validateStatus={this.state.name.validateStatus}
-                            help={this.state.name.errorMsg}>
+                            label="First Name"
+                            validateStatus={this.state.firstName.validateStatus}
+                            help={this.state.firstName.errorMsg}>
                             <Input 
                                 size="large"
-                                name="name"
+                                name="firstName"
                                 autoComplete="off"
-                                placeholder="Your full name"
-                                value={this.state.name.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validateName)} />    
+                                placeholder="Your first name"
+                                value={this.state.firstName.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateFirstName)} />
+                        </FormItem>
+                        <FormItem
+                            label="Last Name"
+                            validateStatus={this.state.lastName.validateStatus}
+                            help={this.state.lastName.errorMsg}>
+                            <Input
+                                size="large"
+                                name="lastName"
+                                autoComplete="off"
+                                placeholder="Your last name"
+                                value={this.state.lastName.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateLastName)} />
+                        </FormItem>
+                        <FormItem
+                            label="Middle Name"
+                            validateStatus={this.state.middleName.validateStatus}
+                            help={this.state.middleName.errorMsg}>
+                            <Input
+                                size="large"
+                                name="middleName"
+                                autoComplete="off"
+                                placeholder="Your middle name"
+                                value={this.state.middleName.value}
+                                onChange={(event) => this.handleInputChange(event, this.validateMiddleName)} />
                         </FormItem>
                         <FormItem label="Username"
                             hasFeedback
@@ -160,22 +197,55 @@ class Signup extends Component {
 
     // Validation Functions
 
-    validateName = (name) => {
-        if(name.length < NAME_MIN_LENGTH) {
+    validateFirstName = (name) => {
+        if(name.length < FIRST_NAME_MIN_LENGTH) {
             return {
                 validateStatus: 'error',
-                errorMsg: `Name is too short (Minimum ${NAME_MIN_LENGTH} characters needed.)`
+                errorMsg: `First name is too short (Minimum ${FIRST_NAME_MIN_LENGTH} characters needed.)`
             }
-        } else if (name.length > NAME_MAX_LENGTH) {
+        } else if (name.length > FIRST_NAME_MAX_LENGTH) {
             return {
                 validationStatus: 'error',
-                errorMsg: `Name is too long (Maximum ${NAME_MAX_LENGTH} characters allowed.)`
+                errorMsg: `First name is too long (Maximum ${FIRST_NAME_MAX_LENGTH} characters allowed.)`
             }
         } else {
             return {
                 validateStatus: 'success',
                 errorMsg: null,
               };            
+        }
+    }
+
+    validateLastName = (name) => {
+        if(name.length < LAST_NAME_MIN_LENGTH) {
+            return {
+                validateStatus: 'error',
+                errorMsg: `Last name is too short (Minimum ${LAST_NAME_MIN_LENGTH} characters needed.)`
+            }
+        } else if (name.length > LAST_NAME_MAX_LENGTH) {
+            return {
+                validationStatus: 'error',
+                errorMsg: `Last name is too long (Maximum ${LAST_NAME_MAX_LENGTH} characters allowed.)`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
+        }
+    }
+
+    validateMiddleName = (name) => {
+        if (name.length > MIDDLE_NAME_MAX_LENGTH) {
+            return {
+                validationStatus: 'error',
+                errorMsg: `Middle name is too long (Maximum ${MIDDLE_NAME_MAX_LENGTH} characters allowed.)`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+            };
         }
     }
 
@@ -324,7 +394,7 @@ class Signup extends Component {
                 });
             }
         }).catch(error => {
-            // Marking validateStatus as success, Form will be recchecked at server
+            // Marking validateStatus as success, Form will be rechecked at server
             this.setState({
                 email: {
                     value: emailValue,
