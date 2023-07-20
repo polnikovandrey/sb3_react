@@ -31,9 +31,9 @@ public class UserRoleRepositoryTest {
 
     @Test
     void testFindRoleByName() {
-        final Optional<Role> roleUserOptional = roleRepository.findByName(RoleName.USER);
+        final Optional<Role> roleUserOptional = roleRepository.findByName(RoleName.ROLE_USER);
         assertTrue(roleUserOptional.isPresent());
-        final Optional<Role> roleAdminOptional = roleRepository.findByName(RoleName.ADMIN);
+        final Optional<Role> roleAdminOptional = roleRepository.findByName(RoleName.ROLE_ADMIN);
         assertTrue(roleAdminOptional.isPresent());
     }
 
@@ -105,7 +105,7 @@ public class UserRoleRepositoryTest {
                         .createdAt(Instant.now())
                         .updatedAt(Instant.now())
                         .build();
-        final Role userRole = roleRepository.findByName(RoleName.USER).orElseThrow(() -> new AppException("User Role not set."));
+        final Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(() -> new AppException("User Role not set."));
         user.setRoles(Collections.singleton(userRole));
         return user;
     }

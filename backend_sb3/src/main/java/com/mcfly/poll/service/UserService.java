@@ -1,16 +1,26 @@
 package com.mcfly.poll.service;
 
+import com.mcfly.poll.domain.user_role.Role;
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
+import com.mcfly.poll.payload.polling.PagedResponse;
 import com.mcfly.poll.payload.polling.PollingUserProfile;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
+import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.polling.PollRepository;
 import com.mcfly.poll.repository.polling.VoteRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -43,5 +53,16 @@ public class UserService {
         final long pollCount = pollRepository.countByCreatedBy(user.getId());
         final long voteCount = voteRepository.countByUserId(user.getId());
         return new PollingUserProfile(user.getId(), user.getUsername(), user.getLastName(), user.getCreatedAt(), pollCount, voteCount);
+    }
+
+    public PagedResponse<UserResponse> findAllUsers(int page, int size) {
+        final Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        final Page<User> users = userRepository.findAll(pageable);
+        final List<UserResponse> responses
+                = users.stream().map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
+                .email(user.getEmail()).firstName(user.getFirstName())
+                .lastName(user.getLastName()).middleName(user.getMiddleName())
+                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())).build()).toList();
+        return new PagedResponse<>(responses, users.getNumber(), users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
     }
 }
