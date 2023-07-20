@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class HomeController {
+public class LoginController {
 
     @GetMapping("/")
     String home(Model model) {
         model.addAttribute("message", "Hello!");        // TODO
-        return "home";
+        return "login";
     }
 }

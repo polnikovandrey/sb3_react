@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <title>Login Page</title>
+</head>
+<body>
+<main>
+    <div th:replace="fragments/navbar"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-2 offset-sm-1 offset-md-2 offset-lg-3 offset-xl-4 offset-xxl-5">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">Invalid Email or Password</div>
+                </div>
+                <div th:if="${param.logout}">
+                    <div class="alert alert-success">You have been logged out.</div>
+                </div>
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>Login Form</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" role="form" th:action="@{/login}">
+                            <div class="row mb-3">
+                                <label class="col-form-label fw-bold" for="login">Login</label>
+                                <input id="login" type="text" name="Login" class="form-control"
+                                       placeholder="Enter login" autocomplete="username"/>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-form-label fw-bold" for="password">Password</label>
+                                <input id="password" type="password" name="Password" class="form-control"
+                                       placeholder="Enter password" autocomplete="current-password"/>
+                            </div>
+                            <div class="row mb-2">
+                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
