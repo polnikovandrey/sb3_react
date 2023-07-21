@@ -4,7 +4,6 @@ import com.mcfly.poll.payload.polling.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.security.JwtUtils;
 import com.mcfly.poll.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,13 +27,6 @@ public class FormLoginController {
     @GetMapping({"/", "/login"})
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/logout")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String logout(HttpServletResponse res) {
-        res.setHeader("Authorization", null);
-        return "redirect:/login";
     }
 
     @GetMapping("/users/{page}")

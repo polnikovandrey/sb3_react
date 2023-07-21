@@ -69,9 +69,7 @@ public class SecurityConfig {
                         formLoginConfigurer
                                 .loginPage("/login")
                                 .defaultSuccessUrl("/users/0"))
-                .logout(httpSecurityLogoutConfigurer ->
-                        httpSecurityLogoutConfigurer
-                                .logoutUrl("/logout"))
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
