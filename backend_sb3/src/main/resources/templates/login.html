@@ -8,7 +8,7 @@
 </head>
 <body>
 <main>
-    <div th:replace="fragments/navbar"></div>
+    <div th:replace="~{fragments/navbar}"></div>
     <div class="container">
         <div class="row">
             <div class="col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-2 offset-sm-1 offset-md-2 offset-lg-3 offset-xl-4 offset-xxl-5">
@@ -25,13 +25,13 @@
                     <div class="card-body">
                         <form method="post" role="form" th:action="@{/login}">
                             <div class="row mb-3">
-                                <label class="col-form-label fw-bold" for="login">Login</label>
-                                <input id="login" type="text" name="Login" class="form-control"
+                                <label class="col-form-label fw-bold" for="username">Login</label>
+                                <input id="username" type="text" name="username" class="form-control"
                                        placeholder="Enter login" autocomplete="username"/>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-form-label fw-bold" for="password">Password</label>
-                                <input id="password" type="password" name="Password" class="form-control"
+                                <input id="password" type="password" name="password" class="form-control"
                                        placeholder="Enter password" autocomplete="current-password"/>
                             </div>
                             <div class="row mb-2">
