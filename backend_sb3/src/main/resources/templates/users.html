@@ -42,7 +42,14 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary">Add</button>
+                <button class="btn btn-primary">Add User</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                Page <span th:text="${users.getPage() + 1}"></span> of <span th:text="${users.getTotalPages()}"></span>
+                <button th:if="${(users.getPage() + 1) < users.getTotalPages()}" class="btn btn-primary">Next page</button>
+                <!-- TODO next page -->
             </div>
         </div>
     </div>
