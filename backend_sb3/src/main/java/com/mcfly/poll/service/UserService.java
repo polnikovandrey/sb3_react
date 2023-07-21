@@ -1,6 +1,5 @@
 package com.mcfly.poll.service;
 
-import com.mcfly.poll.domain.user_role.Role;
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.payload.polling.PagedResponse;
@@ -62,7 +61,7 @@ public class UserService {
                 = users.stream().map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
                 .email(user.getEmail()).firstName(user.getFirstName())
                 .lastName(user.getLastName()).middleName(user.getMiddleName())
-                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())).build()).toList();
+                .roles(user.getRoles().stream().map(role -> role.getName().getName()).collect(Collectors.toSet())).build()).toList();
         return new PagedResponse<>(responses, users.getNumber(), users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
     }
 }

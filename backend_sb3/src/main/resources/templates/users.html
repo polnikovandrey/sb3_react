@@ -10,9 +10,39 @@
 <main>
     <div th:replace="~{fragments/navbar}"></div>
     <div class="container">
+        <div class="row mt-3 mb-3">
+            <div class="col">
+                <table class="table table-hover">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Id</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Middle Name</th>
+                            <th>Roles</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tr th:each="user: ${users.getContent()}">
+                        <td th:text="${user.getId()}"/>
+                        <td th:text="${user.getUsername()}"/>
+                        <td th:text="${user.getEmail()}"/>
+                        <td th:text="${user.getFirstName()}"/>
+                        <td th:text="${user.getLastName()}"/>
+                        <td th:text="${user.getMiddleName()}"/>
+                        <td th:text="${#strings.listJoin(user.getRoles(), ', ')}"/>
+                        <td><button class="btn btn-primary w-100">Edit</button></td>
+                        <td><button class="btn btn-danger w-100">Delete</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-2 offset-sm-1 offset-md-2 offset-lg-3 offset-xl-4 offset-xxl-5">
-                Content
+            <div class="col">
+                <button class="btn btn-primary">Add</button>
             </div>
         </div>
     </div>

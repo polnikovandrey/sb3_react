@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -36,10 +37,10 @@ public class FormLoginController {
         return "redirect:/login";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/users/{page}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String users(Model model) {
-        final PagedResponse<UserResponse> users = userService.findAllUsers(0, 10);
+    public String users(@PathVariable int page, Model model) {
+        final PagedResponse<UserResponse> users = userService.findAllUsers(page, 10);
         model.addAttribute("users", users);
         return "users";
     }

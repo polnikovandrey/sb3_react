@@ -1,6 +1,5 @@
 package com.mcfly.poll.payload.user_role;
 
-import com.mcfly.poll.domain.user_role.RoleName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +19,6 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String middleName;
-    private Set<RoleName> roles;
+    private Set<String> roles;
 
 }

@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .formLogin(formLoginConfigurer ->
                         formLoginConfigurer
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/users"))
+                                .defaultSuccessUrl("/users/0"))
                 .logout(httpSecurityLogoutConfigurer ->
                         httpSecurityLogoutConfigurer
                                 .logoutUrl("/logout"))
