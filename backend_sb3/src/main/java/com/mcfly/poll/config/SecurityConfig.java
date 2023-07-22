@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .formLogin(formLoginConfigurer ->
                         formLoginConfigurer
                                 .loginPage("/login")
-                                .defaultSuccessUrl("/users/0"))
+                                .defaultSuccessUrl("/user/list"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }

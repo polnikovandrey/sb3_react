@@ -4,7 +4,7 @@
     <div sec:authorize="!isAuthenticated()" class="row">Login Page</div>
     <div sec:authorize="isAuthenticated()" class="row">
         <div class="d-flex justify-content-between py-2">
-            <a class="btn btn-dark" th:href="@{/users/add}">Add User</a>
+            <a class="btn btn-dark" th:href="@{/user/add}">Add User</a>
             <a class="btn btn-dark" th:href="@{/logout}">Logout</a>
         </div>
     </div>

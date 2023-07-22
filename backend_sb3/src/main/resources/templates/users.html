@@ -42,13 +42,13 @@
         </div>
         <div class="row">
             <div class="col">
-                <a th:classappend="${users.getPage() <= 0 ? 'disabled' : ''}" class="btn btn-primary" th:href="@{'/users/' + ${users.getPage() - 1}}">Prev page</a>
+                <a th:classappend="${users.getPage() <= 0 ? 'disabled' : ''}" class="btn btn-primary" th:href="@{'/user/list/' + ${users.getPage() - 1}}">Prev page</a>
             </div>
             <div class="col d-flex justify-content-center">
                 Page<span th:text="${users.getPage() + 1}" class="mx-1"></span>of<span th:text="${users.getTotalPages()}" class="mx-1"></span>
             </div>
             <div class="col d-flex justify-content-end">
-                <a th:classappend="${(users.getPage() + 1) >= users.getTotalPages() ? 'disabled' : ''}" class="btn btn-primary" th:href="@{'/users/' + ${users.getPage() + 1}}">Next page</a>
+                <a th:classappend="${(users.getPage() + 1) >= users.getTotalPages() ? 'disabled' : ''}" class="btn btn-primary" th:href="@{'/user/list/' + ${users.getPage() + 1}}">Next page</a>
             </div>
         </div>
     </div>
