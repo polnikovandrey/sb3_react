@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/css.css}"/>
+    <title th:text="${title}"></title>
+</head>
+<div th:fragment="navbar(addUserVisible)" class="container-fluid bg-dark mb-3 py-2">
+    <div sec:authorize="!isAuthenticated()" class="row">
+        <div class="col">
+            <span class="text-white">Login Page</span>
+            <a class="btn invisible">Invisible button to hold nav-bar height</a>
+        </div>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="row">
+        <div class="d-flex justify-content-between">
+            <a th:classappend="${addUserVisible} ? '' : 'invisible'" th:href="@{/user/add}" class="btn btn-dark">Add User</a>
+            <a th:href="@{/logout}" class="btn btn-dark">Logout</a>
+        </div>
+    </div>
+</div>
+<script th:fragment="bootstrap-js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</html>

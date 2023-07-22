@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-    <title>Users List</title>
-</head>
+<div th:replace="~{fragments/general :: head(title='Users List')}"></div>
 <body>
 <main>
-    <div th:replace="~{fragments/navbar}"></div>
+    <div th:replace="~{fragments/general :: navbar(addUserVisible=true)}"></div>
     <div class="container-fluid">
         <div class="row mb-3">
             <div class="col">
@@ -53,6 +48,6 @@
         </div>
     </div>
 </main>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<div th:replace="~{fragments/general :: bootstrap-js}"></div>
 </body>
 </html>
