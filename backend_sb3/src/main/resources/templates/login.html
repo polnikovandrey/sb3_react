@@ -23,16 +23,14 @@
                         <h2>Login Form</h2>
                     </div>
                     <div class="card-body">
-                        <form method="post" role="form" th:action="@{/login}">
+                        <form method="post" th:action="@{/login}">
                             <div class="row mb-3">
                                 <label class="col-form-label fw-bold" for="username">Login</label>
-                                <input id="username" type="text" name="username" class="form-control"
-                                       placeholder="Enter login" autocomplete="username"/>
+                                <input id="username" type="text" name="username" class="form-control" placeholder="Enter Login" autocomplete="username"/>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-form-label fw-bold" for="password">Password</label>
-                                <input id="password" type="password" name="password" class="form-control"
-                                       placeholder="Enter password" autocomplete="current-password"/>
+                                <input id="password" type="password" name="password" class="form-control" placeholder="Enter Password" autocomplete="current-password"/>
                             </div>
                             <div class="row mb-2">
                                 <button type="submit" class="btn btn-primary mb-2">Submit</button>
