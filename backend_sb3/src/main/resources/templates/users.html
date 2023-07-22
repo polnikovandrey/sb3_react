@@ -47,9 +47,13 @@
         </div>
         <div class="row">
             <div class="col">
+                <button th:if="${users.getPage()  > 0}" class="btn btn-primary">Previous page</button>
+            </div>
+            <div class="col">
                 Page <span th:text="${users.getPage() + 1}"></span> of <span th:text="${users.getTotalPages()}"></span>
+            </div>
+            <div class="col">
                 <button th:if="${(users.getPage() + 1) < users.getTotalPages()}" class="btn btn-primary">Next page</button>
-                <!-- TODO next page -->
             </div>
         </div>
     </div>

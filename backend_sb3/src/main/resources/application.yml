@@ -44,3 +44,5 @@ spring:
         show_sql: true
   mvc:
     log-request-details: true
+  profiles:
+    default: dev

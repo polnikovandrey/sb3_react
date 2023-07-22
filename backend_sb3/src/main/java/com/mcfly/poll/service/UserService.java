@@ -55,7 +55,7 @@ public class UserService {
     }
 
     public PagedResponse<UserResponse> findAllUsers(int page, int size) {
-        final Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        final Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
         final Page<User> users = userRepository.findAll(pageable);
         final List<UserResponse> responses
                 = users.stream().map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())

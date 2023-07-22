@@ -78,6 +78,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
 
         <!-- Provided scope -->
         <dependency>
@@ -116,12 +121,6 @@
             <version>2.2.220</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -132,5 +131,43 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <spring.profiles.active>test</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.javafaker</groupId>
+                    <artifactId>javafaker</artifactId>
+                    <version>1.0.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.github.javafaker</groupId>
+                    <artifactId>javafaker</artifactId>
+                    <version>1.0.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

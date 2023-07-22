@@ -18,3 +18,5 @@ spring:
       mode: never
   jpa:
     defer-datasource-initialization: false
+  profiles:
+    default: test
