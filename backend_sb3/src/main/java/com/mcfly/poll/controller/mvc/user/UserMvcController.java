@@ -43,4 +43,11 @@ public class UserMvcController {
         final int lastPageIndex = userService.getLastPageIndex(USERS_PER_PAGE);
         return "redirect:/user/list/" + lastPageIndex;
     }
+
+    @GetMapping("/delete/{userId}/{pageId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String deleteUser(@PathVariable Long userId, @PathVariable Integer pageId) {
+        userService.deleteUserById(userId);
+        return "redirect:/user/list/" + pageId;
+    }
 }

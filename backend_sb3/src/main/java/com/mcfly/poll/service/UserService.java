@@ -90,4 +90,8 @@ public class UserService {
                 .roles(Collections.singleton(userRole)).build();
         return userRepository.save(user);
     }
+
+    public void deleteUserById(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
