@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class UserMvcController {
 
@@ -25,7 +26,6 @@ public class UserMvcController {
     private final UserService userService;
 
     @GetMapping({"/list", "/list/{pageIndex}"})
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String listUsers(@PathVariable(required = false) Optional<Integer> pageIndex, Model model) {
         final PagedResponse<UserResponse> users = userService.listUsersPage(pageIndex.orElse(0), USERS_PER_PAGE);
         model.addAttribute("users", users);
@@ -33,13 +33,11 @@ public class UserMvcController {
     }
 
     @GetMapping("/add")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String showUserForm() {
         return "addUser";
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String postUserForm(@Valid @ModelAttribute AddUserRequest request) {
         userService.registerUser(request.getFirstName(), request.getLastName(), request.getMiddleName(), request.getUsername(), request.getEmail(), request.getPassword(), request.isAdmin());
         final int lastPageIndex = userService.getLastPageIndex(USERS_PER_PAGE);
@@ -47,14 +45,12 @@ public class UserMvcController {
     }
 
     @GetMapping("/delete/{userId}/{pageIndex}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteUser(@PathVariable Long userId, @PathVariable Integer pageIndex) {
         userService.deleteUserById(userId);
         return "redirect:/user/list/" + pageIndex;
     }
 
     @GetMapping("/edit/{userId}/{pageIndex}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String showEditUserForm(@PathVariable Long userId, @PathVariable Integer pageIndex, Model model) {
         final User user = userService.findUserById(userId);
         final EditUserFormData editUserData
@@ -70,7 +66,6 @@ public class UserMvcController {
     }
 
     @PostMapping("/edit")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String showEditUserForm(@Valid @ModelAttribute EditUserFormData editUserFormData) {
         userService.editUser(editUserFormData.getUserId(), editUserFormData.getFirstName(), editUserFormData.getLastName(), editUserFormData.getMiddleName());
         final int pageIndex = editUserFormData.getPageIndex();
