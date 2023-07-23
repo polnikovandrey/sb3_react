@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/general :: head(title='Edit User Form')}"></div>
+<body>
+<main>
+    <div th:replace="~{fragments/general :: navbar(addUserVisible=false)}"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-md-8 col-lg-6 offset-sm-1 offset-md-2 offset-lg-3">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2>Edit User Form</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/user/edit}">
+                            <div class="row mb-3">
+                                <label class="col-form-label fw-bold" for="firstName">First Name</label>
+                                <input id="firstName" type="text" name="firstName" class="form-control" placeholder="Enter First Name" th:value="${editUserFormData.getFirstName()}"/>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-form-label fw-bold" for="lastName">Last Name</label>
+                                <input id="lastName" type="text" name="lastName" class="form-control" placeholder="Enter Last Name" th:value="${editUserFormData.getLastName()}"/>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-form-label fw-bold" for="middleName">Middle Name</label>
+                                <input id="middleName" type="text" name="middleName" class="form-control" placeholder="Enter Middle Name" th:value="${editUserFormData.getMiddleName()}"/>
+                            </div>
+                            <input name="userId" type="hidden" th:value="${editUserFormData.getUserId()}"/>
+                            <input name="pageIndex" type="hidden" th:value="${editUserFormData.getPageIndex()}"/>
+                            <div class="row mb-2">
+                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="~{fragments/general :: bootstrap-js}"></div>
+</body>
+</html>

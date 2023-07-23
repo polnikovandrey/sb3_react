@@ -1,7 +1,9 @@
 package com.mcfly.poll.controller.mvc.user;
 
+import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.payload.polling.PagedResponse;
 import com.mcfly.poll.payload.user_role.AddUserRequest;
+import com.mcfly.poll.payload.user_role.EditUserFormData;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.service.UserService;
 import jakarta.validation.Valid;
@@ -22,10 +24,10 @@ public class UserMvcController {
 
     private final UserService userService;
 
-    @GetMapping({"/list", "/list/{page}"})
+    @GetMapping({"/list", "/list/{pageIndex}"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String listUsers(@PathVariable(required = false) Optional<Integer> page, Model model) {
-        final PagedResponse<UserResponse> users = userService.listUsersPage(page.orElse(0), USERS_PER_PAGE);
+    public String listUsers(@PathVariable(required = false) Optional<Integer> pageIndex, Model model) {
+        final PagedResponse<UserResponse> users = userService.listUsersPage(pageIndex.orElse(0), USERS_PER_PAGE);
         model.addAttribute("users", users);
         return "listUsers";
     }
@@ -44,10 +46,34 @@ public class UserMvcController {
         return "redirect:/user/list/" + lastPageIndex;
     }
 
-    @GetMapping("/delete/{userId}/{pageId}")
+    @GetMapping("/delete/{userId}/{pageIndex}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String deleteUser(@PathVariable Long userId, @PathVariable Integer pageId) {
+    public String deleteUser(@PathVariable Long userId, @PathVariable Integer pageIndex) {
         userService.deleteUserById(userId);
-        return "redirect:/user/list/" + pageId;
+        return "redirect:/user/list/" + pageIndex;
+    }
+
+    @GetMapping("/edit/{userId}/{pageIndex}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String showEditUserForm(@PathVariable Long userId, @PathVariable Integer pageIndex, Model model) {
+        final User user = userService.findUserById(userId);
+        final EditUserFormData editUserData
+                = EditUserFormData.builder()
+                                  .userId(user.getId())
+                                  .firstName(user.getFirstName())
+                                  .lastName(user.getLastName())
+                                  .middleName(user.getMiddleName())
+                                  .pageIndex(pageIndex)
+                                  .build();
+        model.addAttribute("editUserFormData", editUserData);
+        return "editUser";
+    }
+
+    @PostMapping("/edit")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String showEditUserForm(@Valid @ModelAttribute EditUserFormData editUserFormData) {
+        userService.editUser(editUserFormData.getUserId(), editUserFormData.getFirstName(), editUserFormData.getLastName(), editUserFormData.getMiddleName());
+        final int pageIndex = editUserFormData.getPageIndex();
+        return "redirect:/user/list/" + pageIndex;
     }
 }

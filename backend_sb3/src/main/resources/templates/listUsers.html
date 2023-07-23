@@ -30,7 +30,7 @@
                         <td th:text="${user.getMiddleName()}"/>
                         <td th:text="${#strings.listJoin(user.getRoles(), ', ')}"/>
                         <td><a class="btn btn-primary w-100" th:if="${user.getId() != 1}"
-                               th:href="@{'/user/edit/' + ${user.getId()}}">Edit</a></td>
+                               th:href="@{'/user/edit/' + ${user.getId()} + '/' + ${users.getPage()}}">Edit</a></td>
                         <td><a class="btn btn-danger w-100" th:if="${user.getId() != 1}"
                                th:href="@{'/user/delete/' + ${user.getId()} + '/' + ${users.getContent().size() > 1 ? users.getPage() : (users.getPage() - 1)}}">Delete</a></td>
                     </tr>

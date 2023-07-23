@@ -16,6 +16,7 @@ import com.mcfly.poll.repository.polling.VoteRepository;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -93,5 +94,17 @@ public class UserService {
 
     public void deleteUserById(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public void editUser(Long id, String firstName, String lastName, String middleName) {
+        final User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setMiddleName(middleName);
+        userRepository.save(user);
     }
 }
