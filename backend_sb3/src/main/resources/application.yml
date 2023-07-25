@@ -14,7 +14,7 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.springframework.orm.jpa: DEBUG
     org.springframework.web: TRACE
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
     org.springframework.transaction: DEBUG
 
 
