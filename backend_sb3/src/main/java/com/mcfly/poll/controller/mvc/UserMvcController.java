@@ -1,4 +1,4 @@
-package com.mcfly.poll.controller.mvc.user;
+package com.mcfly.poll.controller.mvc;
 
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.payload.polling.PagedResponse;

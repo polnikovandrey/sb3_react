@@ -1,4 +1,4 @@
-package com.mcfly.poll.controller.user_role;
+package com.mcfly.poll.controller.rest.user_role;
 
 import com.mcfly.poll.payload.polling.PagedResponse;
 import com.mcfly.poll.payload.polling.PollResponse;

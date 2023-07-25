@@ -1,4 +1,4 @@
-package com.mcfly.poll.controller.polling;
+package com.mcfly.poll.controller.rest.polling;
 
 import com.mcfly.poll.domain.polling.Poll;
 import com.mcfly.poll.payload.ApiResponse;

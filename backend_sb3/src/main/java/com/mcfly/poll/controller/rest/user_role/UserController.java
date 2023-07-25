@@ -1,4 +1,4 @@
-package com.mcfly.poll.controller.user_role;
+package com.mcfly.poll.controller.rest.user_role;
 
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
 import com.mcfly.poll.payload.user_role.UserSummary;

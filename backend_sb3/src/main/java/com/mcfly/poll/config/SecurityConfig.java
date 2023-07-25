@@ -3,7 +3,7 @@ package com.mcfly.poll.config;
 import com.mcfly.poll.security.CustomUserDetailsService;
 import com.mcfly.poll.security.JwtAuthenticationEntryPoint;
 import com.mcfly.poll.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,19 +27,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
-    @Autowired
-    JwtAuthenticationEntryPoint jwtUnauthorizedHandler;
 
     @Bean
     @Order(1)
-    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity,
+                                                      AuthenticationProvider authenticationProvider,
+                                                      JwtAuthenticationFilter jwtAuthenticationFilter,
+                                                      JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
         return httpSecurity
                 .securityMatcher("/api/**")
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
@@ -48,18 +47,20 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
                 .sessionManagement(sessionManagementConfigurer ->
                         sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(jwtUnauthorizedHandler))
+                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
     @Bean
-    public SecurityFilterChain formLoginFilterChain(HttpSecurity httpSecurity) throws Exception {
+    @Order(2)
+    public SecurityFilterChain formLoginFilterChain(HttpSecurity httpSecurity, AuthenticationProvider authenticationProvider) throws Exception {
         return httpSecurity
-                .authenticationProvider(authenticationProvider())
+                .securityMatcher("/**")
+                .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
@@ -79,15 +80,20 @@ public class SecurityConfig {
     }
 
     @Bean
+    public JwtAuthenticationEntryPoint jwtUnauthorizedEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(customUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 

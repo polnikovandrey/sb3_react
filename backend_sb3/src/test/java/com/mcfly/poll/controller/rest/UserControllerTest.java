@@ -1,6 +1,6 @@
-package com.mcfly.poll.controller;
+package com.mcfly.poll.controller.rest;
 
-import com.mcfly.poll.controller.user_role.UserController;
+import com.mcfly.poll.controller.rest.user_role.UserController;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.service.UserService;
@@ -24,7 +24,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    UserService userService;
+    private UserService userService;
 
     @Test
     void contextLoads() {

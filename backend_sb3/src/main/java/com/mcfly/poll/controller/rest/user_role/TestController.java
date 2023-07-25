@@ -1,4 +1,4 @@
-package com.mcfly.poll.controller.user_role;
+package com.mcfly.poll.controller.rest.user_role;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
