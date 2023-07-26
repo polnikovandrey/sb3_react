@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -78,6 +79,7 @@ public class UserService {
         return strict ? chunks - 1 : chunks;
     }
 
+    @Transactional
     public User registerUser(String firstName, String lastName, String middleName, String username, String email, String password, boolean admin) {
         if (userRepository.existsByUsername(username)) {
             throw new UserExistsAlreadyException("Username is already taken!");
@@ -92,6 +94,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUserById(Long userId) {
         userRepository.deleteById(userId);
     }
@@ -100,6 +103,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
+    @Transactional
     public void editUser(Long id, String firstName, String lastName, String middleName) {
         final User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         user.setFirstName(firstName);

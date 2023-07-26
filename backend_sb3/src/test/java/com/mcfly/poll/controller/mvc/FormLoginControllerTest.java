@@ -25,7 +25,7 @@ public class FormLoginControllerTest {
     }
 
     @Test
-    void loginPageAnonymousAccessAvailable() throws Exception {
+    void loginPageViewResolved() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/login"))
                .andDo(MockMvcResultHandlers.print())
                .andExpect(MockMvcResultMatchers.view().name("login"))
