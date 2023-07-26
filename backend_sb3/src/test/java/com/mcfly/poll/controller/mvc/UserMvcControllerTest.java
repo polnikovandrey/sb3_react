@@ -14,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -36,11 +35,10 @@ public class UserMvcControllerTest {
 
     @Test
     public void userListDeniedUnauthorizedAccess() throws Exception {
-        final MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/user/list");
-        mockMvc.perform(requestBuilder)
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/list"))
                .andDo(MockMvcResultHandlers.print())
-               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/login"))
-               .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/login"));
     }
 
     @Test
@@ -63,5 +61,30 @@ public class UserMvcControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/list"))
                .andDo(MockMvcResultHandlers.print())
                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void showAddUserFormDeniedUnauthorizedAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/add"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void showAddUserFormDeniedUserAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/add"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void showAddUserForm() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/add"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.view().name("addUser"));
     }
 }
