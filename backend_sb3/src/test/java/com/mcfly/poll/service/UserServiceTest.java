@@ -2,8 +2,10 @@ package com.mcfly.poll.service;
 
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
+import com.mcfly.poll.payload.polling.PagedResponse;
 import com.mcfly.poll.payload.polling.PollingUserProfile;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
+import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.polling.PollRepository;
 import com.mcfly.poll.repository.polling.VoteRepository;
@@ -15,8 +17,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -108,4 +116,31 @@ public class UserServiceTest {
         Mockito.verify(voteRepository, Mockito.times(1)).countByUserId(Mockito.any());
         Mockito.verifyNoMoreInteractions(voteRepository);
     }
+
+    @Test
+    void listUsersPage() {
+        final Pageable pageable = PageRequest.of(0, 1, Sort.Direction.ASC, "id");
+        final List<User> users = List.of(User.builder().id(42L).username("username").roles(Set.of()).build());
+        final List<UserResponse> expectedUserResponses
+                = users.stream().map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
+                                                         .email(user.getEmail()).firstName(user.getFirstName())
+                                                         .lastName(user.getLastName()).middleName(user.getMiddleName())
+                                                         .roles(Set.of())
+                                                         .build()).toList();
+        final PagedResponse<UserResponse> expectedPagedResponse = new PagedResponse<>(expectedUserResponses, 0, 1, 1, 1, true);
+        final PageImpl<User> page = new PageImpl<>(users, pageable, 1);
+        Mockito.when(userRepository.findAll(pageable))
+               .thenReturn(page);
+        final PagedResponse<UserResponse> userResponsePagedResponse = userService.listUsersPage(0, 1);
+        assertThat(userResponsePagedResponse).usingRecursiveComparison().isEqualTo(expectedPagedResponse);
+        Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
+    }
+
+    /* TODO
+        com.mcfly.poll.service.UserService.getLastPageIndex
+        com.mcfly.poll.service.UserService.registerUser
+        com.mcfly.poll.service.UserService.deleteUserById
+        com.mcfly.poll.service.UserService.findUserById
+        com.mcfly.poll.service.UserService.editUser
+     */
 }
