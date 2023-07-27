@@ -1,7 +1,9 @@
 package com.mcfly.poll.controller.mvc;
 
 import com.mcfly.poll.config.SecurityConfig;
+import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.payload.polling.PagedResponse;
+import com.mcfly.poll.payload.user_role.EditUserFormData;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.security.CustomUserDetailsService;
 import com.mcfly.poll.security.JwtAuthenticationFilter;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.Instant;
 import java.util.Collections;
 
 @WebMvcTest(UserMvcController.class)
@@ -154,5 +157,44 @@ public class UserMvcControllerTest {
                .andExpect(MockMvcResultMatchers.redirectedUrl("/user/list/" + expectedLastPageIndex));
         Mockito.verify(userService, Mockito.times(1)).deleteUserById(Mockito.anyLong());
         Mockito.verifyNoMoreInteractions(userService);
+    }
+
+    @Test
+    public void showEditUserFormDeniedUnauthorizedAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/42/0"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void showEditUserFormDeniedUserAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/42/0"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void showEditUserForm() throws Exception {
+        final Long userId = 42L;
+        final Integer pageIndex = 0;
+        final User userStub = new User(userId, "username", "email", "password", "firstName", "lastName", "middleName",
+                                    Collections.emptySet(), Instant.now(), Instant.now(), 0L);
+        final EditUserFormData expectedEditUserFormData
+                = EditUserFormData.builder()
+                                  .userId(userStub.getId())
+                                  .firstName(userStub.getFirstName())
+                                  .lastName(userStub.getLastName())
+                                  .middleName(userStub.getMiddleName())
+                                  .pageIndex(pageIndex)
+                                  .build();
+        Mockito.when(userService.findUserById(userId)).thenReturn(userStub);
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/{userId}/{pageIndex}", userId, pageIndex))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.model().attribute("editUserFormData", expectedEditUserFormData))
+               .andExpect(MockMvcResultMatchers.view().name("editUser"));
     }
 }
