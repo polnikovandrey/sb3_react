@@ -74,6 +74,9 @@ public class UserService {
 
     public int getLastPageIndex(int size) {
         final int usersCount = (int) userRepository.count();
+        if (usersCount == 0) {
+            return 0;
+        }
         final boolean strict = usersCount % size == 0;
         final int chunks = usersCount / size;
         return strict ? chunks - 1 : chunks;
