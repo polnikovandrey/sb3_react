@@ -1,7 +1,10 @@
 package com.mcfly.poll.service;
 
+import com.mcfly.poll.domain.user_role.Role;
+import com.mcfly.poll.domain.user_role.RoleName;
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
+import com.mcfly.poll.exception.UserExistsAlreadyException;
 import com.mcfly.poll.payload.polling.PagedResponse;
 import com.mcfly.poll.payload.polling.PollingUserProfile;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
@@ -9,10 +12,12 @@ import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.polling.PollRepository;
 import com.mcfly.poll.repository.polling.VoteRepository;
+import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +45,10 @@ public class UserServiceTest {
     PollRepository pollRepository;
     @Mock
     VoteRepository voteRepository;
+    @Mock
+    RoleRepository roleRepository;
+    @Mock
+    PasswordEncoder passwordEncoder;
     @InjectMocks
     UserService userService;
 
@@ -176,8 +186,69 @@ public class UserServiceTest {
         assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
     }
 
+    @Test
+    void registerUserWithExistingUsernameFails() {
+        Mockito.when(userRepository.existsByUsername(Mockito.any())).thenReturn(true);
+        assertThrows(UserExistsAlreadyException.class,
+                     () -> userService.registerUser("firstName", "lastName", "middleName", "username", "email@mail.com", "password", false));
+    }
+
+    @Test
+    void registerUserWithExistingEmailFails() {
+        Mockito.when(userRepository.existsByUsername(Mockito.any())).thenReturn(false);
+        Mockito.when(userRepository.existsByEmail(Mockito.any())).thenReturn(true);
+        assertThrows(UserExistsAlreadyException.class,
+                     () -> userService.registerUser("firstName", "lastName", "middleName", "username", "email@mail.com", "password", false));
+    }
+
+    @Test
+    void registerUserCorrectUserRole() {
+        final Role roleMock = Mockito.mock(Role.class);
+        final User userMock = Mockito.mock(User.class);
+        Mockito.when(userRepository.existsByUsername(Mockito.any())).thenReturn(false);
+        Mockito.when(userRepository.existsByEmail(Mockito.any())).thenReturn(false);
+        Mockito.when(roleRepository.findByName(Mockito.any())).thenReturn(Optional.of(roleMock));
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn("password");
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(userMock);
+        final ArgumentCaptor<RoleName> roleNameArgumentCaptor = ArgumentCaptor.forClass(RoleName.class);
+        userService.registerUser("firstName", "lastName", "middleName", "username", "email@mail.com", "password", false);
+        Mockito.verify(roleRepository, Mockito.times(1)).findByName(roleNameArgumentCaptor.capture());
+        assertThat(roleNameArgumentCaptor.getValue()).isEqualTo(RoleName.ROLE_USER);
+        userService.registerUser("firstName", "lastName", "middleName", "username", "email@mail.com", "password", true);
+        Mockito.verify(roleRepository, Mockito.times(2)).findByName(roleNameArgumentCaptor.capture());
+        assertThat(roleNameArgumentCaptor.getValue()).isEqualTo(RoleName.ROLE_ADMIN);
+    }
+
+    @Test
+    void registerUserCorrectUser() {
+        final String firstName = "firstName";
+        final String lastName = "lastName";
+        final String middleName = "middleName";
+        final String username = "username";
+        final String mail = "email@mail.com";
+        final String password = "password";
+        final String encryptedPassword = "encryptedPassword";
+        final boolean admin = false;
+        final Role roleMock = Mockito.mock(Role.class);
+        final User userMock = Mockito.mock(User.class);
+        Mockito.when(userRepository.existsByUsername(Mockito.any())).thenReturn(false);
+        Mockito.when(userRepository.existsByEmail(Mockito.any())).thenReturn(false);
+        Mockito.when(roleRepository.findByName(Mockito.any())).thenReturn(Optional.of(roleMock));
+        Mockito.when(passwordEncoder.encode(Mockito.anyString())).thenReturn(encryptedPassword);
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(userMock);
+        final ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        userService.registerUser(firstName, lastName, middleName, username, mail, password, admin);
+        Mockito.verify(userRepository, Mockito.times(1)).save(userArgumentCaptor.capture());
+        assertThat(userArgumentCaptor.getValue())
+                .matches(user -> firstName.equals(user.getFirstName())
+                        && lastName.equals(user.getLastName())
+                        && middleName.equals(user.getMiddleName())
+                        && username.equals(user.getUsername())
+                        && mail.equals(user.getEmail())
+                        && encryptedPassword.equals(user.getPassword()));
+    }
+
     /* TODO
-        com.mcfly.poll.service.UserService.registerUser
         com.mcfly.poll.service.UserService.deleteUserById
         com.mcfly.poll.service.UserService.findUserById
         com.mcfly.poll.service.UserService.editUser
