@@ -127,4 +127,32 @@ public class UserMvcControllerTest {
         Mockito.verify(userService, Mockito.times(1)).getLastPageIndex(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(userService);
     }
+
+    @Test
+    public void deleteUserDeniedUnauthorizedAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete/42/0"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void deleteUserDeniedUserAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete/42/0"))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void deleteUser() throws Exception {
+        final int expectedLastPageIndex = 1;
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete/42/" + expectedLastPageIndex))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrl("/user/list/" + expectedLastPageIndex));
+        Mockito.verify(userService, Mockito.times(1)).deleteUserById(Mockito.anyLong());
+        Mockito.verifyNoMoreInteractions(userService);
+    }
 }
