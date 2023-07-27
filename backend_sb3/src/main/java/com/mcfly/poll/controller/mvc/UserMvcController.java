@@ -72,7 +72,7 @@ public class UserMvcController {
     }
 
     @PostMapping("/edit")
-    public String showEditUserForm(@Valid @ModelAttribute EditUserFormData editUserFormData) {
+    public String editUser(@Valid @ModelAttribute EditUserFormData editUserFormData) {
         userService.editUser(editUserFormData.getUserId(), editUserFormData.getFirstName(), editUserFormData.getLastName(), editUserFormData.getMiddleName());
         final int pageIndex = editUserFormData.getPageIndex();
         return "redirect:/user/list/" + pageIndex;

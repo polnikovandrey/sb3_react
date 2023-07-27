@@ -197,4 +197,57 @@ public class UserMvcControllerTest {
                .andExpect(MockMvcResultMatchers.model().attribute("editUserFormData", expectedEditUserFormData))
                .andExpect(MockMvcResultMatchers.view().name("editUser"));
     }
+
+    @Test
+    public void editUserDeniedUnauthorizedAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/edit")
+                                              .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                              .param("userId", "42")
+                                              .param("firstName", "firstName")
+                                              .param("lastName", "lastName")
+                                              .param("middleName", "middleName")
+                                              .param("pageIndex", "1")
+                                              .with(SecurityMockMvcRequestPostProcessors.csrf()))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void editUserDeniedUserAccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/edit")
+                                              .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                              .param("userId", "42")
+                                              .param("firstName", "firstName")
+                                              .param("lastName", "lastName")
+                                              .param("middleName", "middleName")
+                                              .param("pageIndex", "1")
+                                              .with(SecurityMockMvcRequestPostProcessors.csrf()))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void editUser() throws Exception {
+        final long userId = 42L;
+        final String firstName = "firstName";
+        final String lastName = "lastName";
+        final String middleName = "middleName";
+        final int pageIndex = 1;
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/edit")
+                                              .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                              .param("userId", Long.toString(userId))
+                                              .param("firstName", firstName)
+                                              .param("lastName", lastName)
+                                              .param("middleName", middleName)
+                                              .param("pageIndex", Integer.toString(pageIndex))
+                                              .with(SecurityMockMvcRequestPostProcessors.csrf()))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+               .andExpect(MockMvcResultMatchers.redirectedUrl("/user/list/" + pageIndex));
+        Mockito.verify(userService, Mockito.times(1)).editUser(userId, firstName, lastName, middleName);
+        Mockito.verifyNoMoreInteractions(userService);
+    }
 }
