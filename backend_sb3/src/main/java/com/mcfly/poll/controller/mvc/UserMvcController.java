@@ -38,8 +38,14 @@ public class UserMvcController {
     }
 
     @PostMapping("/add")
-    public String postUserForm(@Valid @ModelAttribute AddUserRequest request) {
-        userService.registerUser(request.getFirstName(), request.getLastName(), request.getMiddleName(), request.getUsername(), request.getEmail(), request.getPassword(), request.isAdmin());
+    public String postUserForm(@Valid @ModelAttribute AddUserRequest addUserRequest) {
+        userService.registerUser(addUserRequest.getFirstName(),
+                                 addUserRequest.getLastName(),
+                                 addUserRequest.getMiddleName(),
+                                 addUserRequest.getUsername(),
+                                 addUserRequest.getEmail(),
+                                 addUserRequest.getPassword(),
+                                 addUserRequest.isAdmin());
         final int lastPageIndex = userService.getLastPageIndex(USERS_PER_PAGE);
         return "redirect:/user/list/" + lastPageIndex;
     }

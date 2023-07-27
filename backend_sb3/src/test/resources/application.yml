@@ -5,6 +5,17 @@ app:
   jwtSecret: 024b0cf342302266ea36c95ba91085f2a3e9075c67a98583b496cd9a38e3cacccccab0f8c8058abed2acc764638fd38a1fa88a1ec188c95e31fb28375076f46a
   jwtExpirationInMs: 604800000
 
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate.engine.transaction.internal.TransactionImpl: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.web: TRACE
+    org.springframework.security: TRACE
+    org.springframework.transaction: DEBUG
+
 spring:
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
@@ -13,10 +24,14 @@ spring:
   h2:
     console:
       enabled: true
-  sql:
-    init:
-      mode: never
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
   jpa:
     defer-datasource-initialization: false
   profiles:
     default: test
+  sql:
+    init:
+      mode: never
