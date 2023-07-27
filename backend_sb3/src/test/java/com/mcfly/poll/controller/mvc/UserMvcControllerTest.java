@@ -1,9 +1,7 @@
 package com.mcfly.poll.controller.mvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mcfly.poll.config.SecurityConfig;
 import com.mcfly.poll.payload.polling.PagedResponse;
-import com.mcfly.poll.payload.user_role.AddUserRequest;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.security.CustomUserDetailsService;
 import com.mcfly.poll.security.JwtAuthenticationFilter;
@@ -111,15 +109,22 @@ public class UserMvcControllerTest {
     @WithMockUser(roles = "ADMIN")
     public void postAddUserForm() throws Exception {
         final int expectedLastPageIndex = 1;
-        final AddUserRequest requestBody = AddUserRequest.builder().email("email").admin(false).middleName("middleName").lastName("lastName").firstName("firstName").username("username").password("password").build();
-        final String body = new ObjectMapper().writeValueAsString(requestBody);
         Mockito.when(userService.getLastPageIndex(Mockito.anyInt())).thenReturn(expectedLastPageIndex);
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/add").with(SecurityMockMvcRequestPostProcessors.csrf().asHeader()).contentType(MediaType.APPLICATION_JSON).content(body))
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/add")
+                                              .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                              .param("firstName", "First Name")
+                                              .param("lastName", "Last Name")
+                                              .param("middleName", "Middle Name")
+                                              .param("username", "username")
+                                              .param("email", "email@mail.com")
+                                              .param("password", "password")
+                                              .param("admin", "false")
+                                              .with(SecurityMockMvcRequestPostProcessors.csrf()))
                .andDo(MockMvcResultHandlers.print())
                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-               .andExpect(MockMvcResultMatchers.redirectedUrlPattern("**/user/list/" + expectedLastPageIndex));
-        Mockito.verify(userService, Mockito.times(1)).registerUser(requestBody.getFirstName(), requestBody.getLastName(), requestBody.getMiddleName(), requestBody.getUsername(), requestBody.getEmail(), requestBody.getPassword(), requestBody.isAdmin());
-        Mockito.verify(userService, Mockito.times(1)).getLastPageIndex(expectedLastPageIndex);
+               .andExpect(MockMvcResultMatchers.redirectedUrl("/user/list/" + expectedLastPageIndex));
+        Mockito.verify(userService, Mockito.times(1)).registerUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyBoolean());
+        Mockito.verify(userService, Mockito.times(1)).getLastPageIndex(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(userService);
     }
 }

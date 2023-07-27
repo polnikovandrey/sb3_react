@@ -15,6 +15,7 @@ logging:
     org.springframework.web: TRACE
     org.springframework.security: TRACE
     org.springframework.transaction: DEBUG
+    org.springframework.validation: TRACE
 
 spring:
   datasource:

@@ -73,6 +73,11 @@
             <artifactId>jjwt-impl</artifactId>
             <version>0.11.5</version>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+        </dependency>
         <!-- Java 8 Date/Time Support -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -99,11 +104,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.1.0</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.5</version>
         </dependency>
 
         <!-- Test scope -->
