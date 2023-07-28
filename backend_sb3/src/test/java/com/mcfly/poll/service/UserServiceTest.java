@@ -241,16 +241,25 @@ public class UserServiceTest {
         Mockito.verify(userRepository, Mockito.times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
                 .matches(user -> firstName.equals(user.getFirstName())
-                        && lastName.equals(user.getLastName())
-                        && middleName.equals(user.getMiddleName())
-                        && username.equals(user.getUsername())
-                        && mail.equals(user.getEmail())
-                        && encryptedPassword.equals(user.getPassword()));
+                                 && lastName.equals(user.getLastName())
+                                 && middleName.equals(user.getMiddleName())
+                                 && username.equals(user.getUsername())
+                                 && mail.equals(user.getEmail())
+                                 && encryptedPassword.equals(user.getPassword()));
     }
 
-    /* TODO
-        com.mcfly.poll.service.UserService.deleteUserById
-        com.mcfly.poll.service.UserService.findUserById
-        com.mcfly.poll.service.UserService.editUser
-     */
+    @Test
+    void editUser() {
+        final String firstName = "firstName";
+        final String lastName = "lastName";
+        final String middleName = "middleName";
+        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(new User()));
+        final ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        userService.editUser(42L, firstName, lastName, middleName);
+        Mockito.verify(userRepository, Mockito.times(1)).save(userArgumentCaptor.capture());
+        assertThat(userArgumentCaptor.getValue())
+                .matches(user -> firstName.equals(user.getFirstName())
+                                 && lastName.equals(user.getLastName())
+                                 && middleName.equals(user.getMiddleName()));
+    }
 }
