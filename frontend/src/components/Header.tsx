@@ -5,7 +5,6 @@ import {LinkContainer} from "react-router-bootstrap";
 import {UserState} from "../store/types";
 import {selectUserInfo} from "../slice/userSlice";
 import {userLogoutAction} from "../actions/userActions";
-import {Route} from "react-router-dom";
 import SearchBox from "./SearchBox";
 import {useLocation, useNavigate} from "react-router";
 
@@ -30,9 +29,7 @@ const Header = () => {
                     <Navbar.Brand>ProShop</Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                { showSearch && (
-                    <Route element={<SearchBox/>}/>
-                )}
+                { showSearch && <SearchBox/>}
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
                         <LinkContainer to='/cart'>

@@ -8,10 +8,11 @@ import Message from "../components/Message";
 import {LinkContainer} from "react-router-bootstrap";
 import {selectUserInfo} from "../slice/userSlice";
 import {selectUserDelete} from "../slice/userDeleteSlice";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 
 const UserListScreen = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useAppDispatch();
     const userListState = useAppSelector(selectUserList);
     const { loading, users, error } = userListState;
@@ -28,7 +29,7 @@ const UserListScreen = () => {
                 navigate('/login');
             }
         })();
-    }, [ admin, dispatch, history, successDelete, token ]);
+    }, [ admin, dispatch, location, successDelete, token ]);
     async function deleteHandler(userId: string) {
         if (window.confirm('Are you sure?')) {
             await userDeleteAction(userId, token, dispatch);
