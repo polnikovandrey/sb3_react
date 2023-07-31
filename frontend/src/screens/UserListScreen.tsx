@@ -29,7 +29,7 @@ const UserListScreen = () => {
                 navigate('/login');
             }
         })();
-    }, [ admin, dispatch, location, successDelete, token ]);
+    }, [ admin, dispatch, location, navigate, successDelete, token ]);
     async function deleteHandler(userId: string) {
         if (window.confirm('Are you sure?')) {
             await userDeleteAction(userId, token, dispatch);

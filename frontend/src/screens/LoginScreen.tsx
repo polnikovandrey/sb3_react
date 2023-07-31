@@ -25,7 +25,7 @@ const LoginScreen = () => {
         if (userState?.user) {
             navigate(redirect);
         }
-    }, [ location, redirect, userState ]);
+    }, [ location, navigate, redirect, userState ]);
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();

@@ -40,7 +40,7 @@ const UserEditScreen = () => {
                 setAdmin(user.admin!);
             }
         })();
-    }, [ dispatch, location, successUpdate, token, userId, user ]);
+    }, [ dispatch, location, navigate, successUpdate, token, userId, user ]);
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();

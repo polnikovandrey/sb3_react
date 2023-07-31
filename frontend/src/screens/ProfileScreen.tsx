@@ -43,7 +43,7 @@ const ProfileScreen = () => {
                 navigate('/login');
             }
         })();
-    }, [ dispatch, location, userStateInfo, userProfileInfo ]);
+    }, [ dispatch, location, navigate, userStateInfo, userProfileInfo ]);
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();

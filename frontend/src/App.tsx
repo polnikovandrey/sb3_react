@@ -10,24 +10,27 @@ import ProfileScreen from "./screens/ProfileScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import {Routes} from "react-router";
+import {HelmetProvider} from "react-helmet-async";
 
 const App = () => {
     return (
         <BrowserRouter>
-            <Header/>
-            <main className="py-3">
-                <Container>
-                    <Routes>
-                        <Route path='/login' element={<LoginScreen/>}/>
-                        <Route path='/register' element={<RegisterScreen/>}/>
-                        <Route path='/profile' element={<ProfileScreen/>}/>
-                        <Route path='/admin/userList' element={<UserListScreen/>}/>
-                        <Route path='/admin/user/:id/edit' element={<UserEditScreen/>}/>
-                        <Route path='/' element={<HomeScreen/>}/>
-                    </Routes>
-                </Container>
-            </main>
-            <Footer/>
+            <HelmetProvider>
+                <Header/>
+                <main className="py-3">
+                    <Container>
+                        <Routes>
+                            <Route path='/login' element={<LoginScreen/>}/>
+                            <Route path='/register' element={<RegisterScreen/>}/>
+                            <Route path='/profile' element={<ProfileScreen/>}/>
+                            <Route path='/admin/userList' element={<UserListScreen/>}/>
+                            <Route path='/admin/user/:id/edit' element={<UserEditScreen/>}/>
+                            <Route path='/' element={<HomeScreen/>}/>
+                        </Routes>
+                    </Container>
+                </main>
+                <Footer/>
+            </HelmetProvider>
         </BrowserRouter>
     );
 }
