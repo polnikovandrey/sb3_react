@@ -1,35 +1,28 @@
-import React, {FormEventHandler, useEffect} from 'react';
+import React, {FormEventHandler} from 'react';
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from "react-router-bootstrap";
 import {UserState} from "../store/types";
 import {selectUserInfo} from "../slice/userSlice";
 import {userLogoutAction} from "../actions/userActions";
-import SearchBox from "./SearchBox";
-import {useLocation, useNavigate} from "react-router";
+import {useNavigate} from "react-router";
+import {APP_NAME} from "../constants";
 
 const Header = () => {
     const navigate = useNavigate();
-    const location = useLocation();
     const userState: UserState = useAppSelector(selectUserInfo);
     const dispatch = useAppDispatch();
     const logoutHandler: FormEventHandler = async () => {
         await userLogoutAction(dispatch);
         navigate('/');
     };
-    const pathname = location.pathname;
-    const showSearch = pathname === '/' || pathname.startsWith('/page/') || pathname.startsWith('/search/');
-    useEffect(() => {
-
-    }, [ showSearch ]);
     return <header>
         <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
             <Container>
                 <LinkContainer to='/'>
-                    <Navbar.Brand>ProShop</Navbar.Brand>
+                    <Navbar.Brand>{APP_NAME}</Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                { showSearch && <SearchBox/>}
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
                         <LinkContainer to='/cart'>
