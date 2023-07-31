@@ -28,7 +28,10 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {   // TODO https://www.bezkoder.com/spring-security-refresh-token/
+public class AuthController {
+
+    // TODO https://www.bezkoder.com/spring-security-refresh-token/
+    // TODO /api/v1/...
 
     @Autowired
     AuthenticationManager authenticationManager;
