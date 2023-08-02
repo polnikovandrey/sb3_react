@@ -13,7 +13,7 @@ import {useLocation, useNavigate} from "react-router";
 const LoginScreen = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [ email, setEmail ] = useState('');
+    const [ usernameOrEmail, setUsernameOrEmail ] = useState('');
     const [ password, setPassword ] = useState('');
 
     const userState: UserState = useAppSelector(selectUserInfo);
@@ -29,7 +29,7 @@ const LoginScreen = () => {
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();
-        await userLoginAction(email, password, dispatch);
+        await userLoginAction(usernameOrEmail, password, dispatch);
     }
     return (
         <FormContainer>
@@ -38,8 +38,8 @@ const LoginScreen = () => {
             { userState?.loading && <Loader/> }
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='email' className='mb-3'>
-                    <Form.Label>Email Address</Form.Label>
-                    <Form.Control type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <Form.Label>Username or email</Form.Label>
+                    <Form.Control type='input' placeholder='Enter username or email' value={usernameOrEmail} onChange={(e) => setUsernameOrEmail(e.target.value)}/>
                 </Form.Group>
                 <Form.Group controlId='password' className='mb-4'>
                     <Form.Label>Password</Form.Label>
