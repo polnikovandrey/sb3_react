@@ -6,13 +6,11 @@ import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.AppException;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.exception.UserExistsAlreadyException;
-import com.mcfly.poll.payload.polling.PagedResponse;
-import com.mcfly.poll.payload.polling.PollingUserProfile;
+import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
+import com.mcfly.poll.payload.user_role.UserProfile;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
-import com.mcfly.poll.repository.polling.PollRepository;
-import com.mcfly.poll.repository.polling.VoteRepository;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
@@ -37,8 +35,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PollRepository pollRepository;
-    private final VoteRepository voteRepository;
 
     public UserSummary getUserSummary(UserPrincipal currentUser) {
         return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getMiddleName());
@@ -54,11 +50,9 @@ public class UserService {
         return new UserIdentityAvailability(isAvailable);
     }
 
-    public PollingUserProfile getUserProfile(String username) {
+    public UserProfile getUserProfile(String username) {
         final User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found", "User", "username", username));
-        final long pollCount = pollRepository.countByCreatedBy(user.getId());
-        final long voteCount = voteRepository.countByUserId(user.getId());
-        return new PollingUserProfile(user.getId(), user.getUsername(), user.getLastName(), user.getCreatedAt(), pollCount, voteCount);
+        return new UserProfile(user.getId(), user.getUsername(), user.getLastName(), user.getCreatedAt());
     }
 
     public PagedResponse<UserResponse> listUsersPage(int page, int size) {

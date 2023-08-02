@@ -1,11 +1,12 @@
 package com.mcfly.poll.controller.mvc;
 
 import com.mcfly.poll.domain.user_role.User;
-import com.mcfly.poll.payload.polling.PagedResponse;
+import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.AddUserRequest;
 import com.mcfly.poll.payload.user_role.EditUserFormData;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.service.UserService;
+import com.mcfly.poll.util.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +28,7 @@ public class UserMvcController {
 
     @GetMapping({"/list", "/list/{pageIndex}"})
     public String listUsers(@PathVariable(required = false) Optional<Integer> pageIndex, Model model) {
-        final PagedResponse<UserResponse> users = userService.listUsersPage(pageIndex.orElse(0), USERS_PER_PAGE);
+        final PagedResponse<UserResponse> users = userService.listUsersPage(pageIndex.orElse(AppConstants.DEFAULT_PAGE_INDEX), AppConstants.DEFAULT_PAGE_SIZE);
         model.addAttribute("users", users);
         return "listUsers";
     }

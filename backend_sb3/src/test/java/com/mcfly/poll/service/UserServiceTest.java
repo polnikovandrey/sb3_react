@@ -5,13 +5,11 @@ import com.mcfly.poll.domain.user_role.RoleName;
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.exception.UserExistsAlreadyException;
-import com.mcfly.poll.payload.polling.PagedResponse;
-import com.mcfly.poll.payload.polling.PollingUserProfile;
+import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
+import com.mcfly.poll.payload.user_role.UserProfile;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
-import com.mcfly.poll.repository.polling.PollRepository;
-import com.mcfly.poll.repository.polling.VoteRepository;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
@@ -41,10 +39,6 @@ public class UserServiceTest {
 
     @Mock
     UserRepository userRepository;
-    @Mock
-    PollRepository pollRepository;
-    @Mock
-    VoteRepository voteRepository;
     @Mock
     RoleRepository roleRepository;
     @Mock
@@ -91,8 +85,6 @@ public class UserServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> userService.getUserProfile(absentUsername));
         Mockito.verify(userRepository, Mockito.times(1)).findByUsername(Mockito.any());
         Mockito.verifyNoMoreInteractions(userRepository);
-        Mockito.verifyNoInteractions(pollRepository);
-        Mockito.verifyNoInteractions(voteRepository);
     }
 
     @Test
@@ -108,23 +100,14 @@ public class UserServiceTest {
                         .lastName("lastName")
                         .middleName("middleName")
                         .build();
-        final PollingUserProfile expectedProfile
-                = new PollingUserProfile(expectedUser.getId(), expectedUser.getUsername(), expectedUser.getLastName(),
-                expectedUser.getCreatedAt(), 42L, 43L);
+        final UserProfile expectedProfile
+                = new UserProfile(expectedUser.getId(), expectedUser.getUsername(), expectedUser.getLastName(), expectedUser.getCreatedAt());
         Mockito.when(userRepository.findByUsername(existingUsername))
                 .thenReturn(Optional.of(expectedUser));
-        Mockito.when(pollRepository.countByCreatedBy(expectedUser.getId()))
-                        .thenReturn(42L);
-        Mockito.when(voteRepository.countByUserId(expectedUser.getId()))
-                .thenReturn(43L);
-        final PollingUserProfile actual = userService.getUserProfile(existingUsername);
+        final UserProfile actual = userService.getUserProfile(existingUsername);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expectedProfile);
         Mockito.verify(userRepository, Mockito.times(1)).findByUsername(Mockito.any());
         Mockito.verifyNoMoreInteractions(userRepository);
-        Mockito.verify(pollRepository, Mockito.times(1)).countByCreatedBy(Mockito.any());
-        Mockito.verifyNoMoreInteractions(pollRepository);
-        Mockito.verify(voteRepository, Mockito.times(1)).countByUserId(Mockito.any());
-        Mockito.verifyNoMoreInteractions(voteRepository);
     }
 
     @Test

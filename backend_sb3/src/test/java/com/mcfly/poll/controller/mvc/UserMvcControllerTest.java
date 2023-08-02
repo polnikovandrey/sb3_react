@@ -2,7 +2,7 @@ package com.mcfly.poll.controller.mvc;
 
 import com.mcfly.poll.config.SecurityConfig;
 import com.mcfly.poll.domain.user_role.User;
-import com.mcfly.poll.payload.polling.PagedResponse;
+import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.EditUserFormData;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.security.CustomUserDetailsService;

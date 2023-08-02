@@ -1,7 +1,6 @@
 package com.mcfly.poll.util;
 
 public interface AppConstants {
-    String DEFAULT_PAGE_NUMBER = "0";
-    String DEFAULT_PAGE_SIZE = "30";
-    int MAX_PAGE_SIZE = 50;
+    int DEFAULT_PAGE_INDEX = 0;
+    int DEFAULT_PAGE_SIZE = 10;
 }
