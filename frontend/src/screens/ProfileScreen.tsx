@@ -1,14 +1,11 @@
 import React, {FormEventHandler, useEffect, useState} from "react";
-import {Button, Col, Form, Row, Table} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import {selectUserInfo} from "../slice/userSlice";
 import {selectUserProfile} from "../slice/userProfileSlice";
 import {getUserProfileAction, updateUserProfileAction, updateUserProfileResetAction} from "../actions/userProfileActions";
-import {selectOrderUserList} from "../slice/orderUserListSlice";
-import {orderUserListAction} from "../actions/orderActions";
-import {LinkContainer} from "react-router-bootstrap";
 import {useLocation, useNavigate} from "react-router";
 
 const ProfileScreen = () => {
@@ -24,8 +21,6 @@ const ProfileScreen = () => {
     const { user: userProfileInfo } = userProfileState;
     const userInfoState = useAppSelector(selectUserInfo);
     const { user: userStateInfo } = userInfoState;
-    const orderUserListState = useAppSelector(selectOrderUserList);
-    const { loading: ordersLoading, orders, error: ordersError } = orderUserListState;
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -37,7 +32,6 @@ const ProfileScreen = () => {
                 } else {
                     await updateUserProfileResetAction(dispatch);
                     await getUserProfileAction('profile', userStateInfo.token, dispatch);
-                    await orderUserListAction(userStateInfo.token, dispatch);
                 }
             } else {
                 navigate('/login');
@@ -83,43 +77,6 @@ const ProfileScreen = () => {
                         Update
                     </Button>
                 </Form>
-            </Col>
-            <Col md={9}>
-                <h2>My Orders</h2>
-                {ordersLoading
-                    ? <Loader />
-                    : ordersError
-                        ? <Message variant='danger'>{ordersError}</Message>
-                        : (
-                            <Table striped bordered hover responsive className='table-sm'>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>DATE</th>
-                                        <th>TOTAL</th>
-                                        <th>PAID</th>
-                                        <th>DELIVERED</th>
-                                        <th/>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {orders!.map(order => (
-                                    <tr key={order._id}>
-                                        <td>{order._id}</td>
-                                        <td>{order.createdAt.toString().substring(0, 10)}</td>
-                                        <td>{order.totalPrice}</td>
-                                        <td>{order.paid ? order.paidAt.toString().substring(0, 10) : (<i className='fas fa-times' style={{color: "red"}}/>)}</td>
-                                        <td>{order.delivered ? order.deliveredAt.toString().substring(0, 10) : (<i className='fas fa-times' style={{color: "red"}}/>)}</td>
-                                        <td>
-                                            <LinkContainer to={`/order/${order._id}`}>
-                                                <Button className='btn-sm' variant='light'>Details</Button>
-                                            </LinkContainer>
-                                        </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </Table>
-                        )}
             </Col>
         </Row>
     );
