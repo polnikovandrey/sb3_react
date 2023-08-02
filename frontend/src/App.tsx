@@ -11,11 +11,13 @@ import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import {Routes} from "react-router";
 import {HelmetProvider} from "react-helmet-async";
+import Meta from "./components/Meta";
 
 const App = () => {
     return (
         <BrowserRouter>
             <HelmetProvider>
+                <Meta/>
                 <Header/>
                 <main className="py-3">
                     <Container>
