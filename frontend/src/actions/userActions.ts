@@ -4,7 +4,6 @@ import {userLoginFail, userLoginRequest, userLoginSuccess, userLogout, userRegis
 import axios, {AxiosRequestConfig} from "axios";
 import {userListFail, userListRequest, userListReset, userListSuccess} from "../slice/userListSlice";
 import {userProfileReset} from "../slice/userProfileSlice";
-import {orderUserListReset} from "../slice/orderUserListSlice";
 import {userDeleteFail, userDeleteRequest, userDeleteSuccess} from "../slice/userDeleteSlice";
 
 export const userLoginAction = async (email: string, password: string, dispatch: Dispatch) => {
@@ -27,7 +26,6 @@ export const userLogoutAction = async (dispatch: Dispatch) => {
     localStorage.removeItem('user');
     dispatch(userLogout());
     dispatch(userProfileReset());
-    dispatch(orderUserListReset());
     dispatch(userListReset())
 };
 
