@@ -17,7 +17,10 @@
     <div sec:authorize="isAuthenticated()" class="row">
         <div class="d-flex justify-content-between">
             <a th:classappend="${addUserVisible} ? '' : 'invisible'" th:href="@{/user/add}" class="btn btn-dark">Add User</a>
-            <a th:href="@{/logout}" class="btn btn-dark">Logout</a>
+            <form method="post" th:action="@{/logout}">
+                <input type="hidden" name="name" value="value" />
+                <a onclick="this.parentNode.submit();" class="btn btn-dark">Logout</a>
+            </form>
         </div>
     </div>
 </div>

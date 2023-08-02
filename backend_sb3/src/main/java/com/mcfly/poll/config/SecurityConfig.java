@@ -44,8 +44,6 @@ public class SecurityConfig {
                                                       JwtAuthenticationFilter jwtAuthenticationFilter,
                                                       JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
         return httpSecurity
-                .securityMatchers(requestMatcherConfigurer ->
-                        requestMatcherConfigurer.requestMatchers("/api/**"))
                 .securityMatcher("/api/**")
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
