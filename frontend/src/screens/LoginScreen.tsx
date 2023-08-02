@@ -39,11 +39,11 @@ const LoginScreen = () => {
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='email' className='mb-3'>
                     <Form.Label>Username or email</Form.Label>
-                    <Form.Control type='input' placeholder='Enter username or email' value={usernameOrEmail} onChange={(e) => setUsernameOrEmail(e.target.value)}/>
+                    <Form.Control type='input' autoComplete='off' placeholder='Enter username or email' value={usernameOrEmail} onChange={(e) => setUsernameOrEmail(e.target.value)}/>
                 </Form.Group>
                 <Form.Group controlId='password' className='mb-4'>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <Form.Control type='password' autoComplete='off' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </Form.Group>
                 <Button type='submit' variant='primary'>Log in</Button>
             </Form>

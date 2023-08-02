@@ -26,7 +26,7 @@ const ProfileScreen = () => {
     useEffect(() => {
         (async () => {
             if (userStateInfo) {
-                if (userProfileInfo?.name && userProfileInfo?._id === userStateInfo._id) {
+                if (userProfileInfo?.name && userProfileInfo?.id === userStateInfo.id) {
                     setName(userProfileInfo.name);
                     setEmail(userProfileInfo.email);
                 } else {
@@ -45,7 +45,7 @@ const ProfileScreen = () => {
         if (password !== confirmPassword) {
             setMessage('Passwords do not match.');
         } else if (userInfo && userProfileState.user) {
-            await updateUserProfileAction(userInfo.token, { _id: userInfo._id, name, email, password }, dispatch);
+            await updateUserProfileAction(userInfo.token, { id: userInfo.id, name, email, password }, dispatch);
         }
     };
     return (

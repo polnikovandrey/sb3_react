@@ -5,6 +5,7 @@ import axios, {AxiosRequestConfig} from "axios";
 import {userListFail, userListRequest, userListReset, userListSuccess} from "../slice/userListSlice";
 import {userProfileReset} from "../slice/userProfileSlice";
 import {userDeleteFail, userDeleteRequest, userDeleteSuccess} from "../slice/userDeleteSlice";
+import {API_BASE_URL} from "../constants";
 
 export const userLoginAction = async (usernameOrEmail: string, password: string, dispatch: Dispatch) => {
     try {
@@ -14,7 +15,7 @@ export const userLoginAction = async (usernameOrEmail: string, password: string,
                 'Content-Type': 'application/json'
             }
         };
-        const { data }: { data: UserInfo } = await axios.post('/api/users/login', { email: usernameOrEmail, password }, config);
+        const { data }: { data: UserInfo } = await axios.post(`${API_BASE_URL}/auth/signin`, { usernameOrEmail, password }, config);
         dispatch(userLoginSuccess(data));
         localStorage.setItem('user', JSON.stringify(data));
     } catch (error: any) {

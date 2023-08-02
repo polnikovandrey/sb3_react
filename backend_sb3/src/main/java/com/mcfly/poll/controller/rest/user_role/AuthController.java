@@ -7,6 +7,7 @@ import com.mcfly.poll.payload.user_role.JwtAuthenticationResponse;
 import com.mcfly.poll.payload.user_role.LoginRequest;
 import com.mcfly.poll.payload.user_role.SignUpRequest;
 import com.mcfly.poll.security.JwtUtils;
+import com.mcfly.poll.security.UserPrincipal;
 import com.mcfly.poll.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,13 @@ public class AuthController {
                 = new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
         final Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String jwt = jwtUtils.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        final String token = jwtUtils.generateToken(authentication);
+        final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        final Long id = userPrincipal.getId();
+        final String email = userPrincipal.getEmail();
+        final String name = userPrincipal.getUsername();
+        final boolean admin = userPrincipal.isAdmin();
+        return ResponseEntity.ok(new JwtAuthenticationResponse(id, email, name, token, admin));
     }
 
     @PostMapping("/signinWithCookie")
@@ -58,12 +64,17 @@ public class AuthController {
                 = new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
         final Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String jwt = jwtUtils.generateToken(authentication);
-        final ResponseCookie jwtCookie = jwtUtils.produceJwtCookie(jwt);
+        final String token = jwtUtils.generateToken(authentication);
+        final ResponseCookie jwtCookie = jwtUtils.produceJwtCookie(token);
+        final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        final Long id = userPrincipal.getId();
+        final String email = userPrincipal.getEmail();
+        final String name = userPrincipal.getUsername();
+        final boolean admin = userPrincipal.isAdmin();
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new JwtAuthenticationResponse(jwt));
+                .body(new JwtAuthenticationResponse(id, email, name, token, admin));
     }
 
     @PostMapping("/signup")

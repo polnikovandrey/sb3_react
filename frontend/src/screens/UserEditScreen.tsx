@@ -32,7 +32,7 @@ const UserEditScreen = () => {
             if (successUpdate) {
                 await resetUserProfileByIdAction(dispatch);
                 navigate('/admin/userList')
-            } else if (!user?.name || user._id !== userId ) {
+            } else if (!user?.name || user.id !== userId ) {
                 await getUserProfileAction(userId, token, dispatch);
             } else {
                 setName(user.name);
@@ -44,7 +44,7 @@ const UserEditScreen = () => {
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();
-        await updateUserProfileByIdAction(token, { _id: userId, name, email, admin }, dispatch);
+        await updateUserProfileByIdAction(token, { id: userId, name, email, admin }, dispatch);
     };
     return (
         <>

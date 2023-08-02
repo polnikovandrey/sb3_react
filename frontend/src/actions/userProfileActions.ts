@@ -21,7 +21,7 @@ export const getUserProfileAction = async (id: string, token: string, dispatch: 
             }
         };
         const { data }: { data: UserInfo } = await axios.get(`/api/users/${id}`, config);
-        const userProfile: UserProfile = { _id: data._id, name: data.name, email: data.email, admin: data.admin };
+        const userProfile: UserProfile = { id: data.id, name: data.name, email: data.email, admin: data.admin };
         dispatch(userProfileSuccess(userProfile));
     } catch (error: any) {
         dispatch(userProfileFail(error.response && error.response.data.message ? error.response.data.message : error.message));

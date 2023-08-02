@@ -1,7 +1,9 @@
 package com.mcfly.poll.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mcfly.poll.domain.user_role.RoleName;
 import com.mcfly.poll.domain.user_role.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Getter
 public class UserPrincipal implements UserDetails {
 
     private Long id;
@@ -43,24 +46,8 @@ public class UserPrincipal implements UserDetails {
         return new UserPrincipal(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getMiddleName(), authorities);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
+    public boolean isAdmin() {
+        return authorities.stream().anyMatch(grantedAuthority -> RoleName.ROLE_ADMIN.getName().equals(grantedAuthority.getAuthority()));
     }
 
     @Override

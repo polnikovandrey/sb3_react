@@ -56,8 +56,8 @@ const UserListScreen = () => {
                             <tbody>
                             {
                                 users?.map(user => (
-                                    <tr key={user._id}>
-                                        <td>{user._id}</td>
+                                    <tr key={user.id}>
+                                        <td>{user.id}</td>
                                         <td>{user.name}</td>
                                         <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
                                         <td>
@@ -66,12 +66,12 @@ const UserListScreen = () => {
                                                 : (<i className='fas fa-times' style={{color: "red"}}/>)}
                                         </td>
                                         <td>
-                                            <LinkContainer to={`user/${user._id}/edit`}>
+                                            <LinkContainer to={`user/${user.id}/edit`}>
                                                 <Button variant='light' className='btn-sm'>
                                                     <i className='fas fa-edit'/>
                                                 </Button>
                                             </LinkContainer>
-                                            <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user._id)}>
+                                            <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
                                                 <i className='fas fa-trash'/>
                                             </Button>
                                         </td>

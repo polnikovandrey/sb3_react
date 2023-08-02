@@ -13,8 +13,8 @@ export const updateUserProfileByIdAction = async (token: string, aUserProfile: U
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserInfo } = await axios.put(`/api/users/${aUserProfile._id}`, aUserProfile, config);
-        const userProfile: UserProfile = { _id: data._id, name: data.name, email: data.email, admin: data.admin };
+        const { data }: { data: UserInfo } = await axios.put(`/api/users/${aUserProfile.id}`, aUserProfile, config);
+        const userProfile: UserProfile = { id: data.id, name: data.name, email: data.email, admin: data.admin };
         dispatch(userProfileByIdUpdateSuccess());
         dispatch(userProfileUpdateSuccess(userProfile));
     } catch (error: any) {
