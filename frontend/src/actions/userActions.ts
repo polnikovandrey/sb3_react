@@ -30,7 +30,7 @@ export const userLogoutAction = async (dispatch: Dispatch) => {
     dispatch(userListReset())
 };
 
-export const userRegisterAction = async (name: string, email: string, password: string, dispatch: Dispatch) => {
+export const userRegisterAction = async (firstName: string, lastName: string, middleName: string, username: string, email: string, password: string, dispatch: Dispatch) => {
     try {
         dispatch(userRegisterRequest());
         const config: AxiosRequestConfig = {
@@ -38,7 +38,7 @@ export const userRegisterAction = async (name: string, email: string, password: 
                 'Content-Type': 'application/json'
             }
         };
-        const { data }: { data: UserInfo } = await axios.post('/api/users', { name, email, password }, config);
+        const { data }: { data: UserInfo } = await axios.post(`${API_BASE_URL}/auth/signup`, {firstName, lastName, middleName, username, email, password }, config);
         dispatch(userRegisterSuccess(data));
         dispatch(userLoginSuccess(data));
         localStorage.setItem('user', JSON.stringify(data));
