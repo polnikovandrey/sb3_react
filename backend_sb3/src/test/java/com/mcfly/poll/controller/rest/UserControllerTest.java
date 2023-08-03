@@ -4,7 +4,6 @@ import com.mcfly.poll.controller.rest.user_role.UserController;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
-import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -99,17 +98,18 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "fakeUsername")
     public void checkMe() throws Exception {
-        final UserSummary userSummary = new UserSummary(1L, "username", "firstName", "lastName", "middleName");
-        //noinspection DataFlowIssue
-        Mockito.when(userService.getUserSummary(null)).thenReturn(userSummary);
+        final UserDataResponse userDataResponse = new UserDataResponse(1L, "email", "username", "firstName", "lastName", "middleName", true);
+        Mockito.when(userService.getCurrentUserData(Mockito.any())).thenReturn(userDataResponse);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/me"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("username"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("firstName"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("lastName"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.middleName").value("middleName"));
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(userDataResponse.getId()))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(userDataResponse.getEmail()))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(userDataResponse.getName()))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(userDataResponse.getFirstName()))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(userDataResponse.getLastName()))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.middleName").value(userDataResponse.getMiddleName()))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.admin").value(userDataResponse.isAdmin()));
     }
 
     @Test

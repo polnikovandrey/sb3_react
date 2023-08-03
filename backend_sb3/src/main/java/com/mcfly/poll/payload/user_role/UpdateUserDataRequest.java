@@ -4,12 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
+@AllArgsConstructor
 @Getter
-@Setter
-public class SignUpRequest {
+@EqualsAndHashCode
+public class UpdateUserDataRequest {
 
     @NotBlank
     @Size(min = 4, max = 20)
@@ -24,13 +26,13 @@ public class SignUpRequest {
     private String middleName;
 
     @NotBlank
-    @Size(min = 3, max = 15)
-    private String username;
-
-    @NotBlank
     @Size(max = 40)
     @Email
     private String email;
+
+    @NotBlank
+    @Size(min = 3, max = 15)
+    private String name;
 
     @NotBlank
     @Size(min = 6, max = 20)

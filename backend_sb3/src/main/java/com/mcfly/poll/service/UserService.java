@@ -10,7 +10,6 @@ import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
 import com.mcfly.poll.payload.user_role.UserResponse;
-import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
@@ -36,8 +35,15 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserSummary getUserSummary(UserPrincipal currentUser) {
-        return new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getFirstName(), currentUser.getLastName(), currentUser.getMiddleName());
+    public UserDataResponse getCurrentUserData(UserPrincipal currentUser) {
+        final Long id = currentUser.getId();
+        final String email = currentUser.getEmail();
+        final String username = currentUser.getUsername();
+        final String firstName = currentUser.getFirstName();
+        final String lastName = currentUser.getLastName();
+        final String middleName = currentUser.getMiddleName();
+        final boolean admin = currentUser.getAuthorities().stream().anyMatch(grantedAuthority -> RoleName.ROLE_USER.getName().equals(grantedAuthority.getAuthority()));
+        return new UserDataResponse(id, email, username, firstName, lastName, middleName, admin);
     }
 
     public UserIdentityAvailability checkUsernameAvailability(String username) {
@@ -102,11 +108,28 @@ public class UserService {
     }
 
     @Transactional
-    public void editUser(Long id, String firstName, String lastName, String middleName) {
+    public void updateUserData(Long id, String firstName, String lastName, String middleName) {
+        updateUserData(id, firstName, lastName, middleName, null, null, null);
+    }
+
+    @Transactional
+    public UserDataResponse updateUserData(Long id, String firstName, String lastName, String middleName, String email, String name, String password) {
         final User user = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setMiddleName(middleName);
-        userRepository.save(user);
+        if (email != null) {
+            user.setEmail(email);
+        }
+        if (name != null) {
+            user.setUsername(name);
+        }
+        if (password != null) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        final User updatedUser = userRepository.saveAndFlush(user);
+        return new UserDataResponse(updatedUser.getId(), updatedUser.getEmail(), updatedUser.getUsername(),
+                                    updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getMiddleName(),
+                                    updatedUser.getRoles().stream().anyMatch(role -> RoleName.ROLE_ADMIN == role.getName()));
     }
 }

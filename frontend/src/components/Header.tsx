@@ -1,4 +1,4 @@
-import React, {FormEventHandler} from 'react';
+import React, {FormEventHandler, useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from "react-router-bootstrap";
@@ -16,6 +16,9 @@ const Header = () => {
         await userLogoutAction(dispatch);
         navigate('/');
     };
+    useEffect(() => {
+
+    }, [userState]);
     return (
         <header>
             <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>

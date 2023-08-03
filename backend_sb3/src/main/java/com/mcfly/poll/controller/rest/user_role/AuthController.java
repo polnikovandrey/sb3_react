@@ -68,7 +68,7 @@ public class AuthController {
                     signUpRequest.getUsername(),
                     signUpRequest.getEmail(),
                     signUpRequest.getPassword(),
-                    signUpRequest.isAdmin());
+                    false);
             final AuthDataResponse authDataResponse = authenticateUser(result.getUsername(), signUpRequest.getPassword());
             return ResponseEntity.ok().body(authDataResponse);
         } catch (UserExistsAlreadyException exception) {

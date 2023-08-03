@@ -53,6 +53,7 @@ const ProfileScreen = () => {
         setMessages(messages);
         if (messages.length == 0 && userInfo && userProfileState.user) {
             await updateUserProfileAction(userInfo.token, { id: userInfo.id, email: email, name: username, firstName: firstName, lastName: lastName, middleName: middleName, password }, dispatch);
+            navigate('/');
         }
     };
     return (
@@ -61,7 +62,6 @@ const ProfileScreen = () => {
                 <h2>User Profile</h2>
                 { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
                 { userProfileState?.error && <Message variant='danger'>{userProfileState.error}</Message> }
-                { userProfileState.success && <Message variant='success'>Profile updated</Message>}
                 { userProfileState?.loading && <Loader/> }
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='firstName' className='mb-3'>

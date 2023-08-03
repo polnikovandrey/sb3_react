@@ -9,7 +9,6 @@ import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
 import com.mcfly.poll.payload.user_role.UserResponse;
-import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
@@ -54,11 +53,11 @@ public class UserServiceTest {
     @Test
     void userSummary() {
         final UserService userServiceMock = Mockito.mock();
-        final UserSummary userSummaryToReturn = new UserSummary(1L, "username", "firstName", "lastName", "middleName");
-        Mockito.when(userServiceMock.getUserSummary(Mockito.any(UserPrincipal.class)))
-                .thenReturn(userSummaryToReturn);
-        final UserSummary userSummary = userServiceMock.getUserSummary(new UserPrincipal());
-        assertThat(userSummary).usingRecursiveComparison().isEqualTo(userSummaryToReturn);
+        final UserDataResponse fakeUserDataResponse = new UserDataResponse(1L, "email", "username", "firstName", "lastName", "middleName", true);
+        Mockito.when(userServiceMock.getCurrentUserData(Mockito.any(UserPrincipal.class)))
+                .thenReturn(fakeUserDataResponse);
+        final UserDataResponse userDataResponse = userServiceMock.getCurrentUserData(new UserPrincipal());
+        assertThat(userDataResponse).usingRecursiveComparison().isEqualTo(fakeUserDataResponse);
     }
 
     @Test
@@ -199,7 +198,7 @@ public class UserServiceTest {
         final String middleName = "middleName";
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(new User()));
         final ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        userService.editUser(42L, firstName, lastName, middleName);
+        userService.updateUserData(42L, firstName, lastName, middleName);
         Mockito.verify(userRepository, Mockito.times(1)).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue())
                 .matches(user -> firstName.equals(user.getFirstName())

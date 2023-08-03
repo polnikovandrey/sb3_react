@@ -247,7 +247,7 @@ public class UserMvcControllerTest {
                .andDo(MockMvcResultHandlers.print())
                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                .andExpect(MockMvcResultMatchers.redirectedUrl("/user/list/" + pageIndex));
-        Mockito.verify(userService, Mockito.times(1)).editUser(userId, firstName, lastName, middleName);
+        Mockito.verify(userService, Mockito.times(1)).updateUserData(userId, firstName, lastName, middleName);
         Mockito.verifyNoMoreInteractions(userService);
     }
 }

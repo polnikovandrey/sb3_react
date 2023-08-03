@@ -39,7 +39,7 @@ export const updateUserProfileAction = async (token: string, aUserProfile: UserP
             }
         };
         const { data }: { data: UserProfileData } = await axios.put(`${API_BASE_URL}/user/${aUserProfile.id}`, aUserProfile, config);
-        const userProfile: UserProfile = { email: data.email, name: data.name, firstName: data.firstName, lastName: data.lastName, middleName: data.middleName };
+        const userProfile: UserProfile = { id: data.id, email: data.email, name: data.name, firstName: data.firstName, lastName: data.lastName, middleName: data.middleName, admin: data.admin };
         dispatch(userProfileUpdateSuccess(userProfile));
     } catch (error: any) {
         dispatch(userProfileUpdateFail(error.response && error.response.data.message ? error.response.data.message : error.message));
