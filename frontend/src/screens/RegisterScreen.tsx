@@ -9,6 +9,7 @@ import FormContainer from "../components/FormContainer";
 import {UserState} from "../store/types";
 import {selectUserInfo} from "../slice/userSlice";
 import {useLocation, useNavigate} from "react-router";
+import {validateUserFormData} from "../validation/userFormValidator";
 
 const RegisterScreen = () => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ const RegisterScreen = () => {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ confirmPassword, setConfirmPassword ] = useState('');
-    const [ message, setMessage ] = useState('');
+    const [ messages, setMessages ] = useState<string[]>([]);
 
     const userState: UserState = useAppSelector(selectUserInfo);
     const dispatch = useAppDispatch();
@@ -34,45 +35,23 @@ const RegisterScreen = () => {
     }, [ location, navigate, redirect, userState ]);
 
     useEffect(() => {
-        if (message !== '') {
+        if (messages.length != 0) {
             window.scrollTo({top: 0, behavior: "smooth"});
         }
-    }, [message]);
+    }, [messages]);
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();
-        const firstNameMinLength = 4;
-        const firstNameMaxLength = 20;
-        const lastNameMinLength = 4;
-        const lastNameMaxLength = 20;
-        const middleNameMaxLength = 20;
-        const usernameMinLength = 3;
-        const usernameMaxLength = 15;
-        const emailMaxLength = 40;
-        const passwordMinLength = 6;
-        const passwordMaxLength = 20;
-        if (firstName.length < firstNameMinLength || firstName.length > firstNameMaxLength) {
-            setMessage(`First name should have from ${firstNameMinLength} to ${firstNameMaxLength} characters`);
-        } else if (lastName.length < lastNameMinLength || lastName.length > lastNameMaxLength) {
-            setMessage(`Last name should have from ${lastNameMinLength} to ${lastNameMaxLength} characters`);
-        } else if (middleName.length > middleNameMaxLength) {
-            setMessage(`Middle name should have maximum ${middleNameMaxLength} characters`);
-        } else if (username.length < usernameMinLength || username.length > usernameMaxLength) {
-            setMessage(`Username should have from ${usernameMinLength} to ${usernameMaxLength} characters`);
-        } else if (email.length == 0 || email.length > emailMaxLength) {
-            setMessage(`Email is required and should have maximum ${emailMaxLength} characters`);
-        } else if (password.length < passwordMinLength || password.length > passwordMaxLength) {
-            setMessage(`Password  should have from ${passwordMinLength} to ${passwordMaxLength} characters`);
-        } else  if (password !== confirmPassword) {
-            setMessage('Passwords do not match.');
-        } else {
+        const messages = validateUserFormData(firstName, lastName, middleName, username, email, password, confirmPassword);
+        setMessages(messages);
+        if (messages.length == 0) {
             await userRegisterAction(firstName, lastName, middleName, username, email, password, dispatch);
         }
     };
     return (
         <FormContainer>
             <h1>Register</h1>
-            { message && <Message variant='danger'>{message}</Message> }
+            { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
             { userState?.error && <Message variant='danger'>{userState.error}</Message> }
             { userState?.loading && <Loader/> }
             <Form onSubmit={submitHandler}>
@@ -102,7 +81,7 @@ const RegisterScreen = () => {
                 </Form.Group>
                 <Form.Group controlId='confirmPassword' className='mb-4'>
                     <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control type='password' autoComplete='off' placeholder='Repeat Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+                    <Form.Control type='password' autoComplete='off' placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
                 </Form.Group>
                 <Button type='submit' variant='primary'>
                     Register

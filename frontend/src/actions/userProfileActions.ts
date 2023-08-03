@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import axios, {AxiosRequestConfig} from "axios";
-import {UserInfo, UserProfile} from "../store/types";
+import {UserProfile, UserProfileData} from "../store/types";
 import {
     userProfileFail,
     userProfileRequest,
@@ -21,8 +21,8 @@ export const getUserProfileAction = async (id: string, token: string, dispatch: 
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserInfo } = await axios.get(`${API_BASE_URL}/api/user/${id}`, config);
-        const userProfile: UserProfile = { id: data.id, name: data.name, email: data.email, admin: data.admin };
+        const { data }: { data: UserProfileData } = await axios.get(`${API_BASE_URL}/user/${id}`, config);
+        const userProfile: UserProfile = { id: data.id, email: data.email, name: data.name, firstName: data.firstName, lastName: data.lastName, middleName: data.middleName, admin: data.admin };
         dispatch(userProfileSuccess(userProfile));
     } catch (error: any) {
         dispatch(userProfileFail(error.response && error.response.data.message ? error.response.data.message : error.message));
@@ -38,8 +38,8 @@ export const updateUserProfileAction = async (token: string, aUserProfile: UserP
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserInfo } = await axios.put(`/api/users/profile`, aUserProfile, config);
-        const userProfile: UserProfile = { name: data.name, email: data.email };
+        const { data }: { data: UserProfileData } = await axios.put(`${API_BASE_URL}/user/${aUserProfile.id}`, aUserProfile, config);
+        const userProfile: UserProfile = { email: data.email, name: data.name, firstName: data.firstName, lastName: data.lastName, middleName: data.middleName };
         dispatch(userProfileUpdateSuccess(userProfile));
     } catch (error: any) {
         dispatch(userProfileUpdateFail(error.response && error.response.data.message ? error.response.data.message : error.message));

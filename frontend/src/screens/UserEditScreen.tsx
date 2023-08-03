@@ -44,7 +44,8 @@ const UserEditScreen = () => {
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();
-        await updateUserProfileByIdAction(token, { id: userId, name, email, admin }, dispatch);
+        // TODO firstName, lastName, middleName
+        await updateUserProfileByIdAction(token, { id: userId, email: email, name: name, firstName: '', lastName: '', middleName: '', admin: admin }, dispatch);
     };
     return (
         <>
