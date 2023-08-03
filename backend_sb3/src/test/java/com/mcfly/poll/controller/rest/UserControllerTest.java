@@ -1,6 +1,8 @@
 package com.mcfly.poll.controller.rest;
 
 import com.mcfly.poll.controller.rest.user_role.UserController;
+import com.mcfly.poll.exception.ResourceNotFoundException;
+import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.service.UserService;
@@ -108,5 +110,32 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("firstName"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("lastName"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.middleName").value("middleName"));
+    }
+
+    @Test
+    public void checkGetUserDataUnauthorizedSecured() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", Long.toString(1L)))
+               .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username="fakeUsername")
+    public void checkGetExistingUserData() throws Exception {
+        final UserDataResponse fakeUserDataResponse = new UserDataResponse(1L, "email", "name", "firstName", "lastName", "middleName", true);
+        Mockito.when(userService.getUserData(fakeUserDataResponse.getId())).thenReturn(fakeUserDataResponse);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", fakeUserDataResponse.getId()))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(fakeUserDataResponse.getId()));
+    }
+
+    @Test
+    @WithMockUser(username="fakeUsername")
+    public void checkGetAbsentUserData() throws Exception {
+        final Long fakeAbsentUserId = -1L;
+        Mockito.when(userService.getUserData(fakeAbsentUserId)).thenThrow(new ResourceNotFoundException("User not found", "User", "id", fakeAbsentUserId));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", fakeAbsentUserId))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

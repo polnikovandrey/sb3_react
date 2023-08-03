@@ -68,13 +68,6 @@ public class UserRoleRepositoryTest {
     }
 
     @Test
-    void testFindUserByUsername() {
-        final User user = persistRandomUser();
-        final Optional<User> userByUsername = userRepository.findByUsername(user.getUsername());
-        assertTrue(userByUsername.isPresent());
-    }
-
-    @Test
     void testFindUserByIdIn() {
         final User user1 = persistRandomUser();
         final User user2 = persistRandomUser();

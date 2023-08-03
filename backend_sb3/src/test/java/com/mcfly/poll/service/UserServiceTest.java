@@ -6,8 +6,8 @@ import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.exception.UserExistsAlreadyException;
 import com.mcfly.poll.payload.PagedResponse;
+import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
-import com.mcfly.poll.payload.user_role.UserProfile;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.user_role.RoleRepository;
@@ -79,34 +79,35 @@ public class UserServiceTest {
 
     @Test
     void getAbsentUserProfileThrowsException() {
-        final String absentUsername = "Absent user";
-        Mockito.when(userRepository.findByUsername(absentUsername))
-                .thenThrow(new ResourceNotFoundException("User not found", "User", "username", absentUsername));
-        assertThrows(ResourceNotFoundException.class, () -> userService.getUserProfile(absentUsername));
-        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(Mockito.any());
+        final Long absentUserId = -1L;
+        Mockito.when(userRepository.findById(absentUserId))
+                .thenThrow(new ResourceNotFoundException("User not found", "User", "id", absentUserId));
+        assertThrows(ResourceNotFoundException.class, () -> userService.getUserData(absentUserId));
+        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verifyNoMoreInteractions(userRepository);
     }
 
     @Test
     void getExistingUserProfile() {
-        final String existingUsername = "Existing user";
+        final Long existingUserId = 1L;
         final User expectedUser =
                 User.builder()
-                        .id(1L)
-                        .username(existingUsername)
+                        .id(existingUserId)
+                        .username("username")
                         .email("user@email.com")
                         .password("password")
                         .firstName("firstName")
                         .lastName("lastName")
                         .middleName("middleName")
+                        .roles(Set.of(new Role(RoleName.ROLE_ADMIN)))
                         .build();
-        final UserProfile expectedProfile
-                = new UserProfile(expectedUser.getId(), expectedUser.getUsername(), expectedUser.getLastName(), expectedUser.getCreatedAt());
-        Mockito.when(userRepository.findByUsername(existingUsername))
+        final UserDataResponse expectedUserDataResponse
+                = new UserDataResponse(expectedUser.getId(), expectedUser.getEmail(), expectedUser.getUsername(), expectedUser.getFirstName(), expectedUser.getLastName(), expectedUser.getMiddleName(), true);
+        Mockito.when(userRepository.findById(existingUserId))
                 .thenReturn(Optional.of(expectedUser));
-        final UserProfile actual = userService.getUserProfile(existingUsername);
-        assertThat(actual).usingRecursiveComparison().isEqualTo(expectedProfile);
-        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(Mockito.any());
+        final UserDataResponse actual = userService.getUserData(existingUserId);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expectedUserDataResponse);
+        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verifyNoMoreInteractions(userRepository);
     }
 
@@ -127,46 +128,6 @@ public class UserServiceTest {
         final PagedResponse<UserResponse> userResponsePagedResponse = userService.listUsersPage(0, 1);
         assertThat(userResponsePagedResponse).usingRecursiveComparison().isEqualTo(expectedPagedResponse);
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
-    }
-
-    @Test
-    void getLastPage() {
-        Mockito.when(userRepository.count()).thenReturn(0L);
-        assertThat(userService.getLastPageIndex(1)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(2)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(5)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(10)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
-        Mockito.when(userRepository.count()).thenReturn(1L);
-        assertThat(userService.getLastPageIndex(1)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(2)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(5)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(10)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
-        Mockito.when(userRepository.count()).thenReturn(5L);
-        assertThat(userService.getLastPageIndex(1)).isEqualTo(4);
-        assertThat(userService.getLastPageIndex(2)).isEqualTo(2);
-        assertThat(userService.getLastPageIndex(5)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(10)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
-        Mockito.when(userRepository.count()).thenReturn(10L);
-        assertThat(userService.getLastPageIndex(1)).isEqualTo(9);
-        assertThat(userService.getLastPageIndex(2)).isEqualTo(4);
-        assertThat(userService.getLastPageIndex(5)).isEqualTo(1);
-        assertThat(userService.getLastPageIndex(10)).isEqualTo(0);
-        assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
-        Mockito.when(userRepository.count()).thenReturn(11L);
-        assertThat(userService.getLastPageIndex(1)).isEqualTo(10);
-        assertThat(userService.getLastPageIndex(2)).isEqualTo(5);
-        assertThat(userService.getLastPageIndex(5)).isEqualTo(2);
-        assertThat(userService.getLastPageIndex(10)).isEqualTo(1);
-        assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
-        Mockito.when(userRepository.count()).thenReturn(19L);
-        assertThat(userService.getLastPageIndex(1)).isEqualTo(18);
-        assertThat(userService.getLastPageIndex(2)).isEqualTo(9);
-        assertThat(userService.getLastPageIndex(5)).isEqualTo(3);
-        assertThat(userService.getLastPageIndex(10)).isEqualTo(1);
-        assertThat(userService.getLastPageIndex(20)).isEqualTo(0);
     }
 
     @Test

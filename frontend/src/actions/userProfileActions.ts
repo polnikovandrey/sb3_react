@@ -10,6 +10,7 @@ import {
     userProfileUpdateReset,
     userProfileUpdateSuccess
 } from "../slice/userProfileSlice";
+import {API_BASE_URL} from "../constants";
 
 export const getUserProfileAction = async (id: string, token: string, dispatch: Dispatch) => {
     try {
@@ -20,7 +21,7 @@ export const getUserProfileAction = async (id: string, token: string, dispatch: 
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserInfo } = await axios.get(`/api/users/${id}`, config);
+        const { data }: { data: UserInfo } = await axios.get(`${API_BASE_URL}/api/user/${id}`, config);
         const userProfile: UserProfile = { id: data.id, name: data.name, email: data.email, admin: data.admin };
         dispatch(userProfileSuccess(userProfile));
     } catch (error: any) {

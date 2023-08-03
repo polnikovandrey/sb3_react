@@ -7,8 +7,8 @@ import com.mcfly.poll.exception.AppException;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.exception.UserExistsAlreadyException;
 import com.mcfly.poll.payload.PagedResponse;
+import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
-import com.mcfly.poll.payload.user_role.UserProfile;
 import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.payload.user_role.UserSummary;
 import com.mcfly.poll.repository.user_role.RoleRepository;
@@ -50,9 +50,10 @@ public class UserService {
         return new UserIdentityAvailability(isAvailable);
     }
 
-    public UserProfile getUserProfile(String username) {
-        final User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found", "User", "username", username));
-        return new UserProfile(user.getId(), user.getUsername(), user.getLastName(), user.getCreatedAt());
+    public UserDataResponse getUserData(Long id) {
+        final User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found", "User", "id", id));
+        return new UserDataResponse(user.getId(), user.getEmail(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getMiddleName(),
+                                    user.getRoles().stream().anyMatch(role -> RoleName.ROLE_ADMIN == role.getName()));
     }
 
     public PagedResponse<UserResponse> listUsersPage(int page, int size) {
