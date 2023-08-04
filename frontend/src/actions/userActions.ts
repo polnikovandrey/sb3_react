@@ -70,7 +70,7 @@ export const userDeleteAction = async (id: number, token: string, dispatch: Disp
                 Authorization: `Bearer ${token}`
             }
         };
-        await axios.delete(`/api/users/${id}`, config);
+        await axios.delete(`${API_BASE_URL}/user/${id}`, config);
         dispatch(userDeleteSuccess());
     } catch (error: any) {
         dispatch(userDeleteFail(error.response && error.response.data.message ? error.response.data.message : error.message));

@@ -58,6 +58,12 @@ public class UserController {
     }
 
     // TODO test
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable(value = "id") Long id) {
+        userService.deleteUserById(id);
+    }
+
+    // TODO test
     @GetMapping({"/list", "/list/{pageIndex}"})
     public PagedResponse<UserDataResponse> listUsers(@PathVariable(required = false) Optional<Integer> pageIndex) {
         final Page<User> users = userService.getUsersPage(pageIndex.orElse(AppConstants.DEFAULT_PAGE_INDEX), AppConstants.DEFAULT_PAGE_SIZE);

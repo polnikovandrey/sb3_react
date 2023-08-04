@@ -31,9 +31,10 @@ const UserListScreen = () => {
             }
         })();
     }, [ admin, dispatch, location, navigate, page, successDelete, token ]);
-    async function deleteHandler(userId: number) {
+    async function deleteHandler(userId: number, nextPage: number) {
         if (window.confirm('Are you sure?')) {
             await userDeleteAction(userId, token, dispatch);
+            setPage(nextPage);
         }
     }
     return (
@@ -78,6 +79,10 @@ const UserListScreen = () => {
                                                 <td>
                                                     {
                                                         user.id !== 1 && (
+                                                            /* TODO del
+            <td><a class="btn btn-primary w-100" th:if="${user.getId() != 1}"
+                               th:href="@{'/user/edit/' + ${user.getId()} + '/' + ${users.getPage()}}">Edit</a></td>
+             */
                                                             <LinkContainer to={`user/${user.id}/edit`}>
                                                                 <Button variant='warning' className='btn-sm w-100'>
                                                                     <i className='bi bi-pencil-square'/>
@@ -89,7 +94,7 @@ const UserListScreen = () => {
                                                 <td>
                                                     {
                                                         user.id !== 1 && (
-                                                            <Button variant='danger' className='btn-sm w-100' onClick={() => deleteHandler(user.id)}>
+                                                            <Button variant='danger' className='btn-sm w-100' onClick={() => deleteHandler(user.id, users?.content.length > 1 ? users?.page : (users?.page - 1))}>
                                                                 <i className='bi bi-trash'/>
                                                             </Button>
                                                         )
