@@ -24,14 +24,13 @@ const Header = () => {
             <Navbar expand="lg" bg="dark" variant="dark" collapseOnSelect>
                 <Container>
                     <LinkContainer to='/'><Navbar.Brand>{APP_TITLE}</Navbar.Brand></LinkContainer>
-                    { userState.user && (<Navbar.Text className="bi bi-person">{userState.user.name}</Navbar.Text>) }
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ml-auto">
                             { userState.user && <LinkContainer to='/profile'><Nav.Link>Profile</Nav.Link></LinkContainer> }
                             { userState.user && userState?.user?.admin && <LinkContainer to='/admin/userList'><Nav.Link>Users</Nav.Link></LinkContainer> }
-                            { userState.user && <Nav.Link onClick={logoutHandler}>Logout</Nav.Link> }
-                            { !userState.user && <LinkContainer to='/login'><Nav.Link><i className="fas fa-user"/>Log in</Nav.Link></LinkContainer> }
+                            { userState.user && <Nav.Link onClick={logoutHandler}><i className="bi bi-person pe-1"/>Logout {userState.user.name}</Nav.Link> }
+                            { !userState.user && <LinkContainer to='/login'><Nav.Link><i className="bi bi-person pe-1"/>Log in</Nav.Link></LinkContainer> }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
