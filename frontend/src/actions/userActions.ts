@@ -47,7 +47,7 @@ export const userRegisterAction = async (firstName: string, lastName: string, mi
     }
 };
 
-export const userListAction = async (token: string, dispatch: Dispatch) => {
+export const userListAction = async (page: number, token: string, dispatch: Dispatch) => {
     try {
         dispatch(userListRequest());
         const config: AxiosRequestConfig = {
@@ -55,7 +55,7 @@ export const userListAction = async (token: string, dispatch: Dispatch) => {
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserListPage } = await axios.get(`${API_BASE_URL}/user/list`, config);
+        const { data }: { data: UserListPage } = await axios.get(`${API_BASE_URL}/user/list${page === 0 ? '' : ('/' + page)}`, config);
         dispatch(userListSuccess(data));
     } catch (error: any) {
         dispatch(userListFail(error.response && error.response.data.message ? error.response.data.message : error.message));
