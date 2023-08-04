@@ -31,7 +31,7 @@ const UserListScreen = () => {
                 navigate('/login');
             }
         })();
-    }, [ admin, dispatch, location, navigate, successDelete, token ]);
+    }, [ admin, dispatch, location, navigate, page, successDelete, token ]);
     async function deleteHandler(userId: number, nextPage: number) {
         if (window.confirm('Are you sure?')) {
             await userDeleteAction(userId, token, dispatch);

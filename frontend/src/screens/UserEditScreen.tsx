@@ -45,7 +45,7 @@ const UserEditScreen = () => {
                 setUsername(user.name);
             }
         })();
-    }, [ dispatch, location, navigate, successUpdate, token, userId, user ]);
+    }, [ dispatch, location, navigate, pageIndex, successUpdate, token, user, userId ]);
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();
