@@ -9,12 +9,15 @@ import com.mcfly.poll.service.UserService;
 import com.mcfly.poll.util.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -28,8 +31,15 @@ public class UserMvcController {
 
     @GetMapping({"/list", "/list/{pageIndex}"})
     public String listUsers(@PathVariable(required = false) Optional<Integer> pageIndex, Model model) {
-        final PagedResponse<UserResponse> users = userService.listUsersPage(pageIndex.orElse(AppConstants.DEFAULT_PAGE_INDEX), AppConstants.DEFAULT_PAGE_SIZE);
-        model.addAttribute("users", users);
+        final Page<User> users = userService.getUsersPage(pageIndex.orElse(AppConstants.DEFAULT_PAGE_INDEX), AppConstants.DEFAULT_PAGE_SIZE);
+        final List<UserResponse> responses
+                = users.stream()
+                       .map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
+                                                .email(user.getEmail()).firstName(user.getFirstName())
+                                                .lastName(user.getLastName()).middleName(user.getMiddleName())
+                                                .roles(user.getRoles().stream().map(role -> role.getName().getName()).collect(Collectors.toSet())).build()).toList();
+        final PagedResponse<UserResponse> usersPageResponse = new PagedResponse<>(responses, users.getNumber(), users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
+        model.addAttribute("users", usersPageResponse);
         return "listUsers";
     }
 

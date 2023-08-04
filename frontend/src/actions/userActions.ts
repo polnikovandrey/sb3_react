@@ -55,7 +55,7 @@ export const userListAction = async (token: string, dispatch: Dispatch) => {
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserListInfo[] } = await axios.get('/api/users', config);
+        const { data }: { data: UserListInfo[] } = await axios.get(`${API_BASE_URL}/user/list`, config);
         dispatch(userListSuccess(data));
     } catch (error: any) {
         dispatch(userListFail(error.response && error.response.data.message ? error.response.data.message : error.message));

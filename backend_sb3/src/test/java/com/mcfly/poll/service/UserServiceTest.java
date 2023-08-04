@@ -5,10 +5,8 @@ import com.mcfly.poll.domain.user_role.RoleName;
 import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.exception.UserExistsAlreadyException;
-import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
-import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
@@ -19,13 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -108,25 +101,6 @@ public class UserServiceTest {
         assertThat(actual).usingRecursiveComparison().isEqualTo(expectedUserDataResponse);
         Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.any());
         Mockito.verifyNoMoreInteractions(userRepository);
-    }
-
-    @Test
-    void listUsersPage() {
-        final Pageable pageable = PageRequest.of(0, 1, Sort.Direction.ASC, "id");
-        final List<User> users = List.of(User.builder().id(42L).username("username").roles(Set.of()).build());
-        final List<UserResponse> expectedUserResponses
-                = users.stream().map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
-                                                         .email(user.getEmail()).firstName(user.getFirstName())
-                                                         .lastName(user.getLastName()).middleName(user.getMiddleName())
-                                                         .roles(Set.of())
-                                                         .build()).toList();
-        final PagedResponse<UserResponse> expectedPagedResponse = new PagedResponse<>(expectedUserResponses, 0, 1, 1, 1, true);
-        final PageImpl<User> page = new PageImpl<>(users, pageable, 1);
-        Mockito.when(userRepository.findAll(pageable))
-               .thenReturn(page);
-        final PagedResponse<UserResponse> userResponsePagedResponse = userService.listUsersPage(0, 1);
-        assertThat(userResponsePagedResponse).usingRecursiveComparison().isEqualTo(expectedPagedResponse);
-        Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
 
     @Test

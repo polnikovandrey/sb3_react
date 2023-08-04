@@ -2,9 +2,7 @@ package com.mcfly.poll.controller.mvc;
 
 import com.mcfly.poll.config.SecurityConfig;
 import com.mcfly.poll.domain.user_role.User;
-import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.EditUserFormData;
-import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.security.CustomUserDetailsService;
 import com.mcfly.poll.security.JwtAuthenticationFilter;
 import com.mcfly.poll.service.UserService;
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -49,8 +49,8 @@ public class UserMvcControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     public void userListDeniedUserAccess() throws Exception {
-        final PagedResponse<UserResponse> responseStub = new PagedResponse<>(Collections.emptyList(), 0, 0, 0, 0, true);
-        Mockito.when(userService.listUsersPage(Mockito.anyInt(), Mockito.anyInt()))
+        final Page<User> responseStub = new PageImpl<>(Collections.emptyList());
+        Mockito.when(userService.getUsersPage(Mockito.anyInt(), Mockito.anyInt()))
                .thenReturn(responseStub);
         mockMvc.perform(MockMvcRequestBuilders.get("/user/list"))
                .andDo(MockMvcResultHandlers.print())
@@ -60,9 +60,9 @@ public class UserMvcControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     public void userList() throws Exception {
-        final PagedResponse<UserResponse> expected = new PagedResponse<>(Collections.emptyList(), 0, 0, 0, 0, true);
-        Mockito.when(userService.listUsersPage(Mockito.anyInt(), Mockito.anyInt()))
-               .thenReturn(expected);
+        final Page<User> responseStub = new PageImpl<>(Collections.emptyList());
+        Mockito.when(userService.getUsersPage(Mockito.anyInt(), Mockito.anyInt()))
+               .thenReturn(responseStub);
         mockMvc.perform(MockMvcRequestBuilders.get("/user/list"))
                .andDo(MockMvcResultHandlers.print())
                .andExpect(MockMvcResultMatchers.status().isOk());

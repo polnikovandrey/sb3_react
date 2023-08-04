@@ -6,10 +6,8 @@ import com.mcfly.poll.domain.user_role.User;
 import com.mcfly.poll.exception.AppException;
 import com.mcfly.poll.exception.ResourceNotFoundException;
 import com.mcfly.poll.exception.UserExistsAlreadyException;
-import com.mcfly.poll.payload.PagedResponse;
 import com.mcfly.poll.payload.user_role.UserDataResponse;
 import com.mcfly.poll.payload.user_role.UserIdentityAvailability;
-import com.mcfly.poll.payload.user_role.UserResponse;
 import com.mcfly.poll.repository.user_role.RoleRepository;
 import com.mcfly.poll.repository.user_role.UserRepository;
 import com.mcfly.poll.security.UserPrincipal;
@@ -19,13 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,15 +59,10 @@ public class UserService {
                                     user.getRoles().stream().anyMatch(role -> RoleName.ROLE_ADMIN == role.getName()));
     }
 
-    public PagedResponse<UserResponse> listUsersPage(int page, int size) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<User> getUsersPage(int page, int size) {
         final Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "id");
-        final Page<User> users = userRepository.findAll(pageable);
-        final List<UserResponse> responses
-                = users.stream().map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
-                .email(user.getEmail()).firstName(user.getFirstName())
-                .lastName(user.getLastName()).middleName(user.getMiddleName())
-                .roles(user.getRoles().stream().map(role -> role.getName().getName()).collect(Collectors.toSet())).build()).toList();
-        return new PagedResponse<>(responses, users.getNumber(), users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
+        return userRepository.findAll(pageable);
     }
 
     public int getLastPageIndex(int size) {
