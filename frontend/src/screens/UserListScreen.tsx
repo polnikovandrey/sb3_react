@@ -46,23 +46,29 @@ const UserListScreen = () => {
                         <Table striped bordered hover responsive className='table-sm'>
                             <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>NAME</th>
-                                <th>EMAIL</th>
-                                <th>ADMIN</th>
+                                <th>Id</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Middle Name</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Admin</th>
                                 <th/>
                             </tr>
                             </thead>
                             <tbody>
                             {
-                                users?.map(user => (
+                                users?.content?.map(user => (
                                     <tr key={user.id}>
                                         <td>{user.id}</td>
-                                        <td>{user.name}</td>
+                                        <td>{user.firstName}</td>
+                                        <td>{user.lastName}</td>
+                                        <td>{user.middleName}</td>
                                         <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
+                                        <td>{user.name}</td>
                                         <td>
                                             {user.admin
-                                                ? (<i className='fas fa-check' style={{color: "green"}}/>)
+                                                ? (<i className='bi bi-check' style={{color: "green"}}/>)
                                                 : (<i className='fas fa-times' style={{color: "red"}}/>)}
                                         </td>
                                         <td>

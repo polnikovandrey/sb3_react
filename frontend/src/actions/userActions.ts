@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {UserInfo, UserListInfo} from "../store/types";
+import {UserInfo, UserListPage} from "../store/types";
 import {userLoginFail, userLoginRequest, userLoginSuccess, userLogout, userRegisterFail, userRegisterRequest, userRegisterSuccess} from "../slice/userSlice";
 import axios, {AxiosRequestConfig} from "axios";
 import {userListFail, userListRequest, userListReset, userListSuccess} from "../slice/userListSlice";
@@ -55,7 +55,7 @@ export const userListAction = async (token: string, dispatch: Dispatch) => {
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserListInfo[] } = await axios.get(`${API_BASE_URL}/user/list`, config);
+        const { data }: { data: UserListPage } = await axios.get(`${API_BASE_URL}/user/list`, config);
         dispatch(userListSuccess(data));
     } catch (error: any) {
         dispatch(userListFail(error.response && error.response.data.message ? error.response.data.message : error.message));
