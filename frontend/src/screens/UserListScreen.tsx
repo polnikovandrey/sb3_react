@@ -43,8 +43,8 @@ const UserListScreen = () => {
                 : error
                     ? <Message variant='danger'>{error}</Message>
                     : (
-                        <Table striped bordered hover responsive className='table-sm'>
-                            <thead>
+                        <Table bordered hover responsive className='table-sm'>
+                            <thead className="table-light">
                             <tr>
                                 <th>Id</th>
                                 <th>First Name</th>
@@ -53,6 +53,7 @@ const UserListScreen = () => {
                                 <th>Email</th>
                                 <th>Username</th>
                                 <th>Admin</th>
+                                <th/>
                                 <th/>
                             </tr>
                             </thead>
@@ -66,19 +67,21 @@ const UserListScreen = () => {
                                         <td>{user.middleName}</td>
                                         <td><a href={`mailto:${user.email}`}>{user.email}</a></td>
                                         <td>{user.name}</td>
-                                        <td>
+                                        <td align={"center"}>
                                             {user.admin
                                                 ? (<i className='bi bi-check' style={{color: "green"}}/>)
-                                                : (<i className='fas fa-times' style={{color: "red"}}/>)}
+                                                : (<i className='bi bi-x' style={{color: "red"}}/>)}
                                         </td>
                                         <td>
                                             <LinkContainer to={`user/${user.id}/edit`}>
-                                                <Button variant='light' className='btn-sm'>
-                                                    <i className='fas fa-edit'/>
+                                                <Button variant='warning' className='btn-sm w-100'>
+                                                    <i className='bi bi-pencil-square'/>
                                                 </Button>
                                             </LinkContainer>
-                                            <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(user.id)}>
-                                                <i className='fas fa-trash'/>
+                                        </td>
+                                        <td>
+                                            <Button variant='danger' className='btn-sm w-100' onClick={() => deleteHandler(user.id)}>
+                                                <i className='bi bi-trash'/>
                                             </Button>
                                         </td>
                                     </tr>
