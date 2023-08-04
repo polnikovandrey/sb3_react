@@ -31,7 +31,7 @@ const UserListScreen = () => {
             }
         })();
     }, [ admin, dispatch, location, navigate, page, successDelete, token ]);
-    async function deleteHandler(userId: string) {
+    async function deleteHandler(userId: number) {
         if (window.confirm('Are you sure?')) {
             await userDeleteAction(userId, token, dispatch);
         }
@@ -76,16 +76,24 @@ const UserListScreen = () => {
                                                         : (<i className='bi bi-x' style={{color: "red"}}/>)}
                                                 </td>
                                                 <td>
-                                                    <LinkContainer to={`user/${user.id}/edit`}>
-                                                        <Button variant='warning' className='btn-sm w-100'>
-                                                            <i className='bi bi-pencil-square'/>
-                                                        </Button>
-                                                    </LinkContainer>
+                                                    {
+                                                        user.id !== 1 && (
+                                                            <LinkContainer to={`user/${user.id}/edit`}>
+                                                                <Button variant='warning' className='btn-sm w-100'>
+                                                                    <i className='bi bi-pencil-square'/>
+                                                                </Button>
+                                                            </LinkContainer>
+                                                        )
+                                                    }
                                                 </td>
                                                 <td>
-                                                    <Button variant='danger' className='btn-sm w-100' onClick={() => deleteHandler(user.id)}>
-                                                        <i className='bi bi-trash'/>
-                                                    </Button>
+                                                    {
+                                                        user.id !== 1 && (
+                                                            <Button variant='danger' className='btn-sm w-100' onClick={() => deleteHandler(user.id)}>
+                                                                <i className='bi bi-trash'/>
+                                                            </Button>
+                                                        )
+                                                    }
                                                 </td>
                                             </tr>
                                         ))

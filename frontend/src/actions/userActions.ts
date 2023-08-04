@@ -62,7 +62,7 @@ export const userListAction = async (page: number, token: string, dispatch: Disp
     }
 };
 
-export const userDeleteAction = async (id: string, token: string, dispatch: Dispatch) => {
+export const userDeleteAction = async (id: number, token: string, dispatch: Dispatch) => {
     try {
         dispatch(userDeleteRequest());
         const config: AxiosRequestConfig = {

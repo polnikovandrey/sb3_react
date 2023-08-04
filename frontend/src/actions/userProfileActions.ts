@@ -12,7 +12,7 @@ import {
 } from "../slice/userProfileSlice";
 import {API_BASE_URL} from "../constants";
 
-export const getUserProfileAction = async (id: string, token: string, dispatch: Dispatch) => {
+export const getUserProfileAction = async (id: number, token: string, dispatch: Dispatch) => {
     try {
         dispatch(userProfileRequest());
         const config: AxiosRequestConfig = {
