@@ -52,7 +52,7 @@ const ProfileScreen = () => {
         const messages = validateUserFormData(firstName, lastName, middleName, username, email, password, confirmPassword);
         setMessages(messages);
         if (messages.length == 0 && userInfo && userProfileState.user) {
-            await updateUserProfileAction(userInfo.token, { id: userInfo.id, email: email, name: username, firstName: firstName, lastName: lastName, middleName: middleName, password }, dispatch);
+            await updateUserProfileAction(userInfo.token, { id: userInfo.id, email: email, name: username, firstName: firstName, lastName: lastName, middleName: middleName, password: password }, dispatch);
             navigate('/');
         }
     };

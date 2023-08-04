@@ -110,13 +110,13 @@ public class UserService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setMiddleName(middleName);
-        if (email != null) {
+        if (email != null && !email.isEmpty()) {
             user.setEmail(email);
         }
-        if (name != null) {
+        if (name != null && !name.isEmpty()) {
             user.setUsername(name);
         }
-        if (password != null) {
+        if (password != null && !password.isEmpty()) {
             user.setPassword(passwordEncoder.encode(password));
         }
         final User updatedUser = userRepository.saveAndFlush(user);

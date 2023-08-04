@@ -53,7 +53,8 @@ public class UserController {
         final String middleName = updateUserDataRequest.getMiddleName();
         final String email = updateUserDataRequest.getEmail();
         final String name = updateUserDataRequest.getName();
-        return userService.updateUserData(id, firstName, lastName, middleName, email, name, null);
+        final String password = updateUserDataRequest.getPassword();
+        return userService.updateUserData(id, firstName, lastName, middleName, email, name, password);
     }
 
     // TODO test
