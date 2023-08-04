@@ -1,8 +1,9 @@
 import {Dispatch} from "redux";
 import axios, {AxiosRequestConfig} from "axios";
-import {UserInfo, UserProfile} from "../store/types";
+import {UserProfile, UserProfileData} from "../store/types";
 import {userProfileByIdUpdateFail, userProfileByIdUpdateRequest, userProfileByIdUpdateReset, userProfileByIdUpdateSuccess} from "../slice/userUpdateSlice";
 import {userProfileReset, userProfileUpdateSuccess} from "../slice/userProfileSlice";
+import {API_BASE_URL} from "../constants";
 
 export const updateUserProfileByIdAction = async (token: string, aUserProfile: UserProfile, dispatch: Dispatch) => {
     try {
@@ -13,9 +14,8 @@ export const updateUserProfileByIdAction = async (token: string, aUserProfile: U
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserInfo } = await axios.put(`/api/users/${aUserProfile.id}`, aUserProfile, config);
-        // TODO firstName, lastName, middleName
-        const userProfile: UserProfile = { id: data.id, email: data.email, name: data.name, firstName: '', lastName: '', middleName: '', admin: data.admin };
+        const { data }: { data: UserProfileData } = await axios.put(`${API_BASE_URL}/user/${aUserProfile.id}`, aUserProfile, config);
+        const userProfile: UserProfile = { id: data.id, email: data.email, name: data.name, firstName: data.firstName, lastName: data.lastName, middleName: data.middleName, admin: data.admin };
         dispatch(userProfileByIdUpdateSuccess());
         dispatch(userProfileUpdateSuccess(userProfile));
     } catch (error: any) {

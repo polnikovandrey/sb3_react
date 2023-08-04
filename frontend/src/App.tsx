@@ -25,8 +25,8 @@ const App = () => {
                             <Route path='/login' element={<LoginScreen/>}/>
                             <Route path='/register' element={<RegisterScreen/>}/>
                             <Route path='/profile' element={<ProfileScreen/>}/>
-                            <Route path='/admin/userList' element={<UserListScreen/>}/>
-                            <Route path='/admin/user/:id/edit' element={<UserEditScreen/>}/>
+                            <Route path='/admin/userList/:pageParam?' element={<UserListScreen/>}/>
+                            <Route path='/admin/user/:id/:page/edit' element={<UserEditScreen/>}/>
                             <Route path='/' element={<HomeScreen/>}/>
                         </Routes>
                     </Container>

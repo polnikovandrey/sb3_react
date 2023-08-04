@@ -55,7 +55,7 @@ export const userListAction = async (page: number, token: string, dispatch: Disp
                 Authorization: `Bearer ${token}`
             }
         };
-        const { data }: { data: UserListPage } = await axios.get(`${API_BASE_URL}/user/list${page === 0 ? '' : ('/' + page)}`, config);
+        const { data }: { data: UserListPage } = await axios.get(`${API_BASE_URL}/user/list${page === 0 ? '' : ('/' + page.toString())}`, config);
         dispatch(userListSuccess(data));
     } catch (error: any) {
         dispatch(userListFail(error.response && error.response.data.message ? error.response.data.message : error.message));

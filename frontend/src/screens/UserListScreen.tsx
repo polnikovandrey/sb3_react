@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {selectUserList} from "../slice/userListSlice";
 import {userDeleteAction, userListAction} from "../actions/userActions";
@@ -8,7 +8,7 @@ import Message from "../components/Message";
 import {LinkContainer} from "react-router-bootstrap";
 import {selectUserInfo} from "../slice/userSlice";
 import {selectUserDelete} from "../slice/userDeleteSlice";
-import {useLocation, useNavigate} from "react-router";
+import {useLocation, useNavigate, useParams} from "react-router";
 
 const UserListScreen = () => {
     const navigate = useNavigate();
@@ -21,7 +21,8 @@ const UserListScreen = () => {
     const admin = userInfoState.user?.admin;
     const userDeleteState = useAppSelector(selectUserDelete);
     const { success: successDelete } = userDeleteState;
-    const [ page, setPage ] = useState<number>(0);
+    const { pageParam = '0' } = useParams();
+    const page = Number(pageParam);
     useEffect(() => {
         (async () => {
             if (admin) {
@@ -30,11 +31,11 @@ const UserListScreen = () => {
                 navigate('/login');
             }
         })();
-    }, [ admin, dispatch, location, navigate, page, successDelete, token ]);
+    }, [ admin, dispatch, location, navigate, successDelete, token ]);
     async function deleteHandler(userId: number, nextPage: number) {
         if (window.confirm('Are you sure?')) {
             await userDeleteAction(userId, token, dispatch);
-            setPage(nextPage);
+            navigate(`/admin/userList/${nextPage}`);
         }
     }
     return (
@@ -79,11 +80,7 @@ const UserListScreen = () => {
                                                 <td>
                                                     {
                                                         user.id !== 1 && (
-                                                            /* TODO del
-            <td><a class="btn btn-primary w-100" th:if="${user.getId() != 1}"
-                               th:href="@{'/user/edit/' + ${user.getId()} + '/' + ${users.getPage()}}">Edit</a></td>
-             */
-                                                            <LinkContainer to={`user/${user.id}/edit`}>
+                                                            <LinkContainer to={`/admin/user/${user.id}/${users?.page}/edit`}>
                                                                 <Button variant='warning' className='btn-sm w-100'>
                                                                     <i className='bi bi-pencil-square'/>
                                                                 </Button>
@@ -109,13 +106,17 @@ const UserListScreen = () => {
                             { users && (
                                 <Row>
                                     <Col>
-                                        <Button className={`btn btn-primary ${users.page <= 0 ? 'disabled' : ''}`} onClick={() => setPage(users.page - 1)}>Prev page</Button>
+                                        <LinkContainer to={`/admin/userList/${users.page - 1}`}>
+                                            <Button className={`btn btn-primary ${users.page <= 0 ? 'disabled' : ''}`}>Prev page</Button>
+                                        </LinkContainer>
                                     </Col>
                                     <Col className="col d-flex justify-content-center">
                                         Page<span className="mx-1">{users.page + 1}</span>of<span className="mx-1">{users.totalPages}</span>
                                     </Col>
                                     <Col className="col d-flex justify-content-end">
-                                        <Button className={`btn btn-primary ${users.page + 1 >= users.totalPages ? 'disabled' : ''}`} onClick={() => setPage(users.page + 1)}>Next page</Button>
+                                        <LinkContainer to={`/admin/userList/${users.page + 1}`}>
+                                            <Button className={`btn btn-primary ${users.page + 1 >= users.totalPages ? 'disabled' : ''}`}>Next page</Button>
+                                        </LinkContainer>
                                     </Col>
                                 </Row>
                             )}

@@ -15,11 +15,14 @@ import {resetUserProfileByIdAction, updateUserProfileByIdAction} from "../action
 const UserEditScreen = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id} = useParams();
+    const { id, page} = useParams();
     const userId = id || '';
-    const [ name, setName ] = useState('');
+    const pageIndex = page || '0';
+    const [ firstName, setFirstName ] = useState('');
+    const [ lastName, setLastName ] = useState('');
+    const [ middleName, setMiddleName ] = useState('');
     const [ email, setEmail ] = useState('');
-    const [ admin, setAdmin ] = useState(false);
+    const [ username, setUsername ] = useState('');
     const userInfoState = useAppSelector(selectUserInfo);
     const token = userInfoState?.user?.token || '';
     const userProfileState = useAppSelector(selectUserProfile);
@@ -31,21 +34,23 @@ const UserEditScreen = () => {
         (async () => {
             if (successUpdate) {
                 await resetUserProfileByIdAction(dispatch);
-                navigate('/admin/userList')
-            } else if (!user?.name || user.id !== Number(userId) ) {
+                navigate(`/admin/userList/${pageIndex}`);
+            } else if (!user?.name || user.id !== Number(userId)) {
                 await getUserProfileAction(Number(userId), token, dispatch);
             } else {
-                setName(user.name);
+                setFirstName(user.firstName);
+                setLastName(user.lastName);
+                setMiddleName(user.middleName);
                 setEmail(user.email);
-                setAdmin(user.admin!);
+                setUsername(user.name);
             }
         })();
     }, [ dispatch, location, navigate, successUpdate, token, userId, user ]);
 
     const submitHandler: FormEventHandler = async (event) => {
         event.preventDefault();
-        // TODO firstName, lastName, middleName
-        await updateUserProfileByIdAction(token, { id: Number(userId), email: email, name: name, firstName: '', lastName: '', middleName: '', admin: admin }, dispatch);
+        await updateUserProfileByIdAction(token, { id: Number(userId), email: email, name: username, firstName: firstName, lastName: lastName, middleName: middleName }, dispatch);
+
     };
     return (
         <>
@@ -60,16 +65,25 @@ const UserEditScreen = () => {
                         ? <Message variant='danger'>{error}</Message>
                         : (
                             <Form onSubmit={submitHandler}>
-                                <Form.Group controlId='name' className='mb-3'>
+                                <Form.Group controlId='firstName' className='mb-3'>
+                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Control type='text' placeholder='Enter First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                                </Form.Group>
+                                <Form.Group controlId='lastName' className='mb-3'>
+                                    <Form.Label>Last Name</Form.Label>
+                                    <Form.Control type='text' placeholder='Enter Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                                </Form.Group>
+                                <Form.Group controlId='middleName' className='mb-3'>
+                                    <Form.Label>Middle Name</Form.Label>
+                                    <Form.Control type='text' placeholder='Enter Middle Name' value={middleName} onChange={(e) => setMiddleName(e.target.value)}/>
+                                </Form.Group>
+                                <Form.Group controlId='username' className='mb-3'>
                                     <Form.Label>Name</Form.Label>
-                                    <Form.Control type='name' placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)}/>
+                                    <Form.Control type='text' placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
                                 </Form.Group>
                                 <Form.Group controlId='email' className='mb-3'>
                                     <Form.Label>Email Address</Form.Label>
                                     <Form.Control type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-                                </Form.Group>
-                                <Form.Group controlId='admin' className='mb-4'>
-                                    <Form.Check type='checkbox' label='Admin' checked={admin} onChange={(e) => setAdmin(e.target.checked)}/>
                                 </Form.Group>
                                 <Button type='submit' variant='primary'>
                                     Update
