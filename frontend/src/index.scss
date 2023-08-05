@@ -18,4 +18,5 @@ h3 {
 
 .progress_page-load {
   --bs-progress-border-radius: 0;
+  transition: opacity 150ms ease-in-out;
 }

@@ -46,7 +46,7 @@ const Header = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            { <ProgressBar className={`progress_page-load ${loading ? '' : 'invisible'}`} animated={true} now={100} striped={true} variant={'info'} /> }
+            { <ProgressBar className={`progress_page-load ${loading ? 'opacity-100' : 'opacity-0'}`} animated={true} now={100} striped={true} variant={'info'} /> }
 
         </header>
     );
