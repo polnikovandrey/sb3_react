@@ -56,46 +56,48 @@ const ProfileScreen = () => {
         }
     };
     return (
-        <Row>
-            <Col md={3}>
-                <h2>User Profile</h2>
-                { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
-                { userProfileState?.error && <Message variant='danger'>{userProfileState.error}</Message> }
-                <Form onSubmit={submitHandler}>
-                    <Form.Group controlId='firstName' className='mb-3'>
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control type='text' placeholder='Enter First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId='lastName' className='mb-3'>
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control type='text' placeholder='Enter Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId='middleName' className='mb-3'>
-                        <Form.Label>Middle Name</Form.Label>
-                        <Form.Control type='text' placeholder='Enter Middle Name' value={middleName} onChange={(e) => setMiddleName(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId='username' className='mb-3'>
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type='text' placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId='email' className='mb-3'>
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control type='email' placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId='password' className='mb-3'>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type='password' autoComplete='off' placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
-                    </Form.Group>
-                    <Form.Group controlId='confirmPassword' className='mb-4'>
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type='password' autoComplete='off' placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-                    </Form.Group>
-                    <Button type='submit' variant='primary'>
-                        Update
-                    </Button>
-                </Form>
-            </Col>
-        </Row>
+        <>
+            <h1>User Profile</h1>
+            <Row>
+                <Col md={3}>
+                    { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
+                    { userProfileState?.error && <Message variant='danger'>{userProfileState.error}</Message> }
+                    <Form onSubmit={submitHandler}>
+                        <Form.Group controlId='firstName' className='mb-3'>
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='lastName' className='mb-3'>
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='middleName' className='mb-3'>
+                            <Form.Label>Middle Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter Middle Name' value={middleName} onChange={(e) => setMiddleName(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='username' className='mb-3'>
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control type='text' placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='email' className='mb-3'>
+                            <Form.Label>Email Address</Form.Label>
+                            <Form.Control type='email' placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='password' className='mb-3'>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type='password' autoComplete='off' placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='confirmPassword' className='mb-4'>
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control type='password' autoComplete='off' placeholder='Confirm Password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+                        </Form.Group>
+                        <Button type='submit' variant='primary'>
+                            Update
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
+        </>
     );
 }
 
