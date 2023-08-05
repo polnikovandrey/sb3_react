@@ -23,7 +23,7 @@ export const validateUserFormData = (firstName : string, lastName : string, midd
     if (username.length < usernameMinLength || username.length > usernameMaxLength) {
         result.push(`Username should have from ${usernameMinLength} to ${usernameMaxLength} characters`);
     }
-    if (email.length == 0 || email.length > emailMaxLength) {
+    if (email.length === 0 || email.length > emailMaxLength) {
         result.push(`Email is required and should have maximum ${emailMaxLength} characters`);
     }
     if (password.length < passwordMinLength || password.length > passwordMaxLength) {

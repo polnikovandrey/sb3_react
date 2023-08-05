@@ -34,10 +34,10 @@
     "typescript": "^5.1.6"
   },
   "scripts": {
-    "start": "npx tsc --project ./ && react-scripts start",
-    "build": "npx tsc --project ./ && react-scripts build",
-    "test": "npx tsc --project ./ && react-scripts test",
-    "eject": "npx tsc --project ./ && react-scripts eject"
+    "start": "npx tsc && react-scripts start",
+    "build": "npx tsc && react-scripts build",
+    "test": "npx tsc && react-scripts test",
+    "eject": "npx tsc && react-scripts eject"
   },
   "overrides": {
     "typescript": "^5.1.6"

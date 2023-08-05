@@ -50,7 +50,7 @@ const ProfileScreen = () => {
         const userInfo = userInfoState.user;
         const messages = validateUserFormData(firstName, lastName, middleName, username, email, password, confirmPassword);
         setMessages(messages);
-        if (messages.length == 0 && userInfo && userProfileState.user) {
+        if (messages.length === 0 && userInfo && userProfileState.user) {
             await updateUserProfileAction(userInfo.token, { id: userInfo.id, email: email, name: username, firstName: firstName, lastName: lastName, middleName: middleName, password: password }, dispatch);
             navigate('/');
         }
@@ -60,7 +60,7 @@ const ProfileScreen = () => {
             <h1>User Profile</h1>
             <Row>
                 <Col md={3}>
-                    { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
+                    { messages.length !== 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
                     { userProfileState?.error && <Message variant='danger'>{userProfileState.error}</Message> }
                     <Form onSubmit={submitHandler}>
                         <Form.Group controlId='firstName' className='mb-3'>

@@ -34,7 +34,7 @@ const RegisterScreen = () => {
     }, [ location, navigate, redirect, userState ]);
 
     useEffect(() => {
-        if (messages.length != 0) {
+        if (messages.length !== 0) {
             window.scrollTo({top: 0, behavior: "smooth"});
         }
     }, [messages]);
@@ -43,14 +43,14 @@ const RegisterScreen = () => {
         event.preventDefault();
         const messages = validateUserFormData(firstName, lastName, middleName, username, email, password, confirmPassword);
         setMessages(messages);
-        if (messages.length == 0) {
+        if (messages.length === 0) {
             await userRegisterAction(firstName, lastName, middleName, username, email, password, dispatch);
         }
     };
     return (
         <FormContainer>
             <h1>Register</h1>
-            { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
+            { messages.length !== 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
             { userState?.error && <Message variant='danger'>{userState.error}</Message> }
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='firstName' className='mb-3'>
