@@ -22,12 +22,12 @@ const App = () => {
                 <main className="py-3">
                     <Container>
                         <Routes>
+                            <Route path='/' element={<HomeScreen/>}/>
                             <Route path='/login' element={<LoginScreen/>}/>
                             <Route path='/register' element={<RegisterScreen/>}/>
                             <Route path='/profile' element={<ProfileScreen/>}/>
                             <Route path='/admin/userList/:pageParam?' element={<UserListScreen/>}/>
                             <Route path='/admin/user/:id/:page/edit' element={<UserEditScreen/>}/>
-                            <Route path='/' element={<HomeScreen/>}/>
                         </Routes>
                     </Container>
                 </main>
