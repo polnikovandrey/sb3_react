@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import Message from "../components/Message";
-import Loader from "../components/Loader";
 import {userLoginAction} from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
 import {UserState} from "../store/types";
@@ -35,7 +34,6 @@ const LoginScreen = () => {
         <FormContainer>
             <h1>Log in</h1>
             { userState?.error && <Message variant='danger'>{userState.error}</Message> }
-            { userState?.loading && <Loader/> }
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='email' className='mb-3'>
                     <Form.Label>Username or email</Form.Label>

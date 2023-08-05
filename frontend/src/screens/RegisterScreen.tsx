@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import Message from "../components/Message";
-import Loader from "../components/Loader";
 import {userRegisterAction} from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
 import {UserState} from "../store/types";
@@ -53,7 +52,6 @@ const RegisterScreen = () => {
             <h1>Register</h1>
             { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
             { userState?.error && <Message variant='danger'>{userState.error}</Message> }
-            { userState?.loading && <Loader/> }
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId='firstName' className='mb-3'>
                     <Form.Label>First Name</Form.Label>

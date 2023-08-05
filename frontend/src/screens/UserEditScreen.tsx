@@ -4,7 +4,6 @@ import {Button, Form} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import Message from "../components/Message";
-import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import {selectUserProfile} from "../slice/userProfileSlice";
 import {getUserProfileAction} from "../actions/userProfileActions";
@@ -28,7 +27,7 @@ const UserEditScreen = () => {
     const userProfileState = useAppSelector(selectUserProfile);
     const { loading, user, error } = userProfileState;
     const userUpdateState = useAppSelector(selectUserUpdate);
-    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = userUpdateState;
+    const { error: errorUpdate, success: successUpdate } = userUpdateState;
     const dispatch = useAppDispatch();
     useEffect(() => {
         (async () => {
@@ -57,39 +56,35 @@ const UserEditScreen = () => {
             <Link to='/admin/userList' className='btn btn-light my-3'>Go back</Link>
             <FormContainer>
                 <h1>Edit user</h1>
-                { loadingUpdate && <Loader/> }
                 { errorUpdate && <Message variant='danger'>{errorUpdate}</Message> }
-                { loading
-                    ? <Loader/>
-                    : error
-                        ? <Message variant='danger'>{error}</Message>
-                        : (
-                            <Form onSubmit={submitHandler}>
-                                <Form.Group controlId='firstName' className='mb-3'>
-                                    <Form.Label>First Name</Form.Label>
-                                    <Form.Control type='text' placeholder='Enter First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-                                </Form.Group>
-                                <Form.Group controlId='lastName' className='mb-3'>
-                                    <Form.Label>Last Name</Form.Label>
-                                    <Form.Control type='text' placeholder='Enter Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-                                </Form.Group>
-                                <Form.Group controlId='middleName' className='mb-3'>
-                                    <Form.Label>Middle Name</Form.Label>
-                                    <Form.Control type='text' placeholder='Enter Middle Name' value={middleName} onChange={(e) => setMiddleName(e.target.value)}/>
-                                </Form.Group>
-                                <Form.Group controlId='username' className='mb-3'>
-                                    <Form.Label>Name</Form.Label>
-                                    <Form.Control type='text' placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
-                                </Form.Group>
-                                <Form.Group controlId='email' className='mb-3'>
-                                    <Form.Label>Email Address</Form.Label>
-                                    <Form.Control type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-                                </Form.Group>
-                                <Button type='submit' variant='primary'>
-                                    Update
-                                </Button>
-                            </Form>
-                        )}
+                { error && <Message variant='danger'>{error}</Message> }
+                { !loading && (
+                    <Form onSubmit={submitHandler}>
+                        <Form.Group controlId='firstName' className='mb-3'>
+                            <Form.Label>First Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='lastName' className='mb-3'>
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='middleName' className='mb-3'>
+                            <Form.Label>Middle Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter Middle Name' value={middleName} onChange={(e) => setMiddleName(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='username' className='mb-3'>
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control type='text' placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
+                        </Form.Group>
+                        <Form.Group controlId='email' className='mb-3'>
+                            <Form.Label>Email Address</Form.Label>
+                            <Form.Control type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        </Form.Group>
+                        <Button type='submit' variant='primary'>
+                            Update
+                        </Button>
+                    </Form>
+                )}
             </FormContainer>
         </>
     );

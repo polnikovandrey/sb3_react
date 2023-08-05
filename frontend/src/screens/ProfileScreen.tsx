@@ -2,7 +2,6 @@ import React, {FormEventHandler, useEffect, useState} from "react";
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import Message from "../components/Message";
-import Loader from "../components/Loader";
 import {selectUserInfo} from "../slice/userSlice";
 import {selectUserProfile} from "../slice/userProfileSlice";
 import {getUserProfileAction, updateUserProfileAction, updateUserProfileResetAction} from "../actions/userProfileActions";
@@ -62,7 +61,6 @@ const ProfileScreen = () => {
                 <h2>User Profile</h2>
                 { messages.length != 0 && messages.map((message, idx) => <Message variant='danger' key={idx}>{message}</Message>) }
                 { userProfileState?.error && <Message variant='danger'>{userProfileState.error}</Message> }
-                { userProfileState?.loading && <Loader/> }
                 <Form onSubmit={submitHandler}>
                     <Form.Group controlId='firstName' className='mb-3'>
                         <Form.Label>First Name</Form.Label>
