@@ -8,7 +8,7 @@ app:
 
 logging:
   level:
-    ROOT: INFO
+    ROOT: TRACE
     org.hibernate.engine.transaction.internal.TransactionImpl: DEBUG
     org.hibernate.sql: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
@@ -23,7 +23,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: sb3_react_user
     password: password
   flyway:
