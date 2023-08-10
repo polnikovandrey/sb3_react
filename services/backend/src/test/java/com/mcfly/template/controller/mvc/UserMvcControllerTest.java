@@ -3,14 +3,13 @@ package com.mcfly.template.controller.mvc;
 import com.mcfly.template.config.SecurityConfig;
 import com.mcfly.template.domain.user_role.User;
 import com.mcfly.template.payload.user_role.EditUserFormData;
-import com.mcfly.template.security.CustomUserDetailsService;
-import com.mcfly.template.security.JwtAuthenticationFilter;
 import com.mcfly.template.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,18 +24,15 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.Instant;
 import java.util.Collections;
 
-@WebMvcTest(UserMvcController.class)
+@ComponentScan(basePackages = "com.mcfly.template.security")
 @Import(SecurityConfig.class)
+@WebMvcTest(UserMvcController.class)
 public class UserMvcControllerTest {
 
-    @MockBean
-    private UserService userService;
-    @MockBean
-    CustomUserDetailsService customUserDetailsService;
-    @MockBean
-    JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
     private MockMvc mockMvc;
+    @MockBean
+    private UserService userService;
 
     @Test
     public void userListDeniedUnauthorizedAccess() throws Exception {
@@ -181,7 +177,7 @@ public class UserMvcControllerTest {
         final Long userId = 42L;
         final Integer pageIndex = 0;
         final User userStub = new User(userId, "username", "email", "password", "firstName", "lastName", "middleName",
-                                    Collections.emptySet(), Instant.now(), Instant.now(), 0L);
+                                       Collections.emptySet(), Instant.now(), Instant.now(), 0L);
         final EditUserFormData expectedEditUserFormData
                 = EditUserFormData.builder()
                                   .userId(userStub.getId())

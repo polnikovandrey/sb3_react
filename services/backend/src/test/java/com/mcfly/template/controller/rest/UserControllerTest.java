@@ -1,5 +1,6 @@
 package com.mcfly.template.controller.rest;
 
+import com.mcfly.template.config.SecurityConfig;
 import com.mcfly.template.controller.rest.user_role.UserController;
 import com.mcfly.template.exception.ResourceNotFoundException;
 import com.mcfly.template.payload.user_role.UserDataResponse;
@@ -11,6 +12,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,6 +22,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ComponentScan(basePackages = "com.mcfly.template.security")
+@Import(SecurityConfig.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
@@ -34,13 +39,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void checkUsernameAvailabilityUnauthorizedSecured() throws Exception {
+    public void checkUsernameAvailabilityUnauthorizedAllowed() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/checkUsernameAvailability").param("username", RandomStringUtils.randomAlphabetic(5)))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    @WithMockUser(username="fakeUsername")
     public void checkExistingUsernameAvailability() throws Exception {
         final String fakeExistingUsername = "Fake existing user";
         Mockito.when(userService.checkUsernameAvailability(fakeExistingUsername)).thenReturn(new UserIdentityAvailability(false));
@@ -51,7 +55,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username="fakeUsername")
     public void checkAbsentUsernameAvailability() throws Exception {
         final String fakeAbsentUsername = "Fake absent user";
         Mockito.when(userService.checkUsernameAvailability(fakeAbsentUsername)).thenReturn(new UserIdentityAvailability(true));
@@ -62,13 +65,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void checkEmailAvailabilityUnauthorizedSecured() throws Exception {
+    public void checkEmailAvailabilityUnauthorizedAllowed() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/checkEmailAvailability").param("email", RandomStringUtils.randomAlphabetic(5)))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    @WithMockUser(username="fakeUsername")
     public void checkExistingEmailAvailability() throws Exception {
         final String fakeExistingEmail = "fake.existing@email.com";
         Mockito.when(userService.checkEmailAvailability(fakeExistingEmail)).thenReturn(new UserIdentityAvailability(false));
@@ -79,7 +81,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(username="fakeUsername")
     public void checkAbsentEmailAvailability() throws Exception {
         final String fakeAbsentEmail = "fake.absent@email.com";
         Mockito.when(userService.checkEmailAvailability(fakeAbsentEmail)).thenReturn(new UserIdentityAvailability(true));

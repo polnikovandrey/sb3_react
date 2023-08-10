@@ -30,6 +30,7 @@ public class UserMvcController {
     private final UserService userService;
 
     @GetMapping({"/list", "/list/{pageIndex}"})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String listUsers(@PathVariable(required = false) Optional<Integer> pageIndex, Model model) {
         final Page<User> users = userService.getUsersPage(pageIndex.orElse(AppConstants.DEFAULT_PAGE_INDEX), AppConstants.DEFAULT_PAGE_SIZE);
         final List<UserResponse> responses
