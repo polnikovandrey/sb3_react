@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  sb3-backend:
+    image: sb3_backend:latest
+    build:
+      context: ./services/backend
+      dockerfile: Dockerfile
+#    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT= 8080
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  react-frontend:
+    image: react_frontend:latest
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile
+#    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      sb3-backend:
+        condition: service_started
+    volumes:
+      - /app/node_modules
+      - ./react_frontend:/app
+  db:
+    image: mysql:8.0.33
+    restart: always
+    environment:
+      - MYSQL_DATABASE=sb3_react
+      - MYSQL_ROOT_PASSWORD=gjkybrjd
+    ports:
+      - '3307:3306'
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+volumes:
+  db:
+    driver: local
