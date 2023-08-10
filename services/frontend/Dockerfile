@@ -1,7 +1,9 @@
-FROM node:17-alpine
-COPY ["package.json", "package-lock.json*", "./"]
+FROM node:16-alpine
+WORKDIR /services/frontend
+COPY package.json ./
+COPY package-lock.json ./
+COPY tsconfig.json ./
+COPY ./ ./
 RUN npm install
-COPY . .
 EXPOSE 3000
-CMD pwd
 CMD ["npm", "start"]

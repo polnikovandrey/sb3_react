@@ -5,7 +5,7 @@ services:
     build:
       context: ./services/backend
       dockerfile: Dockerfile
-#    restart: always
+    restart: always
     ports:
       - "8080:8080"
     depends_on:
@@ -18,8 +18,7 @@ services:
     image: react_frontend:latest
     build:
       context: ./services/frontend
-      dockerfile: Dockerfile
-#    restart: always
+    restart: always
     ports:
       - '3000:3000'
     depends_on:
