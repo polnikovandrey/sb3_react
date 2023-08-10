@@ -3,6 +3,7 @@ package com.mcfly.template.security;
 import com.mcfly.template.domain.user_role.User;
 import com.mcfly.template.repository.user_role.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
+    public CustomUserDetailsService(@Lazy UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

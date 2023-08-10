@@ -12,8 +12,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      - SERVER_PORT= 8080
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
   react-frontend:
     image: react_frontend:latest
     build:
@@ -37,11 +36,11 @@ services:
       - '3307:3306'
     volumes:
       - db:/var/lib/mysql
-      - ./services/backend/src/main/resources/db/script/mysql-setup.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./services/backend/src/main/resources/db/script/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 20s
-      retries: 10
+      timeout: 5s
+      retries: 20
 volumes:
   db:
     driver: local

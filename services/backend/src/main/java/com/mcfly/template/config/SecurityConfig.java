@@ -3,11 +3,12 @@ package com.mcfly.template.config;
 import com.mcfly.template.security.CustomUserDetailsService;
 import com.mcfly.template.security.JwtAuthenticationEntryPoint;
 import com.mcfly.template.security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,8 +29,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
+    public SecurityConfig( CustomUserDetailsService customUserDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -40,7 +49,6 @@ public class SecurityConfig {
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity,
                                                       AuthenticationProvider authenticationProvider,
-                                                      JwtAuthenticationFilter jwtAuthenticationFilter,
                                                       JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
         return httpSecurity
                 .securityMatcher("/api/**")
@@ -76,11 +84,6 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
-
     /*
          Spring Boot detects and automatically registers a Filter.
          Registering by hand is the second registration and leads to doubling of the filter execution.
@@ -88,15 +91,10 @@ public class SecurityConfig {
          After that only manual registration takes place and filter becomes only part of Spring Security and not the regular filter chain anymore.
      */
     @Bean
-    public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistrationBean(JwtAuthenticationFilter filter) {
-        final FilterRegistrationBean<JwtAuthenticationFilter> frb = new FilterRegistrationBean<>(filter);
+    public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistrationBean() {
+        final FilterRegistrationBean<JwtAuthenticationFilter> frb = new FilterRegistrationBean<>(jwtAuthenticationFilter);
         frb.setEnabled(false);
         return frb;
-    }
-
-    @Bean
-    public JwtAuthenticationEntryPoint jwtUnauthorizedEntryPoint() {
-        return new JwtAuthenticationEntryPoint();
     }
 
     @Bean
@@ -105,7 +103,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
         final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(customUserDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
@@ -113,6 +111,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Lazy
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }

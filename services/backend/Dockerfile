@@ -1,4 +1,4 @@
-FROM eclipse-temurin:20-jdk-alpine as build
+FROM amazoncorretto:20-alpine-jdk as build
 WORKDIR /workspace/app
 
 COPY mvnw .
@@ -9,7 +9,7 @@ COPY src src
 RUN ./mvnw install -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-FROM eclipse-temurin:20-jre-alpine
+FROM amazoncorretto:20-alpine-jdk
 VOLUME /tmp
 ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
