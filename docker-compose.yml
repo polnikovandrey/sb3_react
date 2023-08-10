@@ -31,12 +31,13 @@ services:
     image: mysql:8.0.33
     restart: always
     environment:
-      - MYSQL_DATABASE=sb3_react
       - MYSQL_ROOT_PASSWORD=gjkybrjd
+      - MYSQL_DATABASE=sb3_react
     ports:
       - '3307:3306'
     volumes:
       - db:/var/lib/mysql
+      - ./services/backend/src/main/resources/db/script/mysql-setup.sql:/docker-entrypoint-initdb.d/1.sql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
