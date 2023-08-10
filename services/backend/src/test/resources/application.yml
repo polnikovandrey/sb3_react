@@ -7,15 +7,15 @@ app:
 
 logging:
   level:
-    ROOT: INFO
-    org.hibernate.engine.transaction.internal.TransactionImpl: DEBUG
-    org.hibernate.sql: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.web: TRACE
-    org.springframework.security: TRACE
-    org.springframework.transaction: DEBUG
-    org.springframework.validation: TRACE
+    ROOT: info
+    org.hibernate.engine.transaction.internal.TransactionImpl: debug
+    org.hibernate.sql: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.orm.jpa: debug
+    org.springframework.web: trace
+    org.springframework.security: trace
+    org.springframework.transaction: debug
+    org.springframework.validation: trace
 
 spring:
   datasource:
