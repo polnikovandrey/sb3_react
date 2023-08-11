@@ -1,6 +1,6 @@
 ### Configuration parameters ###
 # Virtual machines to initialize count
-VM_COUNT = 3
+VM_COUNT = 5
 
 Vagrant.configure("2") do |config|
 
@@ -13,8 +13,9 @@ Vagrant.configure("2") do |config|
 			web.vm.network "forwarded_port", id: "ssh", host: 2221 + i, guest: 22
 			web.vm.network "private_network", ip: "10.11.10.#{i + 1}", virtualbox__intnet: true
 			if i == 1
-			    web.vm.network "forwarded_port", id: "mvc", host: 8080, guest: 8080
-			    web.vm.network "forwarded_port", id: "react-client", host: 3000, guest: 3000
+			    web.vm.network "forwarded_port", id: "sb3-backend", host: 8080, guest: 8080
+			    web.vm.network "forwarded_port", id: "react-frontend", host: 3000, guest: 3000
+			    web.vm.network "forwarded_port", id: "mysql", host: 3308, guest: 3306
 			end
 			web.vm.hostname = "server#{i}"
 

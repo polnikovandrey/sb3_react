@@ -6,3 +6,7 @@ server2 ansible_host=127.0.0.1  ansible_port=2223 ansible_user=vagrant
 
 [worker]
 server3 ansible_host=127.0.0.1  ansible_port=2224 ansible_user=vagrant
+server4 ansible_host=127.0.0.1  ansible_port=2225 ansible_user=vagrant
+
+[mysql]
+server5 ansible_host=127.0.0.1  ansible_port=2226 ansible_user=vagrant
