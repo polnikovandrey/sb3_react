@@ -1,6 +1,6 @@
 ---
 - name: Preconfig machines
-  hosts: leader, manager, worker
+  hosts: leader, manager, worker, mysql
   roles:
     - role: preconfig
       tags: preconfig

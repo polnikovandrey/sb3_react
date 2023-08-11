@@ -28,8 +28,8 @@
             target_port: 8080
           - mode: ingress
             protocol: tcp
-            published_port: 9000
-            target_port: 9000
+            published_port: 3000
+            target_port: 3000
         configs:
           - config_name: nginx.conf
             filename: "/etc/nginx/nginx.conf"
