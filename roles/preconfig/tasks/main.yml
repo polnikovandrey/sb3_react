@@ -42,7 +42,8 @@
     - name: Проверка что Docker установлен и перезагружен
       service:
         name: docker
-        state: restarted
+        state: started
+#        state: restarted
         enabled: true
   become: true
 

@@ -17,7 +17,8 @@
   ansible.builtin.git:
     repo: "https://polnikov_andrey@bitbucket.org/polnikov_andrey/sb3_react.git"
     dest: "{{ git_folder }}"
-    version: master
+    version: to_services_1
+#    version: master
 
 - name: Собираем docker image сервисов из локального git репозитория
   community.docker.docker_image:
