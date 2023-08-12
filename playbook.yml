@@ -31,12 +31,6 @@
       tags: swarm_join
       type: worker
 
-- name: Deploy mysql service
-  hosts: mysql
-  roles:
-    - role: deploy_mysql
-      tags: deploy_mysql
-
 - name: Build and deploy a leader
   hosts: leader
   roles:

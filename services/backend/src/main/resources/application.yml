@@ -46,3 +46,11 @@ spring:
     log-request-details: true
   profiles:
     default: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://mysql:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+
