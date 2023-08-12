@@ -4,17 +4,18 @@
     - name: "[MySQL] Выкладываем стартовый скрипт"
       ansible.builtin.copy:
         src: ../../services/backend/src/main/resources/db/script/mysql-setup.sql
-        dest: /etc/mysql-setup.sql
+        dest: /tmp/mysql-setup.sql
     - name: "[MySQL] Выкладываем сервис"
       docker_container:
         name: mysql
-        image: mysql:{{ version }}
+        image: mysql:8.0.33
         volumes:
           - db:/var/lib/mysql
-          - /etc/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql
+          - /tmp/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql
         restart: true
-        networks:
-          - name: "{{ docker_overlay_network_name }}"
+        published_ports: "3307:3306"
+        exposed_ports:
+          - 3306
         env:
           MYSQL_ROOT_PASSWORD: gjkybrjd
           MYSQL_DATABASE: sb3_react
