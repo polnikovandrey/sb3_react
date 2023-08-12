@@ -1,0 +1,5 @@
+---
+- name: "Выкладываем стартовый SQL-скрипт"
+  ansible.builtin.copy:
+    src: ../../services/backend/src/main/resources/db/script/mysql-setup.sql
+    dest: /tmp/mysql-setup.sql

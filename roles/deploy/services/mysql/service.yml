@@ -1,10 +1,6 @@
 ---
 - name: "[{{ name }}] Выкладка сервиса"
   block:
-    - name: "[{{ name }}] Выкладываем стартовый скрипт"
-      ansible.builtin.copy:
-        src: ../../services/backend/src/main/resources/db/script/mysql-setup.sql
-        dest: /tmp/mysql-setup.sql
     - name: "[{{ name }}] Выкладываем сервис"
       community.docker.docker_swarm_service:
         name: "{{ name }}"
@@ -12,16 +8,22 @@
         state: present
         networks:
           - "{{ docker_overlay_network_name }}"
-        volumes:
-          - db:/var/lib/mysql
-          - /tmp/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql
-        published_ports: "3306:3306"
-        exposed_ports:
-          - 3306
+        mounts:
+          - source: db
+            target: /var/lib/mysql
+            type: volume
+          - source: /tmp/mysql-setup.sql
+            target: /docker-entrypoint-initdb.d/mysql-setup.sql
+            type: bind
+        publish:
+          - mode: ingress
+            protocol: tcp
+            published_port: 3306
+            target_port: 3306
         env:
           MYSQL_ROOT_PASSWORD: gjkybrjd
           MYSQL_DATABASE: sb3_react
         placement:
           constraints:
-            - node.hostname == mysql
+            - node.hostname == server5
   tags: "{{ name }}"

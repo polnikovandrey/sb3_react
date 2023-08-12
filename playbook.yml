@@ -31,6 +31,12 @@
       tags: swarm_join
       type: worker
 
+- name: Copy MySQL starter script
+  hosts: mysql
+  roles:
+    - role: mysql_setup
+      tags: mysql_setup
+
 - name: Build and deploy a leader
   hosts: leader
   roles:
