@@ -13,7 +13,7 @@
           - db:/var/lib/mysql
           - /tmp/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql
         restart: true
-        published_ports: "3307:3306"
+        published_ports: "3306:3306"
         exposed_ports:
           - 3306
         env:

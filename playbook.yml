@@ -25,7 +25,7 @@
       type: manager
 
 - name: Swarm join worker
-  hosts: worker
+  hosts: worker, mysql
   roles:
     - role: swarm_join
       tags: swarm_join

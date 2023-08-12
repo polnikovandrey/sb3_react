@@ -15,6 +15,8 @@ Vagrant.configure("2") do |config|
 			if i == 1
 			    web.vm.network "forwarded_port", id: "backend", host: 8081, guest: 8080
 			    web.vm.network "forwarded_port", id: "frontend", host: 3001, guest: 3000
+			end
+			if i == 5
 			    web.vm.network "forwarded_port", id: "mysql", host: 3308, guest: 3306
 			end
 			web.vm.hostname = "server#{i}"
