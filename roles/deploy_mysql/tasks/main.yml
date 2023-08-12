@@ -18,6 +18,6 @@
         env:
           MYSQL_ROOT_PASSWORD: gjkybrjd
           MYSQL_DATABASE: sb3_react
-#          MYSQL_USER: wordpress
-#          MYSQL_PASSWORD: wordpress
-  tags: "mysql}"
+  #          MYSQL_USER: wordpress
+  #          MYSQL_PASSWORD: wordpress
+  tags: "mysql"
