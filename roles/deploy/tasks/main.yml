@@ -1,5 +1,5 @@
 ---
-- name: "Выкладка сервиса {{ item.name }}"
+- name: "Выкладка сервисов"
   include_tasks:
     file: "../services/{{ item.name }}/service.yml"
   vars:
