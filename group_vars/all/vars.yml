@@ -14,10 +14,6 @@ services:
     version: latest
     manager: false
     build: true
-  - name: mysql
-    version: 8.0.33
-    manager: false
-    build: false
   - name: nginx
     version: latest
     manager: true
