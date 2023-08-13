@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
-@Profile({"dev", "prod"})       // TODO del prod
+@Profile("dev")
 @RequiredArgsConstructor
 @Slf4j
 public class UserLoader implements CommandLineRunner {
