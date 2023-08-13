@@ -53,4 +53,7 @@ spring:
       on-profile: prod
   datasource:
     url: jdbc:mysql://mysql:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+app:
+  cors:
+    allowedOrigins: http://localhost:80
 
