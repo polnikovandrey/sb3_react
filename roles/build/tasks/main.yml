@@ -24,11 +24,11 @@
   community.docker.docker_image:
     name: "{{ docker_local_registry_name }}{{ item.name }}"
     tag: "{{ item.version }}"
-    dockerfile: production.Dockerfile
     push: true
     force_source: true
     force_tag: true
     build:
+      dockerfile: production.Dockerfile
       path: "{{ git_folder }}/services/{{ item.name }}"
     source: build
   loop: "{{ services | selectattr('build', 'equalto', true) }}"

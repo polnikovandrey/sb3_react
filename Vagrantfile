@@ -13,8 +13,8 @@ Vagrant.configure("2") do |config|
 			web.vm.network "forwarded_port", id: "ssh", host: 2221 + i, guest: 22
 			web.vm.network "private_network", ip: "10.11.10.#{i + 1}", virtualbox__intnet: true
 			if i == 1
-			    web.vm.network "forwarded_port", id: "backend", host: 8081, guest: 8080
-			    web.vm.network "forwarded_port", id: "frontend", host: 3001, guest: 3000
+			    web.vm.network "forwarded_port", id: "backend", host: 8080, guest: 8080
+			    web.vm.network "forwarded_port", id: "frontend", host: 3000, guest: 3000
 			end
 			if i == 5
 			    web.vm.network "forwarded_port", id: "mysql", host: 3308, guest: 3306
