@@ -24,6 +24,7 @@
   community.docker.docker_image:
     name: "{{ docker_local_registry_name }}{{ item.name }}"
     tag: "{{ item.version }}"
+    dockerfile: production.Dockerfile
     push: true
     force_source: true
     force_tag: true
