@@ -1,9 +1,14 @@
-FROM node:16-alpine
+FROM node:16-alpine AS builder
 WORKDIR /services/frontend
-COPY package.json ./
-COPY package-lock.json ./
-COPY tsconfig.json ./
-COPY ./ ./
+COPY package.json package.json
+COPY tsconfig.json tsconfig.json
 RUN npm install
-EXPOSE 3000
-CMD ["npm", "start"]
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf *
+COPY --from=builder /services/frontend/build .
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

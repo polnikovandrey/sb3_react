@@ -4,10 +4,10 @@ events { worker_connections 1024; }
 
 http {
     server {
-        listen 3000;
+        listen 80;
         server_name localhost;
         location / {
-        	proxy_pass http://frontend:3000;
+        	proxy_pass http://frontend:80;
         }
     }
     server {
