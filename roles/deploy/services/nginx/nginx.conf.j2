@@ -4,8 +4,8 @@ events { worker_connections 1024; }
 
 http {
     server {
-        listen 80;
-        listen [::]:80;
+        listen 80 default;
+        listen [::]:80 default;
         server_name localhost;
         location / {
         	proxy_pass http://frontend:80;

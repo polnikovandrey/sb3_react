@@ -34,10 +34,4 @@
         configs:
           - config_name: nginx.conf
             filename: "/etc/nginx/nginx.conf"
-    - name: "[{{ name }}] Удаление конфигурации по-умолчанию"
-      file:
-        path: "/etc/nginx/conf.d/default.conf"
-        state: absent
-      notify:
-        - reload nginx
   tags: "{{ name }}"
