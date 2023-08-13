@@ -3,6 +3,7 @@
   ansible.builtin.wait_for:
     timeout: 30
   delegate_to: localhost
+
 - name: "[{{ name }}] Конфигурация конфига"
   include_tasks:
     file: ../config.yml
@@ -33,4 +34,10 @@
         configs:
           - config_name: nginx.conf
             filename: "/etc/nginx/nginx.conf"
+    - name: "[{{ name }}] Удаление конфигурации по-умолчанию"
+      file:
+        path: "/etc/nginx/conf.d/default.conf"
+        state: absent
+      notify:
+        - reload nginx
   tags: "{{ name }}"
