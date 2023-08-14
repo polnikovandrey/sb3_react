@@ -12,7 +12,7 @@
  [Nginx]
 
 === [Backend] (+ MVC Frontend):
- Spring Boot 3 [Bootstrap, Spring Data JPA, Flyway, Java 20, JUnit, Lombok, Maven, Mockito, MySQL, Spring Security 6, Thymeleaf, Validation, Web]. Note: contains
+ Spring Boot 3 [Bootstrap, Spring Data JPA, Flyway, Java 20, JUnit, Lombok, Maven, Mockito, MySQL, Spring Security 6, Thymeleaf, Validation, Web].
 
 === React Frontend:
  React [Bootstrap, JWT, Redux/Redux Toolkit, TypeScript]
