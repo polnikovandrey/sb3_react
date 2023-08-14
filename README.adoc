@@ -1,0 +1,39 @@
+= [Template project] feat. Vagrant & Ansible & Docker Swarm & Spring Boot 3 & React 18.
+
+[[features]]
+== Features:
+=== Infrastructure (Deploy and Orchestration):
+ Ansible, Docker [+ Compose, + Swarm], Vagrant, VirtualBox
+
+=== Custom Services:
+ [*Backend], [*Frontend], [MySQL], [Nginx].
+
+=== [Backend] (+ MVC Frontend):
+ Spring Boot 3 [Bootstrap, Spring Data JPA, Flyway, Java 20, Lombok, Maven, MySQL, Spring Security 6, Thymeleaf, Validation, Web]. Note: contains
+
+=== React Frontend:
+ React [Bootstrap, JWT, Redux/Redux Toolkit, TypeScript]
+
+[[notes]]
+== Notes:
+=== Database init script location:
+ services/backend/src/main/resources/db/script/mysql-setup.sql
+
+=== MVC Frontend location:
+ localhost:8080
+
+=== React Frontend location:
+ localhost:3000 (development), localhost:8081 ("production") build.
+
+[[todos]]
+== Todos:
+ Apply Bootstrap Themes for both MVC & React Frontends.
+
+ Implement [User Avatar Upload] feature.
+
+ Implement Image Converter microservice.
+
+ Use RabbitMQ for Image Converter <-> Backend communication.
+
+ Use WebSocket for Backend -> React Frontend communication.
+

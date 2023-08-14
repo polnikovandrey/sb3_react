@@ -56,4 +56,3 @@ spring:
 app:
   cors:
     allowedOrigins: http://localhost:8081
-
