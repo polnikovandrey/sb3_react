@@ -31,7 +31,7 @@
 
 ## React Frontend location:
 
-    localhost:3000 (development), localhost:8081 ("production") build.
+    localhost:3000 (development), localhost:8081 (production).
 
 ## Credentials:
 
