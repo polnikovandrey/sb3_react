@@ -28,6 +28,9 @@
 === React Frontend location:
  localhost:3000 (development), localhost:8081 ("production") build.
 
+=== Credentials:
+ admin:admin
+
 [[todos]]
 == Todos:
  Apply Bootstrap Themes for both MVC & React Frontends.
