@@ -33,13 +33,12 @@
 
 [[todos]]
 == Todos:
- Apply Bootstrap Themes for both MVC & React Frontends.
-
- Implement [User Avatar Upload] feature.
-
- Implement Image Converter microservice.
-
- Use RabbitMQ for Image Converter <-> Backend communication.
-
- Use WebSocket for Backend -> React Frontend communication.
-
+ + Bootstrap Themes for both MVC & React Frontends.
+ + health-check (ansible) for services:
+    * MySQL <- [ Backend, Frontend ]
+    * Backend <- [ Nginx ]
+    * Frontend <- [ Nginx ]
+ + [User Avatar Upload] feature
+ + Image Converter microservice
+ + RabbitMQ for Image Converter <-> Backend communication
+ + WebSocket for Backend -> React Frontend communication
