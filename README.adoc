@@ -1,4 +1,4 @@
-= [Template project] feat. Vagrant & Ansible & Docker Swarm & Spring Boot 3 & React 18.
+= [SpringBoot + React] Template Project
 
 [[features]]
 == Features:
