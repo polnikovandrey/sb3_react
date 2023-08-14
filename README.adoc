@@ -5,8 +5,11 @@
 === Infrastructure (Deploy and Orchestration):
  Ansible, Docker [+ Compose, + Swarm], Vagrant, VirtualBox
 
-=== Custom Services:
- [*Backend], [*Frontend], [MySQL], [Nginx].
+=== Services:
+ [Backend] (+ MVC Frontend): Form Login + Signup User + Edit User Profile + List & CRUD Users by Admin.
+ [Frontend] (+ React): JWT Login + Signup User + Edit User Profile + List & CRUD Users by Admin.
+ [MySQL]
+ [Nginx]
 
 === [Backend] (+ MVC Frontend):
  Spring Boot 3 [Bootstrap, Spring Data JPA, Flyway, Java 20, Lombok, Maven, MySQL, Spring Security 6, Thymeleaf, Validation, Web]. Note: contains
