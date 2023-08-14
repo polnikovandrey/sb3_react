@@ -33,7 +33,7 @@
 
 [[todos]]
 == Todos:
- + Bootstrap Themes for both MVC & React Frontends.
+ + Bootstrap Themes for both MVC & React Frontends
  + health-check (ansible) for services:
     * MySQL <- [ Backend, Frontend ]
     * Backend <- [ Nginx ]
