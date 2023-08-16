@@ -31,7 +31,7 @@ services:
       - '8081:80'
     volumes:
       - /app/node_modules
-      - ./react_frontend:/app
+      - ./.react_frontend:/app
     depends_on:
       sb3-backend:
         condition: service_healthy
@@ -63,8 +63,10 @@ services:
     hostname: rabbitmq
     restart: always
     environment:
-      - RABBITMQ_DEFAULT_USER=rmuser
-      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+      - AMQP_EXCHANGE=xchg_integrations
+      - AMQP_HOSTNAME=rmq
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
     volumes:
       - ./.rabbitmq:/var/lib/rabbitmq
