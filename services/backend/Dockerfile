@@ -16,5 +16,5 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 EXPOSE 8080
-HEALTHCHECK --interval=60s --retries=5 --start-period=5s --timeout=10s CMD wget --no-verbose --tries=1 --spider localhost:8080/actuator/health || exit 1
+HEALTHCHECK --start-period=5s --interval=30s --timeout=10s --retries=5 CMD wget --no-verbose --tries=1 --spider localhost:8080/actuator/health || exit 1
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.mcfly.template.Sb3Application"]

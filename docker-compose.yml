@@ -13,12 +13,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     healthcheck:
       test: wget --no-verbose --tries=1 --spider localhost:8080/actuator/health || exit 1
-      interval: 60s
-      retries: 5
       start_period: 5s
+      interval: 30s
       timeout: 10s
+      retries: 5
   react-frontend:
     image: react_frontend:latest
     build:
@@ -34,11 +36,11 @@ services:
       sb3-backend:
         condition: service_healthy
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider localhost:80 || exit 1
-      interval: 60s
-      retries: 5
+      test: wget --no-verbose --tries=1 --spider localhost:80
       start_period: 5s
+      interval: 30s
       timeout: 10s
+      retries: 5
   db:
     image: mysql:8.0.33
     restart: always
@@ -52,8 +54,10 @@ services:
       - ./services/backend/src/main/resources/db/script/mysql-setup.sql:/docker-entrypoint-initdb.d/mysql-setup.sql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 5s
-      retries: 20
+      start_period: 5s
+      interval: 30s
+      timeout: 10s
+      retries: 5
   rabbitmq:
     image: rabbitmq:3.12.2-management
     hostname: rabbitmq
@@ -63,15 +67,16 @@ services:
       - RABBITMQ_DEFAULT_PASS=rmpassword
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
     volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
+      - ./.rabbitmq:/var/lib/rabbitmq
     ports:
       - '15672:15672'
       - '5672:5672'
     healthcheck:
-      test: rabbitmq-diagnostics -q ping
+      test: [ "CMD", "rabbitmqctl", "status"]
+      start_period: 5s
       interval: 30s
-      timeout: 30s
-      retries: 3
+      timeout: 10s
+      retries: 5
 volumes:
   db:
     driver: local

@@ -11,5 +11,5 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 COPY --from=builder /services/frontend/build .
 EXPOSE 80
-HEALTHCHECK --interval=60s --retries=5 --start-period=5s --timeout=10s CMD wget --no-verbose --tries=1 --spider localhost:80 || exit 1
+HEALTHCHECK --start-period=5s --interval=30s --timeout=10s --retries=5 CMD wget --no-verbose --tries=1 --spider localhost:80 || exit 1
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
