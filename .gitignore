@@ -12,3 +12,5 @@ target/
 
 # Vagrnt
 .vagrant
+
+/rabbitmq
