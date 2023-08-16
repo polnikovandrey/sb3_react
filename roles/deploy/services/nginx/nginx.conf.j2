@@ -15,6 +15,20 @@ http {
     		server_name localhost;
     		location / {
     			proxy_pass http://backend:8080;
-    		}
     	}
+    }
+    server {
+    	    listen 5672;
+    		server_name localhost;
+    		location / {
+    			proxy_pass http://rmq:5672;
+    	}
+    }
+    server {
+    	    listen 15672;
+    		server_name localhost;
+    		location / {
+    			proxy_pass http://rmq:15672;
+    	}
+    }
 }
