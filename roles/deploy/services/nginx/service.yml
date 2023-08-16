@@ -6,6 +6,10 @@
 
 - name: "[{{ name }}] Конфигурация конфига"
   include: "../config.yml"
+  loop:
+    - nginx.conf
+  loop_control:
+    loop_var: config_item
 
 - name: "[{{ name }}] Выкладка конфига"
   block:
