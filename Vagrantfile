@@ -13,9 +13,8 @@ Vagrant.configure("2") do |config|
 			web.vm.network "forwarded_port", id: "ssh", host: 2221 + i, guest: 22
 			web.vm.network "private_network", ip: "10.11.10.#{i + 1}", virtualbox__intnet: true
 			if i == 1
-			    # linux restricts insecure non-root connections to ports < 1024
 			    web.vm.network "forwarded_port", id: "backend", host: 8080, guest: 8080
-			    web.vm.network "forwarded_port", id: "frontend", host: 8081, guest: 80
+			    web.vm.network "forwarded_port", id: "frontend", host: 8081, guest: 80      # linux restricts insecure non-root connections to ports < 1024
 			    web.vm.network "forwarded_port", id: "rmq", host: 15672, guest: 15672
 			end
 			if i == 5
@@ -41,6 +40,7 @@ Vagrant.configure("2") do |config|
 			    web.vm.provision :ansible do |ansible|
 			        ansible.playbook = "playbook.yml"
 			        ansible.inventory_path = "inventory/cluster"
+			        ansible.vault_password_file = ".vault_pass"
 			        ansible.limit = "all"
 			        # ansible.verbose = "v"
 			    end
