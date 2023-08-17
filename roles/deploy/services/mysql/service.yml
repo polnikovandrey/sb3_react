@@ -1,4 +1,11 @@
 ---
+- name: "[{{ name }}] Конфигурация секрета"
+  include: "../secret.yml"
+  loop:
+    - db_root_password
+  loop_control:
+    loop_var: secret_item
+
 - name: "[{{ name }}] Выкладка сервиса"
   block:
     - name: "[{{ name }}] Выкладываем сервис"
@@ -20,9 +27,12 @@
             protocol: tcp
             published_port: 3306
             target_port: 3306
+        secrets:
+          - secret_name: db_root_password
+            filename: /run/secrets/db_root_password
         env:
-          MYSQL_ROOT_PASSWORD: gjkybrjd
           MYSQL_DATABASE: sb3_react
+          MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
         placement:
           constraints:
             - node.hostname == server5
