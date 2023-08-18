@@ -42,7 +42,8 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()).and()
+                           .ignoring().requestMatchers("/actuator/**");
     }
 
     @Bean
@@ -75,7 +76,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/", "/login", "/error", "/actuator/**").permitAll()
+                                .requestMatchers("/", "/login", "/error").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(formLoginConfigurer ->
                         formLoginConfigurer
