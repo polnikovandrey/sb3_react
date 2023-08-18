@@ -9,19 +9,17 @@ http {
         location / {
         	proxy_pass http://frontend:80;
         }
+        location /nginx-health {
+            access_log off;
+            add_header 'Content-Type' 'application/json';
+            return 200 '{"status":"UP"}';
+        }
     }
     server {
     	    listen 8080;
     		server_name localhost;
     		location / {
     			proxy_pass http://backend:8080;
-    	}
-    }
-    server {
-    	    listen 5672;
-    		server_name localhost;
-    		location / {
-    			proxy_pass http://rmq:5672;
     	}
     }
     server {

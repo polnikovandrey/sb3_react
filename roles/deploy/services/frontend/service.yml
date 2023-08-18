@@ -10,4 +10,10 @@
         force_update: true
         networks:
           - name: "{{ docker_overlay_network_name }}"
+        healthcheck:
+          test: wget --no-verbose --tries=1 --spider localhost:80
+          start_period: 3s
+          interval: 30s
+          timeout: 3s
+          retries: 30
   tags: "{{ name }}"
