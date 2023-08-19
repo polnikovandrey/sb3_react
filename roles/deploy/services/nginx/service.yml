@@ -1,8 +1,11 @@
 ---
-- name: Sleep for 30 seconds before nginx deployment
-  ansible.builtin.wait_for:
-    timeout: 30
-  delegate_to: localhost
+- name: "[{{ name }}] Ждём backend"
+  wait_for:
+    host: localhost
+    port: 8082
+    connect_timeout: 3
+    delay: 3
+    timeout: 100
 
 - name: "[{{ name }}] Конфигурация конфига"
   include: "../config.yml"

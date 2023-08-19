@@ -1,6 +1,22 @@
 ---
 - name: "[{{ name }}] Выкладка сервиса"
   block:
+    - name: "[{{ name }}] Ждём MySQL"
+      wait_for:
+        host: localhost
+        port: 3306
+        connect_timeout: 3
+        delay: 3
+        timeout: 100
+
+    - name: "[{{ name }}] Ждём RabbitMQ"
+      wait_for:
+        host: localhost
+        port: 15673
+        connect_timeout: 3
+        delay: 3
+        timeout: 100
+
     - name: "[{{ name }}] Выкладываем сервис"
       community.docker.docker_swarm_service:
         name: "{{ name }}"
@@ -10,6 +26,11 @@
         force_update: true
         networks:
           - name: "{{ docker_overlay_network_name }}"
+        publish:
+          - mode: ingress
+            protocol: tcp
+            published_port: 8082
+            target_port: 8080
         placement:
           constraints:
             - node.hostname == server1
