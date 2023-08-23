@@ -23,7 +23,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: sb3_react_user
     password: password
   flyway:
@@ -46,6 +46,12 @@ spring:
     log-request-details: true
   profiles:
     default: dev
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: gjkybrjd
+    port: 5672
+    virtual-host: /
 ---
 spring:
   config:
@@ -53,6 +59,8 @@ spring:
       on-profile: prod
   datasource:
     url: jdbc:mysql://mysql:3306/sb3_react?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  rabbitmq:
+    host: rmq
 app:
   cors:
     allowedOrigins: http://localhost:8081
