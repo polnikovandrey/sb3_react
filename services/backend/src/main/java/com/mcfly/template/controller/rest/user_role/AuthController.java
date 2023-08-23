@@ -1,8 +1,11 @@
 package com.mcfly.template.controller.rest.user_role;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mcfly.template.domain.user_role.User;
 import com.mcfly.template.exception.UserExistsAlreadyException;
 import com.mcfly.template.payload.ApiResponse;
+import com.mcfly.template.payload.queue.EmailConfirmationPayload;
 import com.mcfly.template.payload.user_role.AuthDataResponse;
 import com.mcfly.template.payload.user_role.LoginRequest;
 import com.mcfly.template.payload.user_role.SignUpRequest;
@@ -10,7 +13,8 @@ import com.mcfly.template.security.JwtUtils;
 import com.mcfly.template.security.UserPrincipal;
 import com.mcfly.template.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -25,21 +29,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Random;
+
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     // TODO Swagger
     // TODO https://www.bezkoder.com/spring-security-refresh-token/
 
-    @Autowired
-    AuthenticationManager authenticationManager;
+    // TODO -> spring cloud config server
+    private static final String emailConfirmationQueue = "email-confirmation";
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
+    private final RabbitTemplate rabbitTemplate;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -59,7 +65,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     @Transactional
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) throws JsonProcessingException {
         try {
             final User result = userService.registerUser(
                     signUpRequest.getFirstName(),
@@ -70,6 +76,12 @@ public class AuthController {
                     signUpRequest.getPassword(),
                     false);
             final AuthDataResponse authDataResponse = authenticateUser(result.getUsername(), signUpRequest.getPassword());
+
+            final int confirmationCode = new Random().nextInt(900000) + 100000;
+            final EmailConfirmationPayload emailConfirmationPayload = new EmailConfirmationPayload(result.getId(), confirmationCode);
+            final ObjectMapper objectMapper = new ObjectMapper();
+            final String queuePayload = objectMapper.writeValueAsString(emailConfirmationPayload);
+            rabbitTemplate.convertAndSend(emailConfirmationQueue, queuePayload);
             return ResponseEntity.ok().body(authDataResponse);
         } catch (UserExistsAlreadyException exception) {
             return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), HttpStatus.BAD_REQUEST);

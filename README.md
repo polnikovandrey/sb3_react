@@ -31,7 +31,7 @@
     admin:admin
 
 # Todos:
-    + Check user email feature using RabbitMQ and distinct mailing microservice
+    + User email confirmation feature using RabbitMQ and distinct mailing microservice
     + Spring Cloud Config Server
         https://rafael-as-martins.medium.com/boost-the-flexibility-of-your-microservice-architecture-with-spring-cloud-729ded91e221
     + Bootstrap themes for Both MVC & React frontend apps
