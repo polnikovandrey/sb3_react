@@ -40,10 +40,6 @@
 # Todos:
 
     + Bootstrap themes for Both MVC & React frontend apps
-    + Health-Check for services deployment with Ansible:
-       * MySQL <- [ Backend ]
-       * Backend <- [ Frontend ]
-       * Frontend <- [ Nginx ]
     + User Avatar Upload feature: 
         * Image Converter microservice
         * RabbitMQ for Image Converter <-> Backend communication

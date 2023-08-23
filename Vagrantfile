@@ -1,5 +1,5 @@
 ### Configuration parameters ###
-# Virtual machines to initialize count
+# Virtual machines count to initialize
 VM_COUNT = 5
 
 Vagrant.configure("2") do |config|
@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
 			web.vm.network "private_network", ip: "10.11.10.#{i + 1}", virtualbox__intnet: true
 			if i == 1
 			    web.vm.network "forwarded_port", id: "backend", host: 8080, guest: 8080
-			    web.vm.network "forwarded_port", id: "frontend", host: 8081, guest: 80      # linux restricts insecure non-root connections to ports < 1024
+			    web.vm.network "forwarded_port", id: "frontend", host: 8081, guest: 80      # linux restricts insecure non-root connections for ports < 1024
 			    web.vm.network "forwarded_port", id: "rmq", host: 15672, guest: 15672
 			end
 			if i == 5
