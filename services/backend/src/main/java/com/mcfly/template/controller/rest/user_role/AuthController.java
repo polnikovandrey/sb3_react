@@ -15,6 +15,7 @@ import com.mcfly.template.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -39,13 +40,14 @@ public class AuthController {
     // TODO Swagger
     // TODO https://www.bezkoder.com/spring-security-refresh-token/
 
-    // TODO -> spring cloud config server
-    private static final String emailConfirmationQueue = "email-confirmation";
-
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final RabbitTemplate rabbitTemplate;
+
+    // TODO -> spring cloud config server
+    @Value("${app.rabbitmq.queues.emailConfirmQueue.name}")
+    private String emailConfirmQueueName;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -79,7 +81,7 @@ public class AuthController {
             final int confirmationCode = new Random().nextInt(900000) + 100000;
             final EmailConfirmationPayload emailConfirmationPayload = new EmailConfirmationPayload(result.getId(), result.getEmail(), confirmationCode);
             final String queuePayload = new ObjectMapper().writeValueAsString(emailConfirmationPayload);
-            rabbitTemplate.convertAndSend(emailConfirmationQueue, queuePayload);
+            rabbitTemplate.convertAndSend(emailConfirmQueueName, queuePayload);
             return ResponseEntity.ok().body(authDataResponse);
         } catch (UserExistsAlreadyException exception) {
             return new ResponseEntity<>(new ApiResponse(false, exception.getMessage()), HttpStatus.BAD_REQUEST);

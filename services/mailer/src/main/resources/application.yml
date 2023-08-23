@@ -1,1 +1,22 @@
+app:
+  rabbitmq:
+    queues:
+      emailConfirmQueue:
+        name: email-confirmation
 
+spring:
+  profiles:
+    default: dev
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: gjkybrjd
+    port: 5672
+    virtual-host: /
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  rabbitmq:
+    host: rmq

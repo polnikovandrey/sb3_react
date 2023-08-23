@@ -5,6 +5,10 @@ app:
   # node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
   jwtSecret: 21107542ca08149e06e5cedf515e56d60cf7e64348abfcc32e6407b75f672aa4384c6ffaf9fce1801bc61f506a232c5921ec4705e69fd76f8aeeb0427d76a4ed
   jwtExpirationInMs: 604800000
+  rabbitmq:
+    queues:
+      emailConfirmQueue:
+        name: email-confirmation
 
 logging:
   level:
