@@ -79,7 +79,8 @@ public class AuthController {
                     false);
             final AuthDataResponse authDataResponse = authenticateUser(result.getUsername(), signUpRequest.getPassword());
             final int confirmationCode = new Random().nextInt(900000) + 100000;
-            final EmailConfirmationPayload emailConfirmationPayload = new EmailConfirmationPayload(result.getId(), result.getEmail(), confirmationCode);
+            final String confirmationUrl = "http://localhost:8080/user/confirm_email?code=" + confirmationCode;     // TODO short-lived cache + mvc + message to frontend
+            final EmailConfirmationPayload emailConfirmationPayload = new EmailConfirmationPayload(result.getEmail(), confirmationUrl);
             final String queuePayload = new ObjectMapper().writeValueAsString(emailConfirmationPayload);
             rabbitTemplate.convertAndSend(emailConfirmQueueName, queuePayload);
             return ResponseEntity.ok().body(authDataResponse);

@@ -5,6 +5,15 @@ app:
         name: email-confirmation
 
 spring:
+  mail:
+    username: sbreact438@gmail.com
+    password: gjkybrjd
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
   profiles:
     default: dev
   rabbitmq:
