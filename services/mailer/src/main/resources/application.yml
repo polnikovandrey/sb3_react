@@ -7,7 +7,7 @@ app:
 spring:
   mail:
     username: sbreact438@gmail.com
-    password: gjkybrjd
+    password: tvodayulbisrhtmc
     host: smtp.gmail.com
     port: 587
     protocol: smtp
