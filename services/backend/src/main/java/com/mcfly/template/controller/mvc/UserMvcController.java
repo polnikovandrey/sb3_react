@@ -91,8 +91,9 @@ public class UserMvcController {
     }
 
     @GetMapping("/confirmEmail")
-    public String confirmEmail(@RequestParam String email, @RequestParam String confirmationCode) {
-        if (userService.isValidEmailConfirmationCode(email, confirmationCode)) {
+    public String confirmEmail(@RequestParam String email, @RequestParam String code, Model model) {
+        if (userService.isValidEmailConfirmationCode(email, code)) {
+            model.addAttribute("email", email);
             return "emailConfirmationSuccess";
         }
         throw new RuntimeException("Confirmation code not valid");
