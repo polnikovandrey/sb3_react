@@ -70,7 +70,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/", "/login", "/error", "/actuator/**").permitAll()
+                                .requestMatchers("/", "/login", "/error", "/actuator/**", "/confirmEmail").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(formLoginConfigurer ->
                         formLoginConfigurer

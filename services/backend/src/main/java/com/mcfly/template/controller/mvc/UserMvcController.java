@@ -89,4 +89,12 @@ public class UserMvcController {
         final int pageIndex = editUserFormData.getPageIndex();
         return "redirect:/user/list/" + pageIndex;
     }
+
+    @GetMapping("/confirmEmail")
+    public String confirmEmail(@RequestParam String email, @RequestParam String confirmationCode) {
+        if (userService.isValidEmailConfirmationCode(email, confirmationCode)) {
+            return "emailConfirmationSuccess";
+        }
+        throw new RuntimeException("Confirmation code not valid");
+    }
 }
