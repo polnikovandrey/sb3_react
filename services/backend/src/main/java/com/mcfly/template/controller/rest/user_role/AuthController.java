@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -64,7 +65,8 @@ public class AuthController {
                     signUpRequest.getEmail(),
                     signUpRequest.getPassword(),
                     false);
-            userService.sendEmailConfirmation(result.getEmail());
+            final String url = ServletUriComponentsBuilder.fromCurrentContextPath().replacePath(null).toUriString();
+            userService.sendEmailConfirmation(url, result.getEmail());
             final AuthDataResponse authDataResponse = authenticateUser(result.getUsername(), signUpRequest.getPassword());
             return ResponseEntity.ok().body(authDataResponse);
         } catch (UserExistsAlreadyException exception) {

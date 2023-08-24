@@ -27,6 +27,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Service
@@ -138,9 +140,11 @@ public class UserService {
                                     updatedUser.getRoles().stream().anyMatch(role -> RoleName.ROLE_ADMIN == role.getName()));
     }
 
-    public void sendEmailConfirmation(String email) throws JsonProcessingException {
+    public void sendEmailConfirmation(String url, String email) throws JsonProcessingException {
         final String confirmationCode = passwordEncoder.encode(email);
-        final String confirmationUrl = String.format("http://localhost:8080/user/confirm_email?email=%s&code=%s", email, confirmationCode);
+        final String emailEncoded = URLEncoder.encode(email, StandardCharsets.UTF_8);
+        final String confirmationCodeEncoded = URLEncoder.encode(confirmationCode, StandardCharsets.UTF_8);
+        final String confirmationUrl = String.format("%s/user/confirm_email?email=%s&code=%s", url, emailEncoded, confirmationCodeEncoded);
         final EmailConfirmationPayload emailConfirmationPayload = new EmailConfirmationPayload(email, confirmationUrl);
         final String queuePayload = new ObjectMapper().writeValueAsString(emailConfirmationPayload);
         rabbitTemplate.convertAndSend(emailConfirmQueueName, queuePayload);
