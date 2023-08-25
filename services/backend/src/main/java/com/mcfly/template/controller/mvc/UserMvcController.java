@@ -38,6 +38,7 @@ public class UserMvcController {
                        .map(user -> UserResponse.builder().id(user.getId()).username(user.getUsername())
                                                 .email(user.getEmail()).firstName(user.getFirstName())
                                                 .lastName(user.getLastName()).middleName(user.getMiddleName())
+                                                .emailConfirmed(user.isEmailConfirmed())
                                                 .roles(user.getRoles().stream().map(role -> role.getName().getName()).collect(Collectors.toSet())).build()).toList();
         final PagedResponse<UserResponse> usersPageResponse = new PagedResponse<>(responses, users.getNumber(), users.getSize(), users.getTotalElements(), users.getTotalPages(), users.isLast());
         model.addAttribute("users", usersPageResponse);
@@ -92,10 +93,8 @@ public class UserMvcController {
 
     @GetMapping("/confirmEmail")
     public String confirmEmail(@RequestParam String email, @RequestParam String code, Model model) {
-        if (userService.isValidEmailConfirmationCode(email, code)) {
-            model.addAttribute("email", email);
-            return "emailConfirmationSuccess";
-        }
-        throw new RuntimeException("Confirmation code not valid");
+        userService.validateEmailConfirmationCode(email, code);
+        model.addAttribute("email", email);
+        return "emailConfirmationSuccess";
     }
 }

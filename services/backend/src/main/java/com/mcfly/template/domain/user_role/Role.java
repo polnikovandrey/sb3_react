@@ -3,13 +3,11 @@ package com.mcfly.template.domain.user_role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "roles")
 @Getter
 @Setter
-@ToString
 public class Role {
 
     @Id
@@ -24,5 +22,13 @@ public class Role {
 
     public Role(RoleName name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+               "id=" + id +
+               ", name=" + name +
+               '}';
     }
 }

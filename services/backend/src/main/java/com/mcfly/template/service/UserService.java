@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -150,7 +151,19 @@ public class UserService {
         rabbitTemplate.convertAndSend(emailConfirmQueueName, queuePayload);
     }
 
-    public boolean isValidEmailConfirmationCode(String email, String confirmationCode) {
-        return passwordEncoder.matches(email, confirmationCode);
+    @Transactional
+    public void validateEmailConfirmationCode(String email, String confirmationCode) {
+        final Optional<User> userOptional = userRepository.findByUsernameOrEmail(null, email);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException(String.format("User with email [%s] does not exist", email));
+        }
+        final boolean emailConfirmationValid = passwordEncoder.matches(email, confirmationCode);
+        if (!emailConfirmationValid) {
+            throw new IllegalArgumentException(String.format("Confirmation code [%s] is not valid", confirmationCode));
+        }
+        final User user = userOptional.get();
+        user.setEmailConfirmed(true);
+        userRepository.save(user);
+        // TODO ws
     }
 }

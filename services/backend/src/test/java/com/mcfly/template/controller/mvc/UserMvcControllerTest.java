@@ -176,7 +176,7 @@ public class UserMvcControllerTest {
     public void showEditUserForm() throws Exception {
         final Long userId = 42L;
         final Integer pageIndex = 0;
-        final User userStub = new User(userId, "username", "email", "password", "firstName", "lastName", "middleName",
+        final User userStub = new User(userId, "username", "email", "password", "firstName", "lastName", "middleName", false,
                                        Collections.emptySet(), Instant.now(), Instant.now(), 0L);
         final EditUserFormData expectedEditUserFormData
                 = EditUserFormData.builder()

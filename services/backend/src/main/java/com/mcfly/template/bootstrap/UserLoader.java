@@ -48,6 +48,7 @@ public class UserLoader implements CommandLineRunner {
                         .firstName(faker.name().firstName())
                         .lastName(faker.name().lastName())
                         .middleName(faker.letterify("?", true))
+                        .emailConfirmed(true)
                         .roles(Set.of(adminRole))
                         .build());
             log.info("Populating the db with {} random users", RANDOM_USERS_COUNT);

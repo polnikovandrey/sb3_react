@@ -67,6 +67,7 @@ public class AuthController {
                     false);
             final String url = ServletUriComponentsBuilder.fromCurrentContextPath().replacePath(null).toUriString();
             userService.sendEmailConfirmation(url, result.getEmail());
+            // TODO ws
             final AuthDataResponse authDataResponse = authenticateUser(result.getUsername(), signUpRequest.getPassword());
             return ResponseEntity.ok().body(authDataResponse);
         } catch (UserExistsAlreadyException exception) {

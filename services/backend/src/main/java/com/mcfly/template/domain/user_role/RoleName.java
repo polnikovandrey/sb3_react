@@ -1,8 +1,11 @@
 package com.mcfly.template.domain.user_role;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.Objects;
 
+@Getter
 public enum RoleName {
 
     ROLE_ADMIN("ROLE_ADMIN"), ROLE_USER("ROLE_USER");
@@ -20,14 +23,10 @@ public enum RoleName {
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public String getName() {
-        return name;
-    }
-
     @Override
     public String toString() {
         return "RoleName{" +
-                "name='" + name + '\'' +
-                '}';
+               "name='" + name + '\'' +
+               '}';
     }
 }

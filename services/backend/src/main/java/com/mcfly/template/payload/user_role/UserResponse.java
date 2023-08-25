@@ -19,6 +19,7 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String middleName;
+    private boolean emailConfirmed;
     private Set<String> roles;
 
 }

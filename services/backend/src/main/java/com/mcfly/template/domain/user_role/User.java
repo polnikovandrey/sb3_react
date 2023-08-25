@@ -28,7 +28,6 @@ import java.util.Set;
 @Builder
 @Getter
 @Setter
-@ToString
 public class User {
 
         @Id
@@ -60,6 +59,9 @@ public class User {
         @Size(max = 20)
         private String middleName;
 
+        @NotNull
+        private boolean emailConfirmed;
+
         @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(
                 name = "user_roles",
@@ -80,4 +82,21 @@ public class User {
         @Version
         @Column(nullable = false)
         private Long version;
+
+        @Override
+        public String toString() {
+                return "User{" +
+                       "id=" + id +
+                       ", username='" + username + '\'' +
+                       ", email='" + email + '\'' +
+                       ", password='" + password + '\'' +
+                       ", firstName='" + firstName + '\'' +
+                       ", lastName='" + lastName + '\'' +
+                       ", middleName='" + middleName + '\'' +
+                       ", emailConfirmed=" + emailConfirmed +
+                       ", roles=" + roles +
+                       ", createdAt=" + createdAt +
+                       ", updatedAt=" + updatedAt +
+                       '}';
+        }
 }

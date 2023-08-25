@@ -10,16 +10,17 @@ values ('ROLE_ADMIN'),
 drop table if exists users;
 create table users
 (
-    id          bigint       not null auto_increment primary key,
-    username    varchar(20)  not null unique,
-    email       varchar(40)  not null unique,
-    password    varchar(100) not null,
-    first_name  varchar(20)  not null,
-    last_name   varchar(20)  not null,
-    middle_name varchar(20)  not null default '',
-    created_at  datetime(6)  not null,
-    updated_at  datetime(6)  not null,
-    version     bigint       not null
+    id              bigint       not null auto_increment primary key,
+    username        varchar(20)  not null unique,
+    email           varchar(40)  not null unique,
+    password        varchar(100) not null,
+    first_name      varchar(20)  not null,
+    last_name       varchar(20)  not null,
+    middle_name     varchar(20)  not null default '',
+    email_confirmed boolean      not null default false,
+    created_at      datetime(6)  not null,
+    updated_at      datetime(6)  not null,
+    version         bigint       not null
 );
 drop table if exists user_roles;
 create table user_roles
