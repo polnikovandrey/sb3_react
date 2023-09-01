@@ -11,6 +11,7 @@ import com.mcfly.template.exception.UserExistsAlreadyException;
 import com.mcfly.template.payload.queue.EmailConfirmationPayload;
 import com.mcfly.template.payload.user_role.UserDataResponse;
 import com.mcfly.template.payload.user_role.UserIdentityAvailability;
+import com.mcfly.template.payload.ws.TextMessage;
 import com.mcfly.template.repository.user_role.RoleRepository;
 import com.mcfly.template.repository.user_role.UserRepository;
 import com.mcfly.template.security.UserPrincipal;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final RabbitTemplate rabbitTemplate;
+    private final SimpMessagingTemplate wsTemplate;
 
     @Value("${app.rabbitmq.queues.emailConfirmQueue.name}")
     private String emailConfirmQueueName;   // TODO -> spring cloud config server
@@ -164,6 +167,7 @@ public class UserService {
         final User user = userOptional.get();
         user.setEmailConfirmed(true);
         userRepository.save(user);
-        // TODO ws
+        wsTemplate.convertAndSend("/topic/emailConfirmed", new TextMessage("Email validation user message. Email confirmed: " + email));
+        // TODO wsTemplate.convertAndSendToUser(user.getId().toString(), "/topic/emailConfirmed", new TextMessage("Email validation user message. Email confirmed: " + email));
     }
 }

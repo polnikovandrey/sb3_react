@@ -13,13 +13,18 @@ app:
 logging:
   level:
     ROOT: info
-    org.hibernate.engine.transaction.internal.TransactionImpl: debug
-    org.hibernate.sql: debug
-    org.hibernate.orm.jdbc.bind: trace
-    org.springframework.orm.jpa: debug
-    org.springframework.web: trace
-    org.springframework.security: trace
-    org.springframework.transaction: debug
+    org:
+      hibernate:
+        engine.transaction.internal.TransactionImpl: debug
+        orm.jdbc.bind: trace
+        sql: debug
+      springframework:
+        orm.jpa: debug
+        messaging: trace
+        messaging.simp: trace
+        security: trace
+        transaction: debug
+        web: trace
 
 
 server:

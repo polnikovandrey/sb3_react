@@ -41,6 +41,16 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
+    public SecurityFilterChain wsSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .securityMatcher("/ws")
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                                               authorizationManagerRequestMatcherRegistry.requestMatchers("/ws").permitAll())
+                .build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity,
                                                       AuthenticationProvider authenticationProvider,
                                                       JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
@@ -49,6 +59,8 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
+                                .requestMatchers("/api/ws").permitAll()
+                                .requestMatchers("/api/ws/**").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
@@ -62,7 +74,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(2)
+    @Order(3)
     public SecurityFilterChain formLoginFilterChain(HttpSecurity httpSecurity, AuthenticationProvider authenticationProvider) throws Exception {
         return httpSecurity
                 .securityMatcher("/**")

@@ -35,3 +35,5 @@
     + Spring Cloud Config Server
         https://rafael-as-martins.medium.com/boost-the-flexibility-of-your-microservice-architecture-with-spring-cloud-729ded91e221
     + Bootstrap themes for Both MVC & React frontend apps
+    + Flutter
+        https://umes4ever.medium.com/real-time-application-using-websocket-spring-boot-java-react-js-flutter-eb87fe95f94f
