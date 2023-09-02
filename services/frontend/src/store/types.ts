@@ -8,3 +8,5 @@ export type UserState = { loading?: boolean, user?: UserInfo, error?: string }
 export type UserProfileState = { loading?: boolean, success?: boolean, user?: UserProfile, error?: string }
 export type UserUpdateState = { loading?: boolean, success?: boolean, user?: UserProfile, error?: string }
 export type UserDeleteStata = { loading?: boolean, success?: boolean, error?: string }
+
+export type NotificationsState = { notifications: string[] }

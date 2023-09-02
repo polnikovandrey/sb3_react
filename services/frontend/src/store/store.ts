@@ -6,6 +6,7 @@ import {userProfileReducer} from "../slice/userProfileSlice";
 import {userListReducer} from "../slice/userListSlice";
 import {userDeleteReducer} from "../slice/userDeleteSlice";
 import {userUpdateReducer} from "../slice/userUpdateSlice";
+import {notificationsReducer} from "../slice/notificationsSlice";
 
 const userLocalStorageItem = localStorage.getItem('user');
 const userFromStorage: UserState = userLocalStorageItem ? { user: JSON.parse(userLocalStorageItem) } : { };
@@ -13,6 +14,7 @@ const userFromStorage: UserState = userLocalStorageItem ? { user: JSON.parse(use
 const store: EnhancedStore = configureStore(
     {
         reducer: {
+            notifications: notificationsReducer,
             userInfo: userReducer,
             userList: userListReducer,
             userDelete: userDeleteReducer,

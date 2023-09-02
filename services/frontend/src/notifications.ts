@@ -1,0 +1,1 @@
+export const CONFIRM_EMAIL_NOTIFICATION = 'Please, confirm your email';

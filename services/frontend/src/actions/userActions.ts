@@ -6,6 +6,8 @@ import {userListFail, userListRequest, userListReset, userListSuccess} from "../
 import {userProfileReset} from "../slice/userProfileSlice";
 import {userDeleteFail, userDeleteRequest, userDeleteSuccess} from "../slice/userDeleteSlice";
 import {API_BASE_URL} from "../constants";
+import {addNotification, clearNotifications} from "../slice/notificationsSlice";
+import {CONFIRM_EMAIL_NOTIFICATION} from "../notifications";
 
 export const userLoginAction = async (usernameOrEmail: string, password: string, dispatch: Dispatch) => {
     try {
@@ -28,6 +30,7 @@ export const userLogoutAction = async (dispatch: Dispatch) => {
     dispatch(userLogout());
     dispatch(userProfileReset());
     dispatch(userListReset())
+    dispatch(clearNotifications());
 };
 
 export const userRegisterAction = async (firstName: string, lastName: string, middleName: string, username: string, email: string, password: string, dispatch: Dispatch) => {
@@ -42,6 +45,7 @@ export const userRegisterAction = async (firstName: string, lastName: string, mi
         dispatch(userRegisterSuccess(data));
         dispatch(userLoginSuccess(data));
         localStorage.setItem('user', JSON.stringify(data));
+        dispatch(addNotification(CONFIRM_EMAIL_NOTIFICATION));
     } catch (error: any) {
         dispatch(userRegisterFail(error.response && error.response.data.message ? error.response.data.message : error.message));
     }

@@ -6,6 +6,7 @@ import com.mcfly.template.payload.PagedResponse;
 import com.mcfly.template.payload.user_role.UpdateUserDataRequest;
 import com.mcfly.template.payload.user_role.UserDataResponse;
 import com.mcfly.template.payload.user_role.UserIdentityAvailability;
+import com.mcfly.template.payload.ws.TextMessage;
 import com.mcfly.template.security.CurrentUser;
 import com.mcfly.template.security.UserPrincipal;
 import com.mcfly.template.service.UserService;
@@ -13,6 +14,7 @@ import com.mcfly.template.util.AppConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +26,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final SimpMessagingTemplate wsTemplate;
 
     @GetMapping("/me")
     public UserDataResponse getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        wsTemplate.convertAndSend("/topic/emailConfirmed", new TextMessage("Email validation user message. Email confirmed: 123"));     // TODO del
         return userService.getCurrentUserData(currentUser);
     }
 

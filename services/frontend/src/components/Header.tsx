@@ -11,6 +11,7 @@ import {selectUserList} from "../slice/userListSlice";
 import {selectUserProfile} from "../slice/userProfileSlice";
 import {selectUserUpdate} from "../slice/userUpdateSlice";
 import {selectUserDelete} from "../slice/userDeleteSlice";
+import LoggedUserNotificationPanel from "./LoggedUserNotificationPanel";
 
 const Header = () => {
     const location = useLocation();
@@ -46,7 +47,8 @@ const Header = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            { <ProgressBar className={`progress_page-load ${loading ? 'opacity-100' : 'opacity-0'}`} animated={true} now={100} striped={true} variant={'info'} /> }
+            { userState.user && <LoggedUserNotificationPanel/> }
+            <ProgressBar className={`progress_page-load ${loading ? 'opacity-100' : 'opacity-0'}`} animated={true} now={100} striped={true} variant={'info'} />
 
         </header>
     );
