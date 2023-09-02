@@ -8,6 +8,7 @@ import App from './App';
 import {createRoot} from "react-dom/client";
 import {Client} from "@stomp/stompjs";
 
+// TODO JWT https://stomp-js.github.io/faqs/faqs.html#p-can-i-use-token-based-authentication-with-these-libraries-p
 const client = new Client({
     brokerURL: 'ws://localhost:8080/ws',
     onChangeState: state => console.log(`Stomp client state changed: ${state}`),
