@@ -10,11 +10,19 @@ import {Client} from "@stomp/stompjs";
 
 const client = new Client({
     brokerURL: 'ws://localhost:8080/ws',
-    onConnect: () => {
-        console.log('Connected');
-        // TODO user/{recipientId}/topic/emailConfirmed
-        client.subscribe('/topic/emailConfirmed', message => console.log(`Received: ${message.body}`))
-    }
+    onChangeState: state => console.log(`Stomp client state changed: ${state}`),
+    onConnect: frame => {
+        console.log(`Stomp client connected: ${frame.headers['message']}. Details: ${frame.body}`)
+        client.subscribe('/topic/emailConfirmed', message => {      // TODO user/{recipientId}/topic/emailConfirmed
+            console.log(`Received: ${JSON.parse(message.body)}`);
+        })
+    },
+    onDisconnect: frame => console.log(`Stomp client disconnected: ${frame.headers['message']}. Details: ${frame.body}`),
+    onStompError: frame => console.log(`Stomp client reported error: ${frame.headers['message']}. Details: ${frame.body}`),
+    debug: msg => console.log(msg),
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
+    reconnectDelay: 5000
 });
 client.activate();
 
