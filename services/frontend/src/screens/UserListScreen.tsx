@@ -9,8 +9,6 @@ import {selectUserInfo} from "../slice/userSlice";
 import {selectUserDelete} from "../slice/userDeleteSlice";
 import {useLocation, useNavigate, useParams} from "react-router";
 
-// TODO + email confirmed icon
-
 const UserListScreen = () => {
     const navigate = useNavigate();
     const location = useLocation();

@@ -64,7 +64,6 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
-                                .requestMatchers("/api/user/me").permitAll()        // TODO del
                                 .anyRequest().authenticated())
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -84,6 +83,7 @@ public class SecurityConfig {
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers("/", "/login", "/error", "/actuator/**", "/user/confirmEmail").permitAll()
+                                .requestMatchers("/me").permitAll()        // TODO del
                                 .anyRequest().authenticated())
                 .formLogin(formLoginConfigurer ->
                         formLoginConfigurer

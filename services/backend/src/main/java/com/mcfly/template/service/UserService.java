@@ -167,7 +167,6 @@ public class UserService {
         final User user = userOptional.get();
         user.setEmailConfirmed(true);
         userRepository.save(user);
-        wsTemplate.convertAndSend("/topic/emailConfirmed", new TextMessage("Email validation user message. Email confirmed: " + email));
-        // TODO wsTemplate.convertAndSendToUser(user.getId().toString(), "/topic/emailConfirmed", new TextMessage("Email validation user message. Email confirmed: " + email));
+        wsTemplate.convertAndSend(String.format("/topic/emailConfirmed/%s", user.getId().toString()), new TextMessage("Email validation user message. Email confirmed: " + email));
     }
 }
