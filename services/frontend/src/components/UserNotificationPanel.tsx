@@ -1,5 +1,5 @@
 import {useEffect} from "react";
-import {Container} from "react-bootstrap";
+import {Alert, Container} from "react-bootstrap";
 import {NotificationsState, UserState} from "../store/types";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {addNotification, removeNotification, selectNotificationsState} from "../slice/notificationsSlice";
@@ -44,7 +44,9 @@ const UserNotificationPanel = () => {
     return (
         <Container>
             {
-                notificationsState.notifications.map((notification, i) => <div key={i}>{notification}</div>)
+                notificationsState.notifications.map((notification, i) =>
+                    <Alert key={i} className='alert-warning fade show' onClick={() => dispatch(removeNotification(notification))}>{notification}</Alert>
+                )
             }
         </Container>
     );
