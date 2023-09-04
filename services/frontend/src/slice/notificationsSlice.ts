@@ -16,8 +16,7 @@ export const notificationsSlice = createSlice({
         },
         removeNotification: (state, action: PayloadAction<string>) => {
             let notification = action.payload;
-            let notifications = state.notifications;
-            let newNotifications = notifications.filter(aNotification => aNotification === notification);
+            let newNotifications = [...state.notifications.filter(aNotification => aNotification !== notification)];
             return { notifications: newNotifications };
         },
         clearNotifications: () => {
