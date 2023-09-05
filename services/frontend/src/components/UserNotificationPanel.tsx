@@ -1,6 +1,7 @@
+import * as React from "react";
 import {useEffect} from "react";
-import {Alert, Container} from "react-bootstrap";
-import {NotificationsState, UserState} from "../store/types";
+import {Alert, Container, Fade} from "react-bootstrap";
+import {UserState} from "../store/types";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {addNotification, removeNotification, selectNotificationsState} from "../slice/notificationsSlice";
 import {Client} from "@stomp/stompjs";
@@ -40,12 +41,16 @@ const UserNotificationPanel = () => {
         };
     }, [dispatch, userId]);
 
-    const notificationsState: NotificationsState = useAppSelector(selectNotificationsState);
+    const { notifications } = useAppSelector(selectNotificationsState);
+
     return (
         <Container>
             {
-                notificationsState.notifications.map((notification, i) =>
-                    <Alert key={i} className='alert-warning fade show' onClick={() => dispatch(removeNotification(notification))}>{notification}</Alert>
+                notifications.map((notification, i) =>
+                    <Alert key={i} variant={"warning"} transition={Fade} dismissible={true}
+                           onClose={() => dispatch(removeNotification(CONFIRM_EMAIL_SUCCESS_NOTIFICATION))}>
+                        {notification}
+                    </Alert>
                 )
             }
         </Container>
