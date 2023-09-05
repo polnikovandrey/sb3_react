@@ -1,12 +1,13 @@
 import * as React from "react";
 import {useEffect} from "react";
-import {Alert, Container, Fade} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import {UserState} from "../store/types";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {addNotification, removeNotification, selectNotificationsState} from "../slice/notificationsSlice";
 import {Client} from "@stomp/stompjs";
 import {CONFIRM_EMAIL_NOTIFICATION, CONFIRM_EMAIL_SUCCESS_NOTIFICATION} from "../notifications";
 import {selectUserInfo} from "../slice/userSlice";
+import FadeInAlert from "./FadeInAlert";
 
 const client = new Client({
     brokerURL: 'ws://localhost:8080/ws',
@@ -46,12 +47,13 @@ const UserNotificationPanel = () => {
     return (
         <Container>
             {
-                notifications.map((notification, i) =>
-                    <Alert key={i} variant={"warning"} transition={Fade} dismissible={true}
-                           onClose={() => dispatch(removeNotification(CONFIRM_EMAIL_SUCCESS_NOTIFICATION))}>
-                        {notification}
-                    </Alert>
-                )
+                notifications.map((notification, i) => {
+                    return (
+                        <FadeInAlert i={i} onClose={() => dispatch(removeNotification(notification))}>
+                            {notification}
+                        </FadeInAlert>
+                    );
+                })
             }
         </Container>
     );

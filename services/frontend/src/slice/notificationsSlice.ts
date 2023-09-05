@@ -10,8 +10,8 @@ export const notificationsSlice = createSlice({
             let notification = action.payload;
             let notifications = state.notifications;
             let newNotifications = [];
-            newNotifications.push(notification);
             notifications.forEach(aNotification => newNotifications.push(aNotification));
+            newNotifications.push(notification);
             return { notifications: newNotifications };
         },
         removeNotification: (state, action: PayloadAction<string>) => {
