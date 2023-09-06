@@ -15,6 +15,9 @@ services:
   - name: backend
     version: latest
     build: true
+  - name: mailer
+    version: latest
+    build: true
   - name: frontend
     version: latest
     build: true
@@ -27,7 +30,3 @@ rmq_defaults:
     value: xchg_integrations
   - name: AMQP_HOSTNAME
     value: rmq
-
-configs:
-  converter:
-    queue: q_imageProcessor

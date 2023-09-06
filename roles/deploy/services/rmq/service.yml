@@ -1,10 +1,11 @@
 ---
-- name: "[{{ name }}] Конфигурация секрета"
-  include: "../secret.yml"
+- name: "[{{ name }}] Выкладка конфига"
+  include: "../config.yml"
   loop:
-    - rabbitmq-env.conf
+    - rabbitmq.conf
+    - rabbitmq-definitions.json
   loop_control:
-    loop_var: secret_item
+    loop_var: config_item
 
 - name: "[{{ name }}] Выкладка сервиса"
   block:
@@ -20,12 +21,13 @@
             protocol: tcp
             published_port: 15673
             target_port: 15672
-        secrets:
-          - secret_name: rabbitmq-env.conf
-            filename: /etc/rabbitmq/rabbitmq-env.conf
+        configs:
+          - config_name: rabbitmq.conf
+            filename: /etc/rabbitmq/rabbitmq.conf
+          - config_name: rabbitmq-definitions.json
+            filename: /etc/rabbitmq/rabbitmq-definitions.json
         env:
           - "AMQP_HOSTNAME={{ name }}"
-          - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
         placement:
           constraints:
             - node.hostname == server4
