@@ -83,7 +83,6 @@ public class SecurityConfig {
                         authorizationManagerRequestMatcherRegistry
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers("/", "/login", "/error", "/actuator/**", "/user/confirmEmail").permitAll()
-                                .requestMatchers("/me").permitAll()        // TODO del
                                 .anyRequest().authenticated())
                 .formLogin(formLoginConfigurer ->
                         formLoginConfigurer
